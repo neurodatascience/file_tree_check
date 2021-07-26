@@ -52,14 +52,20 @@ class DisplayablePath(object):
             return int(total_size/self.file_count)   # approximating to the int
         else:
             return self.path.stat().st_size
+        # this way of checking the size is not the most efficient since a directory will recheck every of its file size
+        # even if these files already know their own size because they were checked first
 
     def add_stats(self, stat_dict, count=True, size=True):
-        # Only get the file count from folders
+        # directories can get the size of file under them so we don't need to gather stats from the files themselves
         if self.is_dir:
-            stat_dict['file_count'][self.path] = self.file_count
-        # Only get the file size from files
-        else:
-            stat_dict['file_size'][self.path] = self.file_size
+            dir_name = self.path.name # stats are saved with folder name ("anat", "sub-..") for comparison
+            if dir_name not in stat_dict["file_count"]:
+                stat_dict["file_count"][dir_name] = list()
+            stat_dict["file_count"][dir_name].append(self.file_count)
+
+            if dir_name not in stat_dict["file_size"]:
+                stat_dict["file_size"][dir_name] = list()
+            stat_dict["file_size"][dir_name].append(self.file_size)
         return stat_dict
 
     def display(self, get_file_count=False, get_file_size=False):

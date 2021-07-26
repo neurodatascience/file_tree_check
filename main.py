@@ -4,29 +4,17 @@
 Explore a file structure and build of distribution of file numbers and file size.
 """
 
-import os
-from pathlib import Path
 import argparse
 from fileChecker import *
-import fileTreeHandler
+from fileTreeHandler import FileTreeHandler
 from statBuilder import StatBuilder
 from displayablePath import DisplayablePath
-import pandas as pd
-import seaborn as sns
-from matplotlib import pyplot as plt
+import configparser
+import os
 
 
-def get_file_count(path, print_items=False):
-    # Count and optionally list all files in directory using pathlib
-    base_path = Path(path)
-    # Get the files in the given path
-    files_in_base_path = (entry for entry in base_path.iterdir() if entry.is_file())
-    # Show their name in the std_output
-    if print_items:
-        for item in files_in_base_path:  # update to count items in subdirectory too?
-            print(item.name)
-    # Iterate through the directory and count all the files
-    return sum(len(files) for _, _, files in os.walk(base_path))
+def parse_config(config_file):
+    confpars = configparser.ConfigParser(config_file)
 
 
 def _arg_parser():
@@ -49,25 +37,16 @@ def _arg_parser():
     return pars
 
 
-def explore_template(root, template):
+def explore_template(root, template, common_key):
     # Method using templates instead of blindly iterating, NOT FINISHED
-    tree = fileTreeHandler.read_tree_template(template)
-    tree.update_glob("image1", inplace=True)  # image1 is placeholder for file expected to be in every directory
+    tree = FileTreeHandler(template, root)
+    tree = tree.update(common_key)
+
     # Iterate over the pipelines and subjects
     folders = {}
     for subject_tree in tree.iter('image1'):
         folders[str(subject_tree.get('subject_number'))] = subject_tree.get('pipeline1')
     # Run tests for each pipeline
-    stats = StatBuilder()
-    file_checker = FileChecker()
-    for subject in folders.values():
-        file_count = get_file_count(folders[subject])
-        stats.add_pipeline(name=folders[subject], subject=subject, file_count=file_count)
-        for file in os.listdir(subject):
-            if file_checker.check_size(file):
-                print('{} is beneath the size threshold'.format(str(file)))
-        print('Number of files in folder {}'.format(folders[subject].name))
-        print(file_count)
 
 
 def explore_with_generator(root, output_dir=None, get_count=False, get_size=False):
@@ -75,7 +54,7 @@ def explore_with_generator(root, output_dir=None, get_count=False, get_size=Fals
     paths = DisplayablePath.generate_tree(root, criteria=None)
 
     # Display the file tree either in the std_output or a text_file
-    stat_dict = {"file_count": {}, "file_size": {}}  # TODO use dedicate class for statistics instead
+    stat_dict = {"file_count": {}, "file_size": {}}
     if output_dir is None:
         for path in paths:
             stat_dict = path.add_stats(stat_dict)
@@ -87,16 +66,6 @@ def explore_with_generator(root, output_dir=None, get_count=False, get_size=Fals
                 stat_dict = path.add_stats(stat_dict)
                 f.write(path.displayable(get_count=get_count, get_size=get_size))
     return stat_dict
-
-
-def distribution_graph(data, plot_count=True, plot_size=True):
-    # fig, axes = plt.subplots(1, 2)
-    # fig.suptitle('Distribution in the file structure')
-    if plot_count:
-        sns.displot(data['file_count'])
-    if plot_size:
-        sns.displot(data['file_size'])
-    plt.show()
 
 
 def main():
@@ -122,17 +91,23 @@ def main():
     # Get the data and create the file structure in console or text file
     stat_dict = {}
     if explore_method == 'template':
-        explore_template(root, template)
+        explore_template(root, template, "sub-{subject_number}")  # using sub-## as the common key to explore the files
+
+        stat_builder = StatBuilder(stat_dict)
+
+        if args.show_graphics:
+            # Show the distribution of the statistics
+            stat_builder.create_graphs(["file_count"], ["file_size"])
+
     if explore_method == 'generator':
         stat_dict = explore_with_generator(root, output_dir=output_dir,
                                            get_count=args.file_count, get_size=args.file_size)
+        # Create a dataframe with the dicts
+        stat_builder = StatBuilder(stat_dict)
 
-    if args.show_graphics:
-        # Create a dataframe for size and file count of each item
-        data = pd.DataFrame.from_dict(data={"file_count": stat_dict["file_count"],
-                                            "file_size": stat_dict["file_size"]})
-        # Show the distribution of the statistics
-        distribution_graph(data)
+        if args.show_graphics:
+            # Show the distribution of the statistics
+            stat_builder.create_graphs(["file_count"], ["file_size"])
 
 
 if __name__ == "__main__":
