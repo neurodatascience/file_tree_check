@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 class DisplayablePath(object):
     """A DisplayablePath object is tied to a singular path (file or directory) and allows itself to be printed
     in a readable format and allow retrieval of some statistics.
