@@ -20,13 +20,14 @@ class StatBuilder(object):
         """Will create a comparison graph for each column given in a single figure."""
         self.logger.debug("Creating subplots objects")
         height = len(columns_list)
-        fig, axes = plt.subplots(height, max_size, sharey='row')
+        fig, axes = plt.subplots(height, max_size, sharey='row', figsize=(30, 20))
         fig.suptitle('Distribution in the file structure')
         self.logger.debug("Iterating over the measures in the data")
         for column_index, column_name in enumerate(columns_list):
             i = 0
             self.logger.debug("Iterating over the folders in the measure {}".format(column_name))
-            for folder_name, values in self.dataframe[column_name].items():
+            sorted_folders = {k: v for k, v in sorted(self.dataframe[column_name].items(), key=lambda item: len(item[1]), reverse=True)}
+            for folder_name, values in sorted_folders.items():
                 if max(values) <= 0:
                     continue
                 sns.histplot(values, ax=axes[column_index, i], kde=False)
@@ -42,5 +43,5 @@ class StatBuilder(object):
             self.logger.info("Saved plot at path {}".format(save_file))
         if show_graph:
             self.logger.debug("Displaying plots")
-            plt.tight_layout()
+            plt.tight_layout(rect[0, 0.03, 1, 0.95])
             plt.show()
