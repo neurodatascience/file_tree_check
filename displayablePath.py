@@ -27,6 +27,7 @@ class DisplayablePath(object):
         self.parent = parent_path
         self.is_last = is_last
         self.is_dir = self.path.is_dir()
+        self.is_file = self.path.is_file()
         if self.parent:
             self.depth = self.parent.depth + 1
         else:
@@ -57,7 +58,7 @@ class DisplayablePath(object):
                 total_size += int(file_path.stat().st_size)  # check if file is path first?
             return int(total_size/self.file_count)   # approximating to the int
         else:
-            return self.path.stat().st_size
+            return int(self.path.stat().st_size)
         # this way of checking the size is not the most efficient since a directory will recheck every of its file size
         # even if these files already know their own size because they were checked first
 
@@ -72,6 +73,13 @@ class DisplayablePath(object):
             if dir_name not in stat_dict["file_size"]:
                 stat_dict["file_size"][dir_name] = list()
             stat_dict["file_size"][dir_name].append(self.file_size)
+        elif self.is_file:
+            # We identify files type by removing the subject number by removing everything before the first "_"
+            # and adding the parent folder name in front
+            file_identifier = self.parent.path.name + "/" + "".join(self.path.name.split("_")[1:])
+            if file_identifier not in stat_dict["file_size"]:
+                stat_dict["file_size"][file_identifier] = list()
+            stat_dict["file_size"][file_identifier].append(self.file_size)
         return stat_dict
 
     def display(self, get_file_count=False, get_file_size=False):

@@ -1,19 +1,19 @@
-07-29 16:49 file_tree_check DEBUG    Initializing variables from arguments
-07-29 16:49 file_tree_check INFO     Target folder is : /home/btoutee/test_dir/ds_dir
-07-29 16:49 file_tree_check DEBUG    Initializing variables from config file
-07-29 16:49 file_tree_check INFO     Output file path is : results/File_Structure.txt
-07-29 16:49 file_tree_check DEBUG    Launching exploration of the target folder
-07-29 16:49 file_tree_check INFO     Retrieved 2 measures for 163 different folders name
-07-29 16:49 file_tree_check DEBUG    Creating a dataframe with the dicts
-07-29 16:49 file_tree_check.statBuilder INFO     Created an instance of statBuilder
-07-29 16:49 file_tree_check INFO     Created a dataframe with the measures
-07-29 16:49 file_tree_check DEBUG    Giving the data to the graphic creator
-07-29 16:49 file_tree_check.statBuilder DEBUG    Creating subplots objects
-07-29 16:49 file_tree_check.statBuilder DEBUG    Iterating over the measures in the data
-07-29 16:49 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_count
-07-29 16:49 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
-07-29 16:49 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_size
-07-29 16:49 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
-07-29 16:49 file_tree_check.statBuilder INFO     Plots created
-07-29 16:49 file_tree_check.statBuilder DEBUG    Saving plot to file
-07-29 16:49 file_tree_check.statBuilder INFO     Saved plot at path results/plots.png
+07-30 11:57 file_tree_check DEBUG    Initializing variables from arguments
+07-30 11:57 file_tree_check INFO     Target folder is : C:\Users\datbo\PycharmProjects\testNeuro\bids_structure
+07-30 11:57 file_tree_check DEBUG    Initializing variables from config file
+07-30 11:57 file_tree_check INFO     Output file path is : results\File_Structure.txt
+07-30 11:57 file_tree_check DEBUG    Launching exploration of the target folder
+07-30 11:57 file_tree_check INFO     Retrieved 2 measures for 14 different folders name
+07-30 11:57 file_tree_check DEBUG    Creating a dataframe with the dicts
+07-30 11:57 file_tree_check.statBuilder INFO     Created an instance of statBuilder
+07-30 11:57 file_tree_check INFO     Created a dataframe with the measures
+07-30 11:57 file_tree_check DEBUG    Giving the data to the graphic creator
+07-30 11:57 file_tree_check.statBuilder DEBUG    Creating subplots objects
+07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the measures in the data
+07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_count
+07-30 11:57 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
+07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_size
+07-30 11:57 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
+07-30 11:57 file_tree_check.statBuilder INFO     Plots created
+07-30 11:57 file_tree_check.statBuilder DEBUG    Saving plot to file
+07-30 11:57 file_tree_check.statBuilder INFO     Saved plot at path results\plots.png
