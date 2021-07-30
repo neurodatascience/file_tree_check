@@ -1,5 +1,10 @@
 import os
 from pathlib import Path
+import logging
+
+# Creating the logger outside the class to avoid doing the work for every of the object we will create
+# not used for now because these methods are called so often it would flood the logs
+module_logger = logging.getLogger("file_tree_check.{}".format(__name__))
 
 
 class DisplayablePath(object):

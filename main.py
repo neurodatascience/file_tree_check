@@ -6,10 +6,10 @@ Explore a file structure and build of distribution of file numbers and file size
 
 import argparse
 from fileChecker import *
-from fileTreeHandler import FileTreeHandler
 from statBuilder import StatBuilder
 from displayablePath import DisplayablePath
 import configparser
+import logging
 
 CONFIG_PATH = "./config.ini"
 
@@ -18,19 +18,31 @@ def _arg_parser():
     pars = argparse.ArgumentParser(description="Insert doc here")
     # The only required argument is the location of the directory to explore
     pars.add_argument('start_location', type=str, help="Directory to explore")
+    pars.add_argument('-v', '--verbose', dest="verbose", action='store_true',
+                      default=False, help="Print info level logging to the console")
     return pars
 
 
-def explore_template(root, template, common_key):
-    # Method using templates instead of blindly iterating, NOT FINISHED
-    tree = FileTreeHandler(template, root)
-    tree = tree.update(common_key)
+def _create_logger(file_log_path, file_log_level, is_verbose):
+    logger = logging.getLogger("file_tree_check")
+    logger.setLevel(file_log_level.upper())
+    file_format = logging.Formatter(fmt="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+                                    datefmt="%m-%d %H:%M")
+    console_format = logging.Formatter(fmt="%(name)-12s %(levelname)-8s %(message)s")
 
-    # Iterate over the pipelines and subjects
-    folders = {}
-    for subject_tree in tree.iter('image1'):
-        folders[str(subject_tree.get('subject_number'))] = subject_tree.get('pipeline1')
-    # Run tests for each pipeline
+    if is_verbose:
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        console_handler.setFormatter(console_format)
+        logger.addHandler(console_handler)
+
+    if str(file_log_path) != "None":
+        file_handler = logging.FileHandler(file_log_path, mode="w")
+        file_handler.setLevel(file_log_level.upper())
+        file_handler.setFormatter(file_format)
+        logger.addHandler(file_handler)
+
+    return logger
 
 
 def explore_with_generator(root, output_path=None, get_count=False, get_size=False):
@@ -55,44 +67,49 @@ def main():
     # Parsing the config file
     config = configparser.ConfigParser()
     config.read(Path(CONFIG_PATH))
-    if config['Output'].getboolean('output as file'):
-        output_path = Path(config['Output']['output path'])
-    else:
-        output_path = None
-
-    # Choose exploration method for the file structure
-    if config['Custom Template'].getboolean('use template'):
-        template = Path(config['Custom Template']['template path'])
-        explore_method = 'template'
-    else:
-        template = None
-        explore_method = 'generator'
 
     # Parsing arguments
     parser = _arg_parser()
     args = parser.parse_args()
+
+    # Initializing logger
+    logger = _create_logger(config['Logging']['file log path'],
+                            config['Logging']['file log level'], is_verbose=args.verbose)
+
+    logger.debug("Initializing variables from arguments")
     root = Path(args.start_location)
+    logger.info("Target folder is : {}".format(root))
+
+    logger.debug("Initializing variables from config file")
+    if config['Output'].getboolean('output as file'):
+        output_path = Path(config['Output']['output path'])
+    else:
+        output_path = None
+    logger.info("Output file path is : {}".format(str(output_path)))
 
     # Verifying number of files for debug
     # print(get_file_count(root))
 
-    # Get the data and create the file structure in console or text file
+    logger.debug("Launching exploration of the target folder")
     stat_dict = {}
-    if explore_method == 'template':
-        explore_template(root, template, "sub-{subject_number}")  # using sub-## as the common key to explore the files
-
-    if explore_method == 'generator':
-        stat_dict = explore_with_generator(root, output_path=output_path,
-                                           get_count=config['Measures'].getboolean('file count'),
-                                           get_size=config['Measures'].getboolean('file size'))
-
-    # Create a dataframe with the dicts
+    stat_dict = explore_with_generator(root, output_path=output_path,
+                                       get_count=config['Measures'].getboolean('file count'),
+                                       get_size=config['Measures'].getboolean('file size'))
+    logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
+                                                                             len(stat_dict["file_count"])))
+    logger.debug("Creating a dataframe with the dicts")
     stat_builder = StatBuilder(stat_dict)
+    logger.info("Created a dataframe with the measures")
 
     vis_config = config['Visualization']
-    if vis_config.getboolean('show visualization'):
-        # Show the distribution of the statistics
-        stat_builder.create_graphs(["file_count", "file_size"], max_size=vis_config.getint('shown folder count'))
+    if vis_config.getboolean('create plots'):
+        logger.debug("Giving the data to the graphic creator")
+        if config["Visualization"].getboolean("save plots"):
+            image_path = Path(vis_config["image path"])
+        else:
+            image_path = None
+        stat_builder.create_graphs(["file_count", "file_size"], max_size=vis_config.getint('shown folder count'),
+                                   save_file=image_path, show_graph=vis_config.getboolean("print plots"))
 
 
 if __name__ == "__main__":
