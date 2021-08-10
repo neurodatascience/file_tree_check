@@ -7,11 +7,16 @@ Explore a file structure and build of distribution of file numbers and file size
 import argparse
 from fileChecker import *
 from statBuilder import StatBuilder
-from displayablePath import DisplayablePath
+from smartPath import SmartPath
+from smartFilePath import SmartFilePath
+from smartDirectoryPath import SmartDirectoryPath
 import configparser
 import logging
 
 CONFIG_PATH = "./config.ini"
+LOGGER_NAME = "file_tree_check"
+LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
+LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
 
 
 def _arg_parser():
@@ -24,11 +29,10 @@ def _arg_parser():
 
 
 def _create_logger(file_log_path, file_log_level, is_verbose):
-    logger = logging.getLogger("file_tree_check")
+    logger = logging.getLogger(LOGGER_NAME)
     logger.setLevel(file_log_level.upper())
-    file_format = logging.Formatter(fmt="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
-                                    datefmt="%m-%d %H:%M")
-    console_format = logging.Formatter(fmt="%(name)-12s %(levelname)-8s %(message)s")
+    file_format = logging.Formatter(fmt=LOGGER_FILE_FORMAT, datefmt="%m-%d %H:%M")
+    console_format = logging.Formatter(fmt=LOGGER_CONSOLE_FORMAT)
 
     if is_verbose:
         console_handler = logging.StreamHandler()
@@ -45,22 +49,58 @@ def _create_logger(file_log_path, file_log_level, is_verbose):
     return logger
 
 
-def explore_with_generator(root, output_path=None, get_count=False, get_size=False):
-    # Generate an instance of DisplayablePath for every file and folder (recursively) and store them
-    paths = DisplayablePath.generate_tree(root, criteria=None)
+def explore_with_generator(root, output_path=None, get_count=False, get_size=False, separator="_"):
+    # Generate an instance of SmartPath for every file and folder (recursively) and store them
+    paths = generate_tree(root, criteria=None)
 
-    # Display the file tree either in the std_output or a text_file
+    # Display the file tree either in the std_output or a text_file and get the measures on each file/folder
     stat_dict = {"file_count": {}, "file_size": {}}
     if output_path is None:
         for path in paths:
-            stat_dict = path.add_stats(stat_dict)
+            stat_dict = path.add_stats(stat_dict, separator=separator)
             print(path.displayable(get_count=get_count, get_size=get_size), end='')
     else:
         with open(output_path, 'wt', encoding="utf-8") as f:
             for path in paths:
-                stat_dict = path.add_stats(stat_dict)
+                stat_dict = path.add_stats(stat_dict, get_count=get_count, get_size=get_size,separator=separator)
                 f.write(path.displayable(get_count=get_count, get_size=get_size))
     return stat_dict
+
+
+def generate_tree(root, parent=None, is_last=False, criteria=None):
+    """Generator that creates a SmartFilePath or SmartDirectoryPath object for every item found
+    within the root directory given.
+    Returns an iterable of the file structure that can be used with display() over each element.
+    When a subdirectory is found under the given path, will call another instance of this method with it as the root
+    """
+    logger = logging.getLogger(LOGGER_NAME)
+    root = Path(str(root))
+    # A criteria could be used to ignore specific files or folder
+    criteria = criteria or SmartPath.default_criteria
+
+    # Begin by generating the root path
+    smart_root = SmartDirectoryPath(root, parent, is_last)
+    yield smart_root
+
+    # Get a list of every files or folder in the root and iterate over them
+    children = sorted(list(path for path in root.iterdir()), key=lambda s: str(s).lower())
+    count = 1
+    for path in children:
+        try:
+            # Check if this path is the last children in its parent's directory
+            is_last = count == len(children)
+            # If the children is a folder, another instance of the method is called and
+            # its output is propagated up the generator
+            if path.is_dir():
+                yield from generate_tree(path, parent=smart_root,
+                                         is_last=is_last, criteria=criteria)
+            # If the children is a file, generate a single instance of SmartPath associated to its path
+            else:
+                yield SmartFilePath(path, smart_root, is_last)
+            count += 1
+        except FileNotFoundError as e:
+            logger.error("FileNotFoundError", e)
+
 
 
 def main():
@@ -91,20 +131,19 @@ def main():
     # print(get_file_count(root))
 
     logger.debug("Launching exploration of the target folder")
-    stat_dict = {}
     stat_dict = explore_with_generator(root, output_path=output_path,
                                        get_count=config['Measures'].getboolean('file count'),
-                                       get_size=config['Measures'].getboolean('file size'))
+                                       get_size=config['Measures'].getboolean('file size'),
+                                       separator=config['Categorization']['separator'])
     logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
                                                                              len(stat_dict["file_count"])))
-    logger.debug("Creating a dataframe with the dicts")
+    logger.debug("Creating instance of StatBuilder with the measures")
     stat_builder = StatBuilder(stat_dict)
-    logger.info("Created a dataframe with the measures")
 
     vis_config = config['Visualization']
     if vis_config.getboolean('create plots'):
         logger.debug("Giving the data to the graphic creator")
-        if config["Visualization"].getboolean("save plots"):
+        if vis_config.getboolean("save plots"):
             image_path = Path(vis_config["image path"])
         else:
             image_path = None

@@ -7,3 +7,4 @@
 /__py*
 /log.txt
 /graph_image.png
+/results/*

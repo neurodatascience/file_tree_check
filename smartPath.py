@@ -1,0 +1,77 @@
+from pathlib import Path
+from abc import ABC, abstractmethod
+
+
+class SmartPath(ABC):
+    """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
+    in a readable format and allow retrieval of some statistics.
+
+    While each instance is for a single file or directory, the method generate_tree() allows to recursively generate an
+    instance for every file and folder in a given directory.
+
+    Each instance stores their parent directory and their depth relative to the first path.
+
+    This is an abstract class for both files and folder Paths.
+    """
+    # Credit to stack overflow abstrus
+
+    # The separators for the visual representation of the file structure
+    display_filename_prefix_middle = '├──'
+    display_filename_prefix_last = '└──'
+    display_parent_prefix_middle = '    '
+    display_parent_prefix_last = '│   '
+
+    def __init__(self, path, parent_path, is_last):
+        self.path = Path(str(path))
+        self.parent = parent_path
+        self.is_last = is_last
+        if self.parent:
+            self.depth = self.parent.depth + 1
+        else:
+            self.depth = 0
+
+    @abstractmethod
+    def file_count(self):
+        pass
+
+    @abstractmethod
+    def file_size(self):
+        pass
+
+    @abstractmethod
+    def add_stats(self, stat_dict, get_count=True, get_size=True, separator="_"):
+        pass
+
+    @abstractmethod
+    def display(self, get_file_count=False, get_file_size=False):
+        pass
+
+    @classmethod
+    def default_criteria(cls, path):
+        return True
+
+    def displayable(self, get_count=False, get_size=False):
+        """Returns a str corresponding to a single line in the file structure visualisation."""
+        # If the path is the root, no separators are needed at the beginning of the line
+        if self.parent is None:
+            return self.display(get_file_count=get_count, get_file_size=get_size)
+
+        # If the path is the last in it's directory, it will begin with └── instead of ├──"
+        _filename_prefix = (self.display_filename_prefix_last if self.is_last
+                            else self.display_filename_prefix_middle)
+
+        # Display the info about the file/folder after the prefix chose above
+        parts = ['{!s} {!s}'.format(_filename_prefix,
+                                    self.display(get_file_count=get_count, get_file_size=get_size))]
+
+        # Now that the display for the current directory is ready, we need to add the separator for each depth level
+        parent = self.parent
+        # Going up the parent hierarchy
+        while parent and parent.parent is not None:
+            # If the parent was last in it's directory, the separator is '   ' otherwise it is '│   '
+            parts.append(self.display_parent_prefix_middle if parent.is_last
+                         else self.display_parent_prefix_last)
+            parent = parent.parent
+
+        # Putting it all together in a single string
+        return ''.join(reversed(parts))
