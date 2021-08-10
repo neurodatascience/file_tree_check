@@ -49,21 +49,25 @@ def _create_logger(file_log_path, file_log_level, is_verbose):
     return logger
 
 
-def explore_with_generator(root, output_path=None, get_count=False, get_size=False, separator="_"):
+def explore_with_generator(root, output_path=None, get_file_count=False, get_size=False,
+                           get_dir_count=False, separator="_"):
     # Generate an instance of SmartPath for every file and folder (recursively) and store them
     paths = generate_tree(root, criteria=None)
 
     # Display the file tree either in the std_output or a text_file and get the measures on each file/folder
-    stat_dict = {"file_count": {}, "file_size": {}}
+    stat_dict = {"file_count": {}, "file_size": {}, "dir_count": {}}
     if output_path is None:
         for path in paths:
             stat_dict = path.add_stats(stat_dict, separator=separator)
-            print(path.displayable(get_count=get_count, get_size=get_size), end='')
+            print(path.displayable(get_file_count=get_file_count, get_dir_count=get_dir_count,
+                                   get_size=get_size), end='')
     else:
         with open(output_path, 'wt', encoding="utf-8") as f:
             for path in paths:
-                stat_dict = path.add_stats(stat_dict, get_count=get_count, get_size=get_size,separator=separator)
-                f.write(path.displayable(get_count=get_count, get_size=get_size))
+                stat_dict = path.add_stats(stat_dict, get_file_count=get_file_count, get_dir_count=get_dir_count,
+                                           get_size=get_size, separator=separator)
+                f.write(path.displayable(get_file_count=get_file_count, get_dir_count=get_dir_count,
+                                         get_size=get_size))
     return stat_dict
 
 
@@ -102,7 +106,6 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
             logger.error("FileNotFoundError", e)
 
 
-
 def main():
     # Parsing the config file
     config = configparser.ConfigParser()
@@ -122,18 +125,21 @@ def main():
 
     logger.debug("Initializing variables from config file")
     if config['Output'].getboolean('output as file'):
-        output_path = Path(config['Output']['output path'])
+        tree_output_path = Path(config['Output']['tree output path'])
+        summary_output_path = Path(config['Output']['summary output path'])
     else:
-        output_path = None
-    logger.info("Output file path is : {}".format(str(output_path)))
+        tree_output_path = None
+        summary_output_path = None
+    logger.info("Output file path are : {}, {}".format(str(tree_output_path), str(summary_output_path)))
 
     # Verifying number of files for debug
-    # print(get_file_count(root))
+    # print(get_total_file_count(root))
 
     logger.debug("Launching exploration of the target folder")
-    stat_dict = explore_with_generator(root, output_path=output_path,
-                                       get_count=config['Measures'].getboolean('file count'),
+    stat_dict = explore_with_generator(root, output_path=tree_output_path,
+                                       get_file_count=config['Measures'].getboolean('file count'),
                                        get_size=config['Measures'].getboolean('file size'),
+                                       get_dir_count=config['Measures'].getboolean('dir count'),
                                        separator=config['Categorization']['separator'])
     logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
                                                                              len(stat_dict["file_count"])))
@@ -147,8 +153,13 @@ def main():
             image_path = Path(vis_config["image path"])
         else:
             image_path = None
-        stat_builder.create_graphs(["file_count", "file_size"], max_size=vis_config.getint('shown folder count'),
+        stat_builder.create_graphs(("file_count", "file_size", "dir_count"),
+                                   max_size=vis_config.getint('shown folder count'),
                                    save_file=image_path, show_graph=vis_config.getboolean("print plots"))
+
+    if summary_output_path is not None:
+        with open(summary_output_path, 'wt', encoding="utf-8") as f:
+            f.write(stat_builder.create_summary(("file_count", "dir_count")))
 
 
 if __name__ == "__main__":
