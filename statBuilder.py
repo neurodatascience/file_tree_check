@@ -69,7 +69,7 @@ class StatBuilder(object):
                 most_common_value = counter.most_common(1)[0][0]
                 most_common_counter = counter.most_common(1)[0][1]
                 output += "        Most common : {} found in {} folders\n".format(most_common_value,
-                                                                                most_common_counter)
+                                                                                  most_common_counter)
                 self.logger.debug("Calculating occurrences different from most "
                                   "common value {} in folders named {}".format(most_common_value, most_common_counter))
                 if most_common_counter < len(paths):

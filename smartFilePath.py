@@ -13,7 +13,12 @@ class SmartFilePath(SmartPath):
         # We identify files type by removing the subject number, which is the text before the first "_"
         # and adding the parent folder name in front
         if get_size:
-            file_identifier = self.parent.path.name + "/" + "".join(self.path.name.split(separator)[1:])
+            # if the file name did not contain or finishes by the separator character, the full name is used
+            if separator not in self.path.name and self.path.name[-1] != separator:
+                file_identifier = self.parent.path.name + "/" + self.path.name
+            # if the file did contain the separator, everything before the first separator is removed
+            else:
+                file_identifier = self.parent.path.name + "/" + "".join(self.path.name.split(separator)[1:])
             if file_identifier not in stat_dict["file_size"]:
                 stat_dict["file_size"][file_identifier] = dict()
             stat_dict["file_size"][file_identifier][self.path] = self.file_size

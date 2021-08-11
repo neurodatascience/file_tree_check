@@ -22,11 +22,6 @@ class SmartDirectoryPath(SmartPath):
             if dir_name not in stat_dict["dir_count"]:
                 stat_dict["dir_count"][dir_name] = dict()
             stat_dict["dir_count"][dir_name][self.path] = self.dir_count
-
-        if get_size:
-            if dir_name not in stat_dict["file_size"]:
-                stat_dict["file_size"][dir_name] = dict()
-            stat_dict["file_size"][dir_name][self.path] = self.file_size
         return stat_dict
 
     @property

@@ -46,7 +46,7 @@ class SmartPath(ABC):
         """Returns a str corresponding to a single line in the file structure visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
-            return self.display(get_file_count=get_file_count, get_file_size=get_size, get_dir_count=get_dir_count)
+            return self.display(get_file_count=get_file_count, get_file_size=get_size)
 
         # If the path is the last in it's directory, it will begin with └── instead of ├──"
         _filename_prefix = (self.display_filename_prefix_last if self.is_last
