@@ -31,22 +31,21 @@ class SmartPath(ABC):
             self.depth = 0
 
     @abstractmethod
-    def add_stats(self, stat_dict, get_count=True, get_size=True, separator="_"):
-        pass
-
-    @abstractmethod
-    def display(self, get_file_count=False, get_file_size=False):
+    def add_stats(self, stat_dict, measures=(), separator="_"):
         pass
 
     @classmethod
     def default_criteria(cls, path):
         return True
 
-    def displayable(self, get_file_count=False, get_dir_count=False, get_size=False):
+    def display(self, measures=(), name_max_length=60):
+        return str(self.path.name).ljust(name_max_length - self.depth * 3)
+
+    def displayable(self, measures=(), name_max_length=60):
         """Returns a str corresponding to a single line in the file structure visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
-            return self.display(get_file_count=get_file_count, get_file_size=get_size)
+            return self.display(measures, name_max_length)
 
         # If the path is the last in it's directory, it will begin with └── instead of ├──"
         _filename_prefix = (self.display_filename_prefix_last if self.is_last
@@ -54,7 +53,7 @@ class SmartPath(ABC):
 
         # Display the info about the file/folder after the prefix chose above
         parts = ['{!s} {!s}'.format(_filename_prefix,
-                                    self.display(get_file_count=get_file_count, get_file_size=get_size))]
+                                    self.display(measures, name_max_length))]
 
         # Now that the display for the current directory is ready, we need to add the separator for each depth level
         parent = self.parent

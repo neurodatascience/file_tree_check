@@ -18,15 +18,15 @@ class StatBuilder(object):
         self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
         self.logger.info("Created an instance of statBuilder")
 
-    def create_graphs(self, measures_list=(), save_file=None, show_graph=True, max_size=8):
+    def create_graphs(self, measures=(), save_file=None, show_graph=True, max_size=8):
         """Will create a comparison graph for each measure given in a single figure."""
         sns.set(style="darkgrid")
         self.logger.debug("Creating subplots objects")
-        height = len(measures_list)
+        height = len(measures)
         fig, axes = plt.subplots(height, max_size, figsize=FIG_SIZE)
         fig.suptitle('Distribution in the file structure')
         self.logger.debug("Iterating over the measures in the data")
-        for measure_index, measure_name in enumerate(measures_list):
+        for measure_index, measure_name in enumerate(measures):
             i = 0
             self.logger.debug("Iterating over the folders in the measure {}".format(measure_name))
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
@@ -53,10 +53,10 @@ class StatBuilder(object):
             self.logger.debug("Displaying plots")
             plt.show()
 
-    def create_summary(self, measures_list=()):
+    def create_summary(self, measures=()):
         self.logger.debug("Initializing summary output")
         output = ""
-        for measure_name in measures_list:
+        for measure_name in measures:
             output += "Occurrences for measure  : {}\n".format(measure_name)
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
                                                       key=lambda item: len(item[1]), reverse=True)}

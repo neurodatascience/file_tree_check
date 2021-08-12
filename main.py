@@ -17,6 +17,7 @@ CONFIG_PATH = "./config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
+FILENAME_MAX_LENGTH = 60
 
 
 def _arg_parser():
@@ -49,25 +50,23 @@ def _create_logger(file_log_path, file_log_level, is_verbose):
     return logger
 
 
-def explore_with_generator(root, output_path=None, get_file_count=False, get_size=False,
-                           get_dir_count=False, separator="_"):
+def explore_with_generator(root, output_path=None, measures=(), separator="_"):
     # Generate an instance of SmartPath for every file and folder (recursively) and store them
     paths = generate_tree(root, criteria=None)
 
     # Display the file tree either in the std_output or a text_file and get the measures on each file/folder
-    stat_dict = {"file_count": {}, "file_size": {}, "dir_count": {}}
+    stat_dict = {}
+    for measure_name in measures:
+        stat_dict[measure_name] = {}
     if output_path is None:
         for path in paths:
             stat_dict = path.add_stats(stat_dict, separator=separator)
-            print(path.displayable(get_file_count=get_file_count, get_dir_count=get_dir_count,
-                                   get_size=get_size), end='')
+            print(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH), end='')
     else:
         with open(output_path, 'wt', encoding="utf-8") as f:
             for path in paths:
-                stat_dict = path.add_stats(stat_dict, get_file_count=get_file_count, get_dir_count=get_dir_count,
-                                           get_size=get_size, separator=separator)
-                f.write(path.displayable(get_file_count=get_file_count, get_dir_count=get_dir_count,
-                                         get_size=get_size))
+                stat_dict = path.add_stats(stat_dict, measures=measures, separator=separator)
+                f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
     return stat_dict
 
 
@@ -124,7 +123,7 @@ def main():
     logger.info("Target folder is : {}".format(root))
 
     logger.debug("Initializing variables from config file")
-    if config['Output'].getboolean('output as file'):
+    if config['Output'].getboolean('create text files'):
         tree_output_path = Path(config['Output']['tree output path'])
         summary_output_path = Path(config['Output']['summary output path'])
     else:
@@ -136,10 +135,12 @@ def main():
     # print(get_total_file_count(root))
 
     logger.debug("Launching exploration of the target folder")
-    stat_dict = explore_with_generator(root, output_path=tree_output_path,
-                                       get_file_count=config['Measures'].getboolean('file count'),
-                                       get_size=config['Measures'].getboolean('file size'),
-                                       get_dir_count=config['Measures'].getboolean('dir count'),
+    measure_list = []
+    for key in config["Measures"]:
+        if config["Measures"].getboolean(key):
+            measure_list.append(key)
+
+    stat_dict = explore_with_generator(root, output_path=tree_output_path, measures=measure_list,
                                        separator=config['Categorization']['separator'])
     logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
                                                                              len(stat_dict["file_count"])))
@@ -153,8 +154,7 @@ def main():
             image_path = Path(vis_config["image path"])
         else:
             image_path = None
-        stat_builder.create_graphs(("file_count", "file_size", "dir_count"),
-                                   max_size=vis_config.getint('shown folder count'),
+        stat_builder.create_graphs(measure_list, max_size=vis_config.getint('shown folder count'),
                                    save_file=image_path, show_graph=vis_config.getboolean("print plots"))
 
     if summary_output_path is not None:
