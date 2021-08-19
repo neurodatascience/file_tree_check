@@ -13,7 +13,7 @@ from smartDirectoryPath import SmartDirectoryPath
 import configparser
 import logging
 
-CONFIG_PATH = "./config.ini"
+CONFIG_PATH = "config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
@@ -154,12 +154,12 @@ def main():
             image_path = Path(vis_config["image path"])
         else:
             image_path = None
-        stat_builder.create_graphs(measure_list, max_size=vis_config.getint('shown folder count'),
+        stat_builder.create_graphs(max_size=vis_config.getint('shown folder count'),
                                    save_file=image_path, show_graph=vis_config.getboolean("print plots"))
 
     if summary_output_path is not None:
         with open(summary_output_path, 'wt', encoding="utf-8") as f:
-            f.write(stat_builder.create_summary(("file_count", "dir_count")))
+            f.write(stat_builder.create_summary())
 
 
 if __name__ == "__main__":

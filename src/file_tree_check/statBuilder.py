@@ -13,20 +13,21 @@ class StatBuilder(object):
     Store the data in a dictionary and create histograms of the distribution of the data for each folder.
     """
 
-    def __init__(self, stat_dict):
+    def __init__(self, stat_dict, measures=()):
         self.stat_dict = stat_dict
+        self.measures = measures
         self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
         self.logger.info("Created an instance of statBuilder")
 
-    def create_graphs(self, measures=(), save_file=None, show_graph=True, max_size=8):
+    def create_graphs(self, save_file=None, show_graph=True, max_size=8):
         """Will create a comparison graph for each measure given in a single figure."""
         sns.set(style="darkgrid")
         self.logger.debug("Creating subplots objects")
-        height = len(measures)
+        height = len(self.measures)
         fig, axes = plt.subplots(height, max_size, figsize=FIG_SIZE)
         fig.suptitle('Distribution in the file structure')
         self.logger.debug("Iterating over the measures in the data")
-        for measure_index, measure_name in enumerate(measures):
+        for measure_index, measure_name in enumerate(self.measures):
             i = 0
             self.logger.debug("Iterating over the folders in the measure {}".format(measure_name))
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
@@ -53,10 +54,10 @@ class StatBuilder(object):
             self.logger.debug("Displaying plots")
             plt.show()
 
-    def create_summary(self, measures=()):
+    def create_summary(self):
         self.logger.debug("Initializing summary output")
         output = ""
-        for measure_name in measures:
+        for measure_name in self.measures:
             output += "Occurrences for measure  : {}\n".format(measure_name)
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
                                                       key=lambda item: len(item[1]), reverse=True)}
