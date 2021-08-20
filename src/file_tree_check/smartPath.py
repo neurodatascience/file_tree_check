@@ -6,9 +6,6 @@ class SmartPath(ABC):
     """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
     in a readable format and allow retrieval of some statistics.
 
-    While each instance is for a single file or directory, the method generate_tree() allows to recursively generate an
-    instance for every file and folder in a given directory.
-
     Each instance stores their parent directory and their depth relative to the first path.
 
     This is an abstract class for both files and folder Paths.
@@ -30,8 +27,41 @@ class SmartPath(ABC):
         else:
             self.depth = 0
 
-    @abstractmethod
     def add_stats(self, stat_dict, measures=(), separator="_"):
+        identifier = self.get_identifier(stat_dict, separator)
+
+        for measure in measures:
+            if identifier not in stat_dict[measure]:
+                stat_dict[measure][identifier] = dict()
+
+        if "file_size" in measures:
+            stat_dict["file_size"][identifier][self.path] = self.file_size
+        if "file_count" in measures:
+            stat_dict["file_count"][identifier][self.path] = self.file_count
+        if "dir_count" in measures:
+            stat_dict["dir_count"][identifier][self.path] = self.dir_count
+        if "modified_time" in measures:
+            stat_dict["modified_time"][identifier][self.path] = self.modified_time
+        return stat_dict
+
+    @property
+    def file_size(self):
+        return int(self.path.stat().st_size)
+
+    @property
+    def modified_time(self):
+        return int(self.path.stat().st_mtime)
+
+    @abstractmethod
+    def file_count(self):
+        pass
+
+    @abstractmethod
+    def dir_count(self):
+        pass
+
+    @abstractmethod
+    def get_identifier(self, stat_dict, separator="_"):
         pass
 
     @classmethod

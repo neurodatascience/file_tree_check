@@ -10,32 +10,29 @@ class SmartFilePath(SmartPath):
     The Child class of SmartPath for path pointing to a file.
     """
 
-    def add_stats(self, stat_dict, measures=(), separator="_"):
-        # We identify files type by removing the subject number, which is the text before the first "_"
-        # and adding the parent folder name in front
-        # if the file name did not contain or finishes by the separator character, the full name is used
+    def get_identifier(self, stat_dict, separator="_"):
+        """We identify file type by removing the subject number, which is the text before the first "_"
+         and adding the parent folder name in front"""
         if separator not in self.path.name and self.path.name[-1] != separator:
+            # if the file name does not contain nor finishes by the separator character, the full name is used
             file_identifier = self.parent.path.name + "/" + self.path.name
-        # if the file did contain the separator, everything before the first separator is removed
         else:
+            # if the file name contain (and does not finish by) the separator,
+            # everything before the first separator is removed
             file_identifier = self.parent.path.name + "/" + "".join(self.path.name.split(separator)[1:])
-        if "file_size" in measures:
-            if file_identifier not in stat_dict["file_size"]:
-                stat_dict["file_size"][file_identifier] = dict()
-            stat_dict["file_size"][file_identifier][self.path] = self.file_size
-        if "modified_time" in measures:
-            if file_identifier not in stat_dict["modified_time"]:
-                stat_dict["modified_time"][file_identifier] = dict()
-            stat_dict["modified_time"][file_identifier][self.path] = self.modified_time
-        return stat_dict
+        return file_identifier
 
     @property
-    def file_size(self):
-        return int(self.path.stat().st_size)
+    def file_count(self):
+        """Since this is not a directory, this measure is meaningless and the return None
+        is handled by the calling function. """
+        return None
 
     @property
-    def modified_time(self):
-        return int(self.path.stat().st_mtime)
+    def dir_count(self):
+        """Since this is not a directory, this measure is meaningless and the return None
+        is handled by the calling function. """
+        return None
 
     def display(self, measures=(), name_max_length=60):
         output = SmartPath.display(self, measures, name_max_length)

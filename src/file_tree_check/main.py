@@ -13,7 +13,7 @@ from smartDirectoryPath import SmartDirectoryPath
 import configparser
 import logging
 
-CONFIG_PATH = "config.ini"
+CONFIG_PATH = r"C:\Users\datbo\PycharmProjects\testNeuro\src\file_tree_check\config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
@@ -129,7 +129,14 @@ def main():
     else:
         tree_output_path = None
         summary_output_path = None
-    logger.info("Output file path are : {}, {}".format(str(tree_output_path), str(summary_output_path)))
+
+    if config['Output'].getboolean('create csv'):
+        csv_output_path = Path(config['Output']['csv output path'])
+    else:
+        csv_output_path = None
+
+    logger.info("Output file paths, Tree:{}, Summary:{}, CSV:{}".format(str(tree_output_path), str(summary_output_path),
+                                                                        str(csv_output_path)))
 
     # Verifying number of files for debug
     # print(get_total_file_count(root))
@@ -145,7 +152,7 @@ def main():
     logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
                                                                              len(stat_dict["file_count"])))
     logger.debug("Creating instance of StatBuilder with the measures")
-    stat_builder = StatBuilder(stat_dict)
+    stat_builder = StatBuilder(stat_dict, measure_list)
 
     vis_config = config['Visualization']
     if vis_config.getboolean('create plots'):
@@ -160,6 +167,9 @@ def main():
     if summary_output_path is not None:
         with open(summary_output_path, 'wt', encoding="utf-8") as f:
             f.write(stat_builder.create_summary())
+
+    if csv_output_path is not None:
+        stat_builder.create_csv(csv_output_path)
 
 
 if __name__ == "__main__":

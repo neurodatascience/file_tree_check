@@ -1,3 +1,4 @@
+import csv
 import logging
 import operator
 from collections import Counter
@@ -33,9 +34,10 @@ class StatBuilder(object):
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
                                                       key=lambda item: len(item[1]), reverse=True)}
             for folder_name, paths in sorted_folders.items():
-                # Do not show on plot folders where all values are 0
-                if max(paths.values()) <= 0:
+                # Do not show on plot where all values are 0 or None
+                if all(value == 0 or value is None for value in paths.values()):
                     continue
+
                 sns.histplot(paths, ax=axes[measure_index, i], bins=20)
                 axes[measure_index, i].set_xlabel(measure_name, color="b")
                 axes[measure_index, i].set_title(folder_name, color="r")
@@ -58,25 +60,44 @@ class StatBuilder(object):
         self.logger.debug("Initializing summary output")
         output = ""
         for measure_name in self.measures:
-            output += "Occurrences for measure  : {}\n".format(measure_name)
+            self.logger.debug("Calculating most common occurrences for measure {}".format(measure_name))
+            output += "\n\nOccurrences for measure  :     **{}**\n".format(measure_name)
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
                                                       key=lambda item: len(item[1]), reverse=True)}
             for folder_name, paths in sorted_folders.items():
                 most_common_value, most_common_counter = 0, 0
-                output += "    In folders named {} :\n".format(folder_name)
+                output += "    In '{}' :\n".format(folder_name)
                 counter = Counter()
                 for path, value in paths.items():
                     counter[value] += 1
                 most_common_value = counter.most_common(1)[0][0]
                 most_common_counter = counter.most_common(1)[0][1]
-                output += "        Most common : {} found in {} folders\n".format(most_common_value,
-                                                                                  most_common_counter)
-                self.logger.debug("Calculating occurrences different from most "
-                                  "common value {} in folders named {}".format(most_common_value, most_common_counter))
+                output += "        {} of {} found in {} folders\n".format(measure_name, most_common_value,
+                                                                                        most_common_counter)
                 if most_common_counter < len(paths):
-                    output += "        Outliers :\n"
+                    output += "          Outliers :\n"
                     for path, value in paths.items():
                         if value != most_common_value:
                             output += "            {}  has : {}\n".format(str(path), value)
-
+            self.logger.info("Found {} folder/files for measure {}".format(len(sorted_folders), measure_name))
+        self.logger.info("Summary created with {} measures. Contains {} total written characters.".format(
+            len(self.measures), len(output)))
         return output
+
+    def create_csv(self, file_path):
+        self.logger.debug("Opening csv file for writing at : {}".format(file_path))
+        with open(file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            headers = ['Path'] + ['Identifier'] + list(self.measures)
+            csv_writer.writerow(headers)
+            self.logger.info("Storing in CSV file with header : {}".format(str(headers)))
+            # Supposing every file/folder is present in the first measure's dictionary
+            self.logger.debug("Iterating through every file/folder type to populate CSV.")
+            for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
+                "For every path found in the first measure, write all the measures for that path in the same row."
+                for path, value in paths.items():
+                    row = list()
+                    for measure in self.measures:
+                        row.append(self.stat_dict[measure][file_identifier][path])
+                    csv_writer.writerow([path] + [file_identifier] + row)
+        self.logger.info("CSV files closed. Contains {} bytes of data".format(Path(file_path).stat().st_size))
