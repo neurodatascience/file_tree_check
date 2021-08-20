@@ -24,21 +24,27 @@ def _arg_parser():
     pars = argparse.ArgumentParser(description="Insert doc here")
     # The only required argument is the location of the directory to explore
     pars.add_argument('start_location', type=str, help="Directory to explore")
-    pars.add_argument('-v', '--verbose', dest="verbose", action='store_true',
-                      default=False, help="Print info level logging to the console")
+    console_log = pars.add_mutually_exclusive_group()
+    console_log.add_argument('-v', '--verbose', dest="verbose", action='store_true',
+                             default=False, help="Print info level logging to the console")
+    console_log.add_argument('-d', '--debug', dest="debug", action='store_true',
+                             default=False, help="Print debug level logging to the console")
     return pars
 
 
-def _create_logger(file_log_path, file_log_level, is_verbose):
+def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     logger = logging.getLogger(LOGGER_NAME)
     logger.setLevel(file_log_level.upper())
     file_format = logging.Formatter(fmt=LOGGER_FILE_FORMAT, datefmt="%m-%d %H:%M")
     console_format = logging.Formatter(fmt=LOGGER_CONSOLE_FORMAT)
 
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(console_format)
     if is_verbose:
-        console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
-        console_handler.setFormatter(console_format)
+        logger.addHandler(console_handler)
+    elif is_debug:
+        console_handler.setLevel(logging.DEBUG)
         logger.addHandler(console_handler)
 
     if str(file_log_path) != "None":
@@ -115,8 +121,8 @@ def main():
     args = parser.parse_args()
 
     # Initializing logger
-    logger = _create_logger(config['Logging']['file log path'],
-                            config['Logging']['file log level'], is_verbose=args.verbose)
+    logger = _create_logger(config['Logging']['file log path'], config['Logging']['file log level'],
+                            is_verbose=args.verbose, is_debug=args.debug)
 
     logger.debug("Initializing variables from arguments")
     root = Path(args.start_location)
