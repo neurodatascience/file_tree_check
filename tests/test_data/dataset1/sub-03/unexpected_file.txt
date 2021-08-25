@@ -1,0 +1,1 @@
+this subject is missing the func file and has this new text file that is not present in other subject

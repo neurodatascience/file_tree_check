@@ -1,0 +1,36 @@
+
+Plot a bar using matplotlib using a dictionary - Stack Overflow
+https://stackoverflow.com › questions › plot-a-bar-usin...
+Nov. 22, 2018 — For Python 3, the D.keys() needs to be converted to a list. import matplotlib.pyplot as plt D = {u'Label1':26, u'Label2': 17, u'Label3':30} ...
+7 answers
+  ·  Top answer: You can do it in two lines by first plotting the bar chart and th
+
+From a list of tuples
+
+You can also construct a dictionary from a list (or any iterable) of key, value pairs. For instance:
+1
+	
+d = dict([("age", 25)])
+
+This is perhaps most useful in the context of a list comprehension:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+	
+class Person(object):
+    def __init__(self, name, profession):
+        self.name = name
+        self.profession = profession
+ 
+people = [Person("Nick", "Programmer"), Person("Alice","Engineer")]
+professions = dict([ (p.name, p.profession) for p in people ])
+>>> print professions
+{"Nick": "Programmer", "Alice": "Engineer"}
+
+This is equivalent, though a bit shorter, to the following:

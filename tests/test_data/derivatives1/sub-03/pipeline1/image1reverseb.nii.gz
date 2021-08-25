@@ -1,0 +1,7 @@
+>> parser = argparse.ArgumentParser(prog='PROG')
+>>> parser.add_argument('foo', nargs='+')
+>>> parser.parse_args(['a', 'b'])
+Namespace(foo=['a', 'b'])
+>>> parser.parse_args([])
+usage: PROG [-h] foo [foo ...]
+PROG: error: the following arguments are required: foo

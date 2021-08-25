@@ -1,0 +1,6 @@
+{dataset}
+    sub-{subject_number}
+        {pipeline1}
+            image1.nii.gz
+        {pipeline2}
+        [pipeline3]

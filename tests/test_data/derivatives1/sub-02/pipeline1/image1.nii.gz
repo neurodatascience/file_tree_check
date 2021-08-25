@@ -1,0 +1,31 @@
+
+
+os.path.splitext()
+	
+
+PurePath.suffix
+Table of Contents
+
+    pathlib — Object-oriented filesystem paths
+        Basic use
+        Pure paths
+            General properties
+            Operators
+            Accessing individual parts
+            Methods and properties
+        Concrete paths
+            Methods
+        Correspondence to tools in the os module
+
+Previous topic
+
+File and Directory Access
+Next topic
+
+os.path — Common pathname manipulations
+This Page
+
+    Report a Bug
+    Show Source
+
+«

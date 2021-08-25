@@ -1,0 +1,88 @@
+
+
+So I used to use a for loop for iterating through the dictionary as well, but one thing I've found that works much faster is to convert to a panel and then to a dataframe. Say you have a dictionary d
+
+import pandas as pd
+d
+{'RAY Index': {datetime.date(2014, 11, 3): {'PX_LAST': 1199.46,
+'PX_OPEN': 1200.14},
+datetime.date(2014, 11, 4): {'PX_LAST': 1195.323, 'PX_OPEN': 1197.69},
+datetime.date(2014, 11, 5): {'PX_LAST': 1200.936, 'PX_OPEN': 1195.32},
+datetime.date(2014, 11, 6): {'PX_LAST': 1206.061, 'PX_OPEN': 1200.62}},
+'SPX Index': {datetime.date(2014, 11, 3): {'PX_LAST': 2017.81,
+'PX_OPEN': 2018.21},
+datetime.date(2014, 11, 4): {'PX_LAST': 2012.1, 'PX_OPEN': 2015.81},
+datetime.date(2014, 11, 5): {'PX_LAST': 2023.57, 'PX_OPEN': 2015.29},
+datetime.date(2014, 11, 6): {'PX_LAST': 2031.21, 'PX_OPEN': 2023.33}}}
+
+The command
+
+pd.Panel(d)
+<class 'pandas.core.panel.Panel'>
+Dimensions: 2 (items) x 2 (major_axis) x 4 (minor_axis)
+Items axis: RAY Index to SPX Index
+Major_axis axis: PX_LAST to PX_OPEN
+Minor_axis axis: 2014-11-03 to 2014-11-06
+
+where pd.Panel(d)[item] yields a dataframe
+
+pd.Panel(d)['SPX Index']
+2014-11-03  2014-11-04  2014-11-05 2014-11-06
+PX_LAST 2017.81 2012.10 2023.57 2031.21
+PX_OPEN 2018.21 2015.81 2015.29 2023.33
+
+You can then hit the command to_frame() to turn it into a dataframe. I use reset_index as well to turn the major and minor axis into columns rather than have them as indices.
+
+pd.Panel(d).to_frame().reset_index()
+major   minor      RAY Index    SPX Index
+PX_LAST 2014-11-03  1199.460    2017.81
+PX_LAST 2014-11-04  1195.323    2012.10
+PX_LAST 2014-11-05  1200.936    2023.57
+PX_LAST 2014-11-06  1206.061    2031.21
+PX_OPEN 2014-11-03  1200.140    2018.21
+PX_OPEN 2014-11-04  1197.690    2015.81
+PX_OPEN 2014-11-05  1195.320    2015.29
+PX_OPEN 2014-11-06  1200.620    2023.33
+
+Finally, if you don't like the way the frame looks you can use the transpose function of panel to change the appearance before calling to_frame() see documentation here http://pandas.pydata.org/pandas-docs/dev/generated/pandas.Panel.transpose.html
+
+Just as an example
+
+pd.Panel(d).transpose(2,0,1).to_frame().reset_index()
+major        minor  2014-11-03  2014-11-04  2014-11-05  2014-11-06
+RAY Index   PX_LAST 1199.46    1195.323     1200.936    1206.061
+RAY Index   PX_OPEN 1200.14    1197.690     1195.320    1200.620
+SPX Index   PX_LAST 2017.81    2012.100     2023.570    2031.210
+SPX Index   PX_OPEN 2018.21    2015.810     2015.290    2023.330
+
+Hope this helps.
+Share
+Improve this answer
+Follow
+answered Nov 7 '14 at 14:44
+Mishiko
+22111 gold badge55 silver badges1010 bronze badges
+
+    10
+    Panel is deprecated in more recent versions of pandas (v0.23 at the time of writing). – cs95 Jan 22 '19 at 3:42
+
+Add a comment
+8
+
+In case someone wants to get the data frame in a "long format" (leaf values have the same type) without multiindex, you can do this:
+
+pd.DataFrame.from_records(
+    [
+        (level1, level2, level3, leaf)
+        for level1, level2_dict in user_dict.items()
+        for level2, level3_dict in level2_dict.items()
+        for level3, leaf in level3_dict.items()
+    ],
+    columns=['UserId', 'Category', 'Attribute', 'value']
+)
+
+    UserId    Category Attribute     value
+0       12  Category 1     att_1         1
+1       12  Category 1     att_2  whatever
+2       12  Category 2     att_1        23
+3       12  Category 2     att_2   another

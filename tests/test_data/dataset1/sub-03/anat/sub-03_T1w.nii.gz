@@ -1,0 +1,190 @@
+shorter random text
+
+
+
+    Whiteout.
+
+    New in version 3.4.
+
+Note
+
+S_IFDOOR, S_IFPORT or S_IFWHT are defined as 0 when the platform does not have support for the file types.
+
+The following flags can also be used in the mode argument of os.chmod():
+
+stat.S_ISUID
+
+    Set UID bit.
+
+stat.S_ISGID
+
+    Set-group-ID bit. This bit has several special uses. For a directory it indicates that BSD semantics is to be used for that directory: files created there inherit their group ID from the directory, not from the effective group ID of the creating process, and directories created there will also get the S_ISGID bit set. For a file that does not have the group execution bit (S_IXGRP) set, the set-group-ID bit indicates mandatory file/record locking (see also S_ENFMT).
+
+stat.S_ISVTX
+
+    Sticky bit. When this bit is set on a directory it means that a file in that directory can be renamed or deleted only by the owner of the file, by the owner of the directory, or by a privileged process.
+
+stat.S_IRWXU
+
+    Mask for file owner permissions.
+
+stat.S_IRUSR
+
+    Owner has read permission.
+
+stat.S_IWUSR
+
+    Owner has write permission.
+
+stat.S_IXUSR
+
+    Owner has execute permission.
+
+stat.S_IRWXG
+
+    Mask for group permissions.
+
+stat.S_IRGRP
+
+    Group has read permission.
+
+stat.S_IWGRP
+
+    Group has write permission.
+
+stat.S_IXGRP
+
+    Group has execute permission.
+
+stat.S_IRWXO
+
+    Mask for permissions for others (not in group).
+
+stat.S_IROTH
+
+    Others have read permission.
+
+stat.S_IWOTH
+
+    Others have write permission.
+
+stat.S_IXOTH
+
+    Others have execute permission.
+
+stat.S_ENFMT
+
+    System V file locking enforcement. This flag is shared with S_ISGID: file/record locking is enforced on files that do not have the group execution bit (S_IXGRP) set.
+
+stat.S_IREAD
+
+    Unix V7 synonym for S_IRUSR.
+
+stat.S_IWRITE
+
+    Unix V7 synonym for S_IWUSR.
+
+stat.S_IEXEC
+
+    Unix V7 synonym for S_IXUSR.
+
+The following flags can be used in the flags argument of os.chflags():
+
+stat.UF_NODUMP
+
+    Do not dump the file.
+
+stat.UF_IMMUTABLE
+
+    The file may not be changed.
+
+stat.UF_APPEND
+
+    The file may only be appended to.
+
+stat.UF_OPAQUE
+
+    The directory is opaque when viewed through a union stack.
+
+stat.UF_NOUNLINK
+
+    The file may not be renamed or deleted.
+
+stat.UF_COMPRESSED
+
+    The file is stored compressed (Mac OS X 10.6+).
+
+stat.UF_HIDDEN
+
+    The file should not be displayed in a GUI (Mac OS X 10.5+).
+
+stat.SF_ARCHIVED
+
+    The file may be archived.
+
+stat.SF_IMMUTABLE
+
+    The file may not be changed.
+
+stat.SF_APPEND
+
+    The file may only be appended to.
+
+stat.SF_NOUNLINK
+
+    The file may not be renamed or deleted.
+
+stat.SF_SNAPSHOT
+
+    The file is a snapshot file.
+
+See the *BSD or Mac OS systems man page chflags(2) for more information.
+
+On Windows, the following file attribute constants are available for use when testing bits in the st_file_attributes member returned by os.stat(). See the Windows API documentation for more detail on the meaning of these constants.
+
+stat.FILE_ATTRIBUTE_ARCHIVE
+stat.FILE_ATTRIBUTE_COMPRESSED
+stat.FILE_ATTRIBUTE_DEVICE
+stat.FILE_ATTRIBUTE_DIRECTORY
+stat.FILE_ATTRIBUTE_ENCRYPTED
+stat.FILE_ATTRIBUTE_HIDDEN
+stat.FILE_ATTRIBUTE_INTEGRITY_STREAM
+stat.FILE_ATTRIBUTE_NORMAL
+stat.FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
+stat.FILE_ATTRIBUTE_NO_SCRUB_DATA
+stat.FILE_ATTRIBUTE_OFFLINE
+stat.FILE_ATTRIBUTE_READONLY
+stat.FILE_ATTRIBUTE_REPARSE_POINT
+stat.FILE_ATTRIBUTE_SPARSE_FILE
+stat.FILE_ATTRIBUTE_SYSTEM
+stat.FILE_ATTRIBUTE_TEMPORARY
+stat.FILE_ATTRIBUTE_VIRTUAL
+
+    New in version 3.5.
+
+On Windows, the following constants are available for comparing against the st_reparse_tag member returned by os.lstat(). These are well-known constants, but are not an exhaustive list.
+
+stat.IO_REPARSE_TAG_SYMLINK
+stat.IO_REPARSE_TAG_MOUNT_POINT
+stat.IO_REPARSE_TAG_APPEXECLINK
+
+    New in version 3.8.
+
+Previous topic
+
+fileinput — Iterate over lines from multiple input streams
+Next topic
+
+filecmp — File and Directory Comparisons
+This Page
+
+    Report a Bug
+    Show Source
+
+«
+
+    index
+    modules |
+    next |
+    previous |
+    Python » 3.9.5 Documentation » The Python Standard Library » File and Directory Access »

@@ -1,0 +1,21 @@
+
+22
+
+In general if you're doing a streaming mean calculation of floating point numbers, you're probably better off using a more numerically stable algorithm than simply summing the generator and dividing by the length.
+
+The simplest of these (that I know) is usually credited to Knuth, and also calculates variance. The link contains a python implementation, but just the mean portion is copied here for completeness.
+
+def mean(data):
+    n = 0
+    mean = 0.0
+
+    for x in data:
+        n += 1
+        mean += (x - mean)/n
+
+    if n < 1:
+        return float('nan');
+    else:
+        return mean
+
+I know this question is super old, but it's still the first hit on google, so it seemed appropriate to post. I'm still sad that the python standard library doesn't contain this simple piec

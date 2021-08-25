@@ -1,0 +1,663 @@
+    dirpath is a string, the path to the directory. dirnames is a list of the names of the subdirectories in dirpath (excluding '.' and '..'). filenames is a list of the names of the non-directory files in dirpath. Note that the names in the lists contain no path components. To get a full path (which begins with top) to a file or directory in dirpath, do os.path.join(dirpath, name). Whether or not the lists are sorted depends on the file system. If a file is removed from or added to the dirpath directory during generating the lists, whether a name for that file be included is unspecified.
+
+    If optional argument topdown is True or not specified, the triple for a directory is generated before the triples for any of its subdirectories (directories are generated top-down). If topdown is False, the triple for a directory is generated after the triples for all of its subdirectories (directories are generated bottom-up). No matter the value of topdown, the list of subdirectories is retrieved before the tuples for the directory and its subdirectories are generated.
+
+    When topdown is True, the caller can modify the dirnames list in-place (perhaps using del or slice assignment), and walk() will only recurse into the subdirectories whose names remain in dirnames; this can be used to prune the search, impose a specific order of visiting, or even to inform walk() about directories the caller creates or renames before it resumes walk() again. Modifying dirnames when topdown is False has no effect on the behavior of the walk, because in bottom-up mode the directories in dirnames are generated before dirpath itself is generated.
+
+    By default, errors from the scandir() call are ignored. If optional argument onerror is specified, it should be a function; it will be called with one argument, an OSError instance. It can report the error to continue with the walk, or raise the exception to abort the walk. Note that the filename is available as the filename attribute of the exception object.
+
+    By default, walk() will not walk down into symbolic links that resolve to directories. Set followlinks to True to visit directories pointed to by symlinks, on systems that support them.
+
+    Note
+
+    Be aware that setting followlinks to True can lead to infinite recursion if a link points to a parent directory of itself. walk() does not keep track of the directories it visited already.
+
+    Note
+
+    If you pass a relative pathname, don’t change the current working directory between resumptions of walk(). walk() never changes the current directory, and assumes that its caller doesn’t either.
+
+    This example displays the number of bytes taken by non-directory files in each directory under the starting directory, except that it doesn’t look under any CVS subdirectory:
+
+    import os
+    from os.path import join, getsize
+    for root, dirs, files in os.walk('python/Lib/email'):
+        print(root, "consumes", end=" ")
+        print(sum(getsize(join(root, name)) for name in files), end=" ")
+        print("bytes in", len(files), "non-directory files")
+        if 'CVS' in dirs:
+            dirs.remove('CVS')  # don't visit CVS directories
+
+    In the next example (simple implementation of shutil.rmtree()), walking the tree bottom-up is essential, rmdir() doesn’t allow deleting a directory before the directory is empty:
+
+    # Delete everything reachable from the directory named in "top",
+    # assuming there are no symbolic links.
+    # CAUTION:  This is dangerous!  For example, if top == '/', it
+    # could delete all your disk files.
+    import os
+    for root, dirs, files in os.walk(top, topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+
+    Raises an auditing event os.walk with arguments top, topdown, onerror, followlinks.
+
+    Changed in version 3.5: This function now calls os.scandir() instead of os.listdir(), making it faster by reducing the number of calls to os.stat().
+
+    Changed in version 3.6: Accepts a path-like object.
+
+os.fwalk(top='.', topdown=True, onerror=None, *, follow_symlinks=False, dir_fd=None)
+
+    This behaves exactly like walk(), except that it yields a 4-tuple (dirpath, dirnames, filenames, dirfd), and it supports dir_fd.
+
+    dirpath, dirnames and filenames are identical to walk() output, and dirfd is a file descriptor referring to the directory dirpath.
+
+    This function always supports paths relative to directory descriptors and not following symlinks. Note however that, unlike other functions, the fwalk() default value for follow_symlinks is False.
+
+    Note
+
+    Since fwalk() yields file descriptors, those are only valid until the next iteration step, so you should duplicate them (e.g. with dup()) if you want to keep them longer.
+
+    This example displays the number of bytes taken by non-directory files in each directory under the starting directory, except that it doesn’t look under any CVS subdirectory:
+
+    import os
+    for root, dirs, files, rootfd in os.fwalk('python/Lib/email'):
+        print(root, "consumes", end="")
+        print(sum([os.stat(name, dir_fd=rootfd).st_size for name in files]),
+              end="")
+        print("bytes in", len(files), "non-directory files")
+        if 'CVS' in dirs:
+            dirs.remove('CVS')  # don't visit CVS directories
+
+    In the next example, walking the tree bottom-up is essential: rmdir() doesn’t allow deleting a directory before the directory is empty:
+
+    # Delete everything reachable from the directory named in "top",
+    # assuming there are no symbolic links.
+    # CAUTION:  This is dangerous!  For example, if top == '/', it
+    # could delete all your disk files.
+    import os
+    for root, dirs, files, rootfd in os.fwalk(top, topdown=False):
+        for name in files:
+            os.unlink(name, dir_fd=rootfd)
+        for name in dirs:
+            os.rmdir(name, dir_fd=rootfd)
+
+    Raises an auditing event os.fwalk with arguments top, topdown, onerror, follow_symlinks, dir_fd.
+
+    Availability: Unix.
+
+    New in version 3.3.
+
+    Changed in version 3.6: Accepts a path-like object.
+
+    Changed in version 3.7: Added support for bytes paths.
+
+os.memfd_create(name[, flags=os.MFD_CLOEXEC])
+
+    Create an anonymous file and return a file descriptor that refers to it. flags must be one of the os.MFD_* constants available on the system (or a bitwise ORed combination of them). By default, the new file descriptor is non-inheritable.
+
+    The name supplied in name is used as a filename and will be displayed as the target of the corresponding symbolic link in the directory /proc/self/fd/. The displayed name is always prefixed with memfd: and serves only for debugging purposes. Names do not affect the behavior of the file descriptor, and as such multiple files can have the same name without any side effects.
+
+    Availability: Linux 3.17 or newer with glibc 2.27 or newer.
+
+    New in version 3.8.
+
+os.MFD_CLOEXEC
+os.MFD_ALLOW_SEALING
+os.MFD_HUGETLB
+
+    Open a pipe to or from command cmd. The return value is an open file object connected to the pipe, which can be read or written depending on whether mode is 'r' (default) or 'w'. The buffering argument has the same meaning as the corresponding argument to the built-in open() function. The returned file object reads or writes text strings rather than bytes.
+
+    The close method returns None if the subprocess exited successfully, or the subprocess’s return code if there was an error. On POSIX systems, if the return code is positive it represents the return value of the process left-shifted by one byte. If the return code is negative, the process was terminated by the signal given by the negated value of the return code. (For example, the return value might be - signal.SIGKILL if the subprocess was killed.) On Windows systems, the return value contains the signed integer return code from the child process.
+
+    On Unix, waitstatus_to_exitcode() can be used to convert the close method result (exit status) into an exit code if it is not None. On Windows, the close method result is directly the exit code (or None).
+
+    This is implemented using subprocess.Popen; see that class’s documentation for more powerful ways to manage and communicate with subprocesses.
+
+os.posix_spawn(path, argv, env, *, file_actions=None, setpgroup=None, resetids=False, setsid=False, setsigmask=(), setsigdef=(), scheduler=None)
+
+    Wraps the posix_spawn() C library API for use from Python.
+
+    Most users should use subprocess.run() instead of posix_spawn().
+
+    The positional-only arguments path, args, and env are similar to execve().
+
+    The path parameter is the path to the executable file. The path should contain a directory. Use posix_spawnp() to pass an executable file without directory.
+
+    The file_actions argument may be a sequence of tuples describing actions to take on specific file descriptors in the child process between the C library implementation’s fork() and exec() steps. The first item in each tuple must be one of the three type indicator listed below describing the remaining tuple elements:
+
+    os.POSIX_SPAWN_OPEN
+
+        (os.POSIX_SPAWN_OPEN, fd, path, flags, mode)
+
+        Performs os.dup2(os.open(path, flags, mode), fd).
+
+    os.POSIX_SPAWN_CLOSE
+
+        (os.POSIX_SPAWN_CLOSE, fd)
+
+        Performs os.close(fd).
+
+    os.POSIX_SPAWN_DUP2
+
+        (os.POSIX_SPAWN_DUP2, fd, new_fd)
+
+        Performs os.dup2(fd, new_fd).
+
+    These tuples correspond to the C library posix_spawn_file_actions_addopen(), posix_spawn_file_actions_addclose(), and posix_spawn_file_actions_adddup2() API calls used to prepare for the posix_spawn() call itself.
+
+    The setpgroup argument will set the process group of the child to the value specified. If the value specified is 0, the child’s process group ID will be made the same as its process ID. If the value of setpgroup is not set, the child will inherit the parent’s process group ID. This argument corresponds to the C library POSIX_SPAWN_SETPGROUP flag.
+
+    If the resetids argument is True it will reset the effective UID and GID of the child to the real UID and GID of the parent process. If the argument is False, then the child retains the effective UID and GID of the parent. In either case, if the set-user-ID and set-group-ID permission bits are enabled on the executable file, their effect will override the setting of the effective UID and GID. This argument corresponds to the C library POSIX_SPAWN_RESETIDS flag.
+
+    If the setsid argument is True, it will create a new session ID for posix_spawn. setsid requires POSIX_SPAWN_SETSID or POSIX_SPAWN_SETSID_NP flag. Otherwise, NotImplementedError is raised.
+
+    The setsigmask argument will set the signal mask to the signal set specified. If the parameter is not used, then the child inherits the parent’s signal mask. This argument corresponds to the C library POSIX_SPAWN_SETSIGMASK flag.
+
+    The sigdef argument will reset the disposition of all signals in the set specified. This argument corresponds to the C library POSIX_SPAWN_SETSIGDEF flag.
+
+    The scheduler argument must be a tuple containing the (optional) scheduler policy and an instance of sched_param with the scheduler parameters. A value of None in the place of the scheduler policy indicates that is not being provided. This argument is a combination of the C library POSIX_SPAWN_SETSCHEDPARAM and POSIX_SPAWN_SETSCHEDULER flags.
+
+    Raises an auditing event os.posix_spawn with arguments path, argv, env.
+
+    New in version 3.8.
+
+    Availability: Unix.
+
+os.posix_spawnp(path, argv, env, *, file_actions=None, setpgroup=None, resetids=False, setsid=False, setsigmask=(), setsigdef=(), scheduler=None)
+
+    Wraps the posix_spawnp() C library API for use from Python.
+
+    Similar to posix_spawn() except that the system searches for the executable file in the list of directories specified by the PATH environment variable (in the same way as for execvp(3)).
+
+    Raises an auditing event os.posix_spawn with arguments path, argv, env.
+
+    New in version 3.8.
+
+    Availability: See posix_spawn() documentation.
+
+os.register_at_fork(*, before=None, after_in_parent=None, after_in_child=None)
+
+    Register callables to be executed when a new child process is forked using os.fork() or similar process cloning APIs. The parameters are optional and keyword-only. Each specifies a different call point.
+
+        before is a function called before forking a child process.
+
+        after_in_parent is a function called from the parent process after forking a child process.
+
+        after_in_child is a function called from the child process.
+
+    These calls are only made if control is expected to return to the Python interpreter. A typical subprocess launch will not trigger them as the child is not going to re-enter the interpreter.
+
+    Functions registered for execution before forking are called in reverse registration order. Functions registered for execution after forking (either in the parent or in the child) are called in registration order.
+
+    Note that fork() calls made by third-party C code may not call those functions, unless it explicitly calls PyOS_BeforeFork(), PyOS_AfterFork_Parent() and PyOS_AfterFork_Child().
+
+    There is no way to unregister a function.
+
+    Availability: Unix.
+
+    New in version 3.7.
+
+os.spawnl(mode, path, ...)
+os.spawnle(mode, path, ..., env)
+os.spawnlp(mode, file, ...)
+os.spawnlpe(mode, file, ..., env)
+os.spawnv(mode, path, args)
+os.spawnve(mode, path, args, env)
+os.spawnvp(mode, file, args)
+os.spawnvpe(mode, file, args, env)
+
+    Execute the program path in a new process.
+
+    (Note that the subprocess module provides more powerful facilities for spawning new processes and retrieving their results; using that module is preferable to using these functions. Check especially the Replacing Older Functions with the subprocess Module section.)
+
+    If mode is P_NOWAIT, this function returns the process id of the new process; if mode is P_WAIT, returns the process’s exit code if it exits normally, or -signal, where signal is the signal that killed the process. On Windows, the process id will actually be the process handle, so can be used with the waitpid() function.
+
+    Note on VxWorks, this function doesn’t return -signal when the new process is killed. Instead it raises OSError exception.
+
+    The “l” and “v” variants of the spawn* functions differ in how command-line arguments are passed. The “l” variants are perhaps the easiest to work with if the number of parameters is fixed when the code is written; the individual parameters simply become additional parameters to the spawnl*() functions. The “v” variants are good when the number of parameters is variable, with the arguments being passed in a list or tuple as the args parameter. In either case, the arguments to the child process must start with the name of the command being run.
+
+    The variants which include a second “p” near the end (spawnlp(), spawnlpe(), spawnvp(), and spawnvpe()) will use the PATH environment variable to locate the program file. When the environment is being replaced (using one of the spawn*e variants, discussed in the next paragraph), the new environment is used as the source of the PATH variable. The other variants, spawnl(), spawnle(), spawnv(), and spawnve(), will not use the PATH variable to locate the executable; path must contain an appropriate absolute or relative path.
+
+    For spawnle(), spawnlpe(), spawnve(), and spawnvpe() (note that these all end in “e”), the env parameter must be a mapping which is used to define the environment variables for the new process (they are used instead of the current process’ environment); the functions spawnl(), spawnlp(), spawnv(), and spawnvp() all cause the new process to inherit the environment of the current process. Note that keys and values in the env dictionary must be strings; invalid keys or values will cause the function to fail, with a return value of 127.
+
+    As an example, the following calls to spawnlp() and spawnvpe() are equivalent:
+
+    import os
+    os.spawnlp(os.P_WAIT, 'cp', 'cp', 'index.html', '/dev/null')
+
+    L = ['cp', 'index.html', '/dev/null']
+    os.spawnvpe(os.P_WAIT, 'cp', L, os.environ)
+
+    Raises an auditing event os.spawn with arguments mode, path, args, env.
+
+    Availability: Unix, Windows. spawnlp(), spawnlpe(), spawnvp() and spawnvpe() are not available on Windows. spawnle() and spawnve() are not thread-safe on Windows; we advise you to use the subprocess module instead.
+
+    Changed in version 3.6: Accepts a path-like object.
+
+os.P_NOWAIT
+os.P_NOWAITO
+
+    Possible values for the mode parameter to the spawn* family of functions. If either of these values is given, the spawn*() functions will return as soon as the new process has been created, with the process id as the return value.
+
+    Availability: Unix, Windows.
+
+os.P_WAIT
+
+    Possible value for the mode parameter to the spawn* family of functions. If this is given as mode, the spawn*() functions will not return until the new process has run to completion and will return the exit code of the process the run is successful, or -signal if a signal kills the process.
+
+    Availability: Unix, Windows.
+
+os.P_DETACH
+os.P_OVERLAY
+
+    Possible values for the mode parameter to the spawn* family of functions. These are less portable than those listed above. P_DETACH is similar to P_NOWAIT, but the new process is detached from the console of the calling process. If P_OVERLAY is used, the current process will be replaced; the spawn* function will not return.
+
+    Availability: Windows.
+
+os.startfile(path[, operation])
+
+    Start a file with its associated application.
+
+    When operation is not specified or 'open', this acts like double-clicking the file in Windows Explorer, or giving the file name as an argument to the start command from the interactive command shell: the file is opened with whatever application (if any) its extension is associated.
+
+    When another operation is given, it must be a “command verb” that specifies what should be done with the file. Common verbs documented by Microsoft are 'print' and 'edit' (to be used on files) as well as 'explore' and 'find' (to be used on directories).
+
+    startfile() returns as soon as the associated application is launched. There is no option to wait for the application to close, and no way to retrieve the application’s exit status. The path parameter is relative to the current directory. If you want to use an absolute path, make sure the first character is not a slash ('/'); the underlying Win32 ShellExecute() function doesn’t work if it is. Use the os.path.normpath() function to ensure that the path is properly encoded for Win32.
+
+    To reduce interpreter startup overhead, the Win32 ShellExecute() function is not resolved until this function is first called. If the function cannot be resolved, NotImplementedError will be raised.
+
+    Raises an auditing event os.startfile with arguments path, operation.
+
+    Availability: Windows.
+
+os.system(command)
+
+    Execute the command (a string) in a subshell. This is implemented by calling the Standard C function system(), and has the same limitations. Changes to sys.stdin, etc. are not reflected in the environment of the executed command. If command generates any output, it will be sent to the interpreter standard output stream. The C standard does not specify the meaning of the return value of the C function, so the return value of the Python function is system-dependent.
+
+    On Unix, the return value is the exit status of the process encoded in the format specified for wait().
+
+    On Windows, the return value is that returned by the system shell after running command. The shell is given by the Windows environment variable COMSPEC: it is usually cmd.exe, which returns the exit status of the command run; on systems using a non-native shell, consult your shell documentation.
+
+    The subprocess module provides more powerful facilities for spawning new processes and retrieving their results; using that module is preferable to using this function. See the Replacing Older Functions with the subprocess Module section in the subprocess documentation for some helpful recipes.
+
+    On Unix, waitstatus_to_exitcode() can be used to convert the result (exit status) into an exit code. On Windows, the result is directly the exit code.
+
+    Raises an auditing event os.system with argument command.
+
+    Availability: Unix, Windows.
+
+os.times()
+
+    Returns the current global process times. The return value is an object with five attributes:
+
+        user - user time
+
+        system - system time
+
+        children_user - user time of all child processes
+
+        children_system - system time of all child processes
+
+        elapsed - elapsed real time since a fixed point in the past
+
+    For backwards compatibility, this object also behaves like a five-tuple containing user, system, children_user, children_system, and elapsed in that order.
+
+    See the Unix manual page times(2) and times(3) manual page on Unix or the GetProcessTimes MSDN on Windows. On Windows, only user and system are known; the other attributes are zero.
+
+    Availability: Unix, Windows.
+
+    Changed in version 3.3: Return type changed from a tuple to a tuple-like object with named attributes.
+
+os.wait()
+
+    Wait for completion of a child process, and return a tuple containing its pid and exit status indication: a 16-bit number, whose low byte is the signal number that killed the process, and whose high byte is the exit status (if the signal number is zero); the high bit of the low byte is set if a core file was produced.
+
+    waitstatus_to_exitcode() can be used to convert the exit status into an exit code.
+
+    Availability: Unix.
+
+    See also
+
+    waitpid() can be used to wait for the completion of a specific child process and has more options.
+
+os.waitid(idtype, id, options)
+
+    Wait for the completion of one or more child processes. idtype can be P_PID, P_PGID, P_ALL, or P_PIDFD on Linux. id specifies the pid to wait on. options is constructed from the ORing of one or more of WEXITED, WSTOPPED or WCONTINUED and additionally may be ORed with WNOHANG or WNOWAIT. The return value is an object representing the data contained in the siginfo_t structure, namely: si_pid, si_uid, si_signo, si_status, si_code or None if WNOHANG is specified and there are no children in a waitable state.
+
+    Availability: Unix.
+
+    New in version 3.3.
+
+os.P_PID
+os.P_PGID
+os.P_ALL
+
+    These are the possible values for idtype in waitid(). They affect how id is interpreted.
+
+    Availability: Unix.
+
+    New in version 3.3.
+
+os.P_PIDFD
+
+    This is a Linux-specific idtype that indicates that id is a file descriptor that refers to a process.
+
+    Availability: Linux 5.4+
+
+    New in version 3.9.
+
+os.WEXITED
+os.WSTOPPED
+os.WNOWAIT
+
+    Flags that can be used in options in waitid() that specify what child signal to wait for.
+
+    Availability: Unix.
+
+    New in version 3.3.
+
+os.CLD_EXITED
+os.CLD_KILLED
+os.CLD_DUMPED
+os.CLD_TRAPPED
+os.CLD_STOPPED
+os.CLD_CONTINUED
+
+    These are the possible values for si_code in the result returned by waitid().
+
+    Availability: Unix.
+
+    New in version 3.3.
+
+    Changed in version 3.9: Added CLD_KILLED and CLD_STOPPED values.
+
+os.waitpid(pid, options)
+
+    The details of this function differ on Unix and Windows.
+
+    On Unix: Wait for completion of a child process given by process id pid, and return a tuple containing its process id and exit status indication (encoded as for wait()). The semantics of the call are affected by the value of the integer options, which should be 0 for normal operation.
+
+    If pid is greater than 0, waitpid() requests status information for that specific process. If pid is 0, the request is for the status of any child in the process group of the current process. If pid is -1, the request pertains to any child of the current process. If pid is less than -1, status is requested for any process in the process group -pid (the absolute value of pid).
+
+    An OSError is raised with the value of errno when the syscall returns -1.
+
+    On Windows: Wait for completion of a process given by process handle pid, and return a tuple containing pid, and its exit status shifted left by 8 bits (shifting makes cross-platform use of the function easier). A pid less than or equal to 0 has no special meaning on Windows, and raises an exception. The value of integer options has no effect. pid can refer to any process whose id is known, not necessarily a child process. The spawn* functions called with P_NOWAIT return suitable process handles.
+
+    waitstatus_to_exitcode() can be used to convert the exit status into an exit code.
+
+    Changed in version 3.5: If the system call is interrupted and the signal handler does not raise an exception, the function now retries the system call instead of raising an InterruptedError exception (see PEP 475 for the rationale).
+
+os.wait3(options)
+
+    Similar to waitpid(), except no process id argument is given and a 3-element tuple containing the child’s process id, exit status indication, and resource usage information is returned. Refer to resource.getrusage() for details on resource usage information. The option argument is the same as that provided to waitpid() and wait4().
+
+    waitstatus_to_exitcode() can be used to convert the exit status into an exitcode.
+
+    Availability: Unix.
+
+os.wait4(pid, options)
+
+    Similar to waitpid(), except a 3-element tuple, containing the child’s process id, exit status indication, and resource usage information is returned. Refer to resource.getrusage() for details on resource usage information. The arguments to wait4() are the same as those provided to waitpid().
+
+    waitstatus_to_exitcode() can be used to convert the exit status into an exitcode.
+
+    Availability: Unix.
+
+os.waitstatus_to_exitcode(status)
+
+    Convert a wait status to an exit code.
+
+    On Unix:
+
+        If the process exited normally (if WIFEXITED(status) is true), return the process exit status (return WEXITSTATUS(status)): result greater than or equal to 0.
+
+        If the process was terminated by a signal (if WIFSIGNALED(status) is true), return -signum where signum is the number of the signal that caused the process to terminate (return -WTERMSIG(status)): result less than 0.
+
+        Otherwise, raise a ValueError.
+
+    On Windows, return status shifted right by 8 bits.
+
+    On Unix, if the process is being traced or if waitpid() was called with WUNTRACED option, the caller must first check if WIFSTOPPED(status) is true. This function must not be called if WIFSTOPPED(status) is true.
+
+    See also
+
+    WIFEXITED(), WEXITSTATUS(), WIFSIGNALED(), WTERMSIG(), WIFSTOPPED(), WSTOPSIG() functions.
+
+    New in version 3.9.
+
+os.WNOHANG
+
+    The option for waitpid() to return immediately if no child process status is available immediately. The function returns (0, 0) in this case.
+
+    Availability: Unix.
+
+os.WCONTINUED
+
+    This option causes child processes to be reported if they have been continued from a job control stop since their status was last reported.
+
+    Availability: some Unix systems.
+
+os.WUNTRACED
+
+    This option causes child processes to be reported if they have been stopped but their current state has not been reported since they were stopped.
+
+    Availability: Unix.
+
+The following functions take a process status code as returned by system(), wait(), or waitpid() as a parameter. They may be used to determine the disposition of a process.
+
+os.WCOREDUMP(status)
+
+    Return True if a core dump was generated for the process, otherwise return False.
+
+    This function should be employed only if WIFSIGNALED() is true.
+
+    Availability: Unix.
+
+os.WIFCONTINUED(status)
+
+    Return True if a stopped child has been resumed by delivery of SIGCONT (if the process has been continued from a job control stop), otherwise return False.
+
+    See WCONTINUED option.
+
+    Availability: Unix.
+
+os.WIFSTOPPED(status)
+
+    Return True if the process was stopped by delivery of a signal, otherwise return False.
+
+    WIFSTOPPED() only returns True if the waitpid() call was done using WUNTRACED option or when the process is being traced (see ptrace(2)).
+
+    Availability: Unix.
+
+os.WIFSIGNALED(status)
+
+    Return True if the process was terminated by a signal, otherwise return False.
+
+    Availability: Unix.
+
+os.WIFEXITED(status)
+
+    Return True if the process exited terminated normally, that is, by calling exit() or _exit(), or by returning from main(); otherwise return False.
+
+    Availability: Unix.
+
+os.WEXITSTATUS(status)
+
+    Return the process exit status.
+
+    This function should be employed only if WIFEXITED() is true.
+
+    Availability: Unix.
+
+os.WSTOPSIG(status)
+
+    Return the signal which caused the process to stop.
+
+    This function should be employed only if WIFSTOPPED() is true.
+
+    Availability: Unix.
+
+os.WTERMSIG(status)
+
+    Return the number of the signal that caused the process to terminate.
+
+    This function should be employed only if WIFSIGNALED() is true.
+
+    Availability: Unix.
+
+Interface to the scheduler
+
+These functions control how a process is allocated CPU time by the operating system. They are only available on some Unix platforms. For more detailed information, consult your Unix manpages.
+
+New in version 3.3.
+
+The following scheduling policies are exposed if they are supported by the operating system.
+
+os.SCHED_OTHER
+
+    The default scheduling policy.
+
+os.SCHED_BATCH
+
+    Scheduling policy for CPU-intensive processes that tries to preserve interactivity on the rest of the computer.
+
+os.SCHED_IDLE
+
+    Scheduling policy for extremely low priority background tasks.
+
+os.SCHED_SPORADIC
+
+    Scheduling policy for sporadic server programs.
+
+os.SCHED_FIFO
+
+    A First In First Out scheduling policy.
+
+os.SCHED_RR
+
+    A round-robin scheduling policy.
+
+os.SCHED_RESET_ON_FORK
+
+    This flag can be OR’ed with any other scheduling policy. When a process with this flag set forks, its child’s scheduling policy and priority are reset to the default.
+
+class os.sched_param(sched_priority)
+
+    This class represents tunable scheduling parameters used in sched_setparam(), sched_setscheduler(), and sched_getparam(). It is immutable.
+
+    At the moment, there is only one possible parameter:
+
+    sched_priority
+
+        The scheduling priority for a scheduling policy.
+
+os.sched_get_priority_min(policy)
+
+    Get the minimum priority value for policy. policy is one of the scheduling policy constants above.
+
+os.sched_get_priority_max(policy)
+
+    Get the maximum priority value for policy. policy is one of the scheduling policy constants above.
+
+os.sched_setscheduler(pid, policy, param)
+os.RTLD_LAZY
+os.RTLD_NOW
+os.RTLD_GLOBAL
+os.RTLD_LOCAL
+os.RTLD_NODELETE
+os.RTLD_NOLOAD
+os.RTLD_DEEPBIND
+
+    Flags for use with the setdlopenflags() and getdlopenflags() functions. See the Unix manual page dlopen(3) for what the different flags mean.
+
+    New in version 3.3.
+
+Random numbers
+
+os.getrandom(size, flags=0)
+
+    Get up to size random bytes. The function can return less bytes than requested.
+
+    These bytes can be used to seed user-space random number generators or for cryptographic purposes.
+
+    getrandom() relies on entropy gathered from device drivers and other sources of environmental noise. Unnecessarily reading large quantities of data will have a negative impact on other users of the /dev/random and /dev/urandom devices.
+
+    The flags argument is a bit mask that can contain zero or more of the following values ORed together: os.GRND_RANDOM and GRND_NONBLOCK.
+
+    See also the Linux getrandom() manual page.
+
+    Availability: Linux 3.17 and newer.
+
+    New in version 3.6.
+
+os.urandom(size)
+
+    Return a string of size random bytes suitable for cryptographic use.
+
+    This function returns random bytes from an OS-specific randomness source. The returned data should be unpredictable enough for cryptographic applications, though its exact quality depends on the OS implementation.
+
+    On Linux, if the getrandom() syscall is available, it is used in blocking mode: block until the system urandom entropy pool is initialized (128 bits of entropy are collected by the kernel). See the PEP 524 for the rationale. On Linux, the getrandom() function can be used to get random bytes in non-blocking mode (using the GRND_NONBLOCK flag) or to poll until the system urandom entropy pool is initialized.
+
+    On a Unix-like system, random bytes are read from the /dev/urandom device. If the /dev/urandom device is not available or not readable, the NotImplementedError exception is raised.
+
+    On Windows, it will use CryptGenRandom().
+
+    See also
+
+    The secrets module provides higher level functions. For an easy-to-use interface to the random number generator provided by your platform, please see random.SystemRandom.
+
+    Changed in version 3.6.0: On Linux, getrandom() is now used in blocking mode to increase the security.
+
+    Changed in version 3.5.2: On Linux, if the getrandom() syscall blocks (the urandom entropy pool is not initialized yet), fall back on reading /dev/urandom.
+
+    Changed in version 3.5: On Linux 3.17 and newer, the getrandom() syscall is now used when available. On OpenBSD 5.6 and newer, the C getentropy() function is now used. These functions avoid the usage of an internal file descriptor.
+
+os.GRND_NONBLOCK
+
+    By default, when reading from /dev/random, getrandom() blocks if no random bytes are available, and when reading from /dev/urandom, it blocks if the entropy pool has not yet been initialized.
+
+    If the GRND_NONBLOCK flag is set, then getrandom() does not block in these cases, but instead immediately raises BlockingIOError.
+
+    New in version 3.6.
+
+os.GRND_RANDOM
+
+    If this bit is set, then random bytes are drawn from the /dev/random pool instead of the /dev/urandom pool.
+
+    New in version 3.6.
+
+Table of Contents
+
+    os — Miscellaneous operating system interfaces
+        File Names, Command Line Arguments, and Environment Variables
+        Process Parameters
+        File Object Creation
+        File Descriptor Operations
+            Querying the size of a terminal
+            Inheritance of File Descriptors
+        Files and Directories
+            Linux extended attributes
+        Process Management
+        Interface to the scheduler
+        Miscellaneous System Information
+        Random numbers
+
+Previous topic
+
+Generic Operating System Services
+Next topic
+
+io — Core tools for working with streams
+This Page
+
+    Report a Bug
+    Show Source
+
+«
+
+    index
+    modules |
+    next |
+    previous |
+    Python » 3.9.5 Documentation » The Python Standard Library » Generic Operating System Services »

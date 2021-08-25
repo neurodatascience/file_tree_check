@@ -1,0 +1,9 @@
+ also see other answers here that approach that sort of output, but I think we can do better, with simpler, more modern code and lazily evaluating approaches.
+Tree in Python
+
+To begin with, let's use an example that
+
+    uses the Python 3 Path object
+    uses the yield and yield from expressions (that create a generator function)
+    uses recursion for elegant simplicity
+    uses comments and some type annotations for extra clarity
