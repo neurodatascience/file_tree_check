@@ -6,7 +6,7 @@ class SmartPath(ABC):
     """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
     in a readable format and allow retrieval of some statistics.
 
-    Each instance stores their parent directory and their target_depth relative to the first path.
+    Each instance stores their parent directory and their depth relative to the first path.
 
     This is an abstract class for both files and folder Paths.
     """
@@ -57,10 +57,6 @@ class SmartPath(ABC):
     @abstractmethod
     def dir_count(self):
         raise NotImplementedError()
-
-    @classmethod
-    def default_criteria(cls, path):
-        return True
 
     def display(self, measures=(), name_max_length=60):
         return str(self.path.name).ljust(name_max_length - self.depth * 3)

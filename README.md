@@ -3,7 +3,7 @@ File checking project for McGill NeuroDataScience - ORIGAMI lab
 
 The file_tree_check package takes a repeating file organization (large amount of folders with same name or files with similar name) and will do comparisons between every occurences to highlight missing or unusual files/folders.
 
-Written initially for neural imaging data structure like [BIDS](https://bids.neuroimaging.io/) but compatible with any data structure where folder names and file names are repeating (directly the same name or after removing the unique identifier).
+Written initially for neural imaging data structure like [BIDS](https://bids.neuroimaging.io/) but compatible with any data structure where folder names and file of similar name are repeating (a regular expression is used to remove any non-repeating part if needed).
 
 
 ## Installation

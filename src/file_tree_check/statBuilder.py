@@ -97,7 +97,7 @@ class StatBuilder(object):
                         if value != most_common_value:
                             output += "            {}  has : {}\n".format(str(path), value)
             self.logger.info("Found {} folder/files for measure {}".format(len(sorted_folders), measure_name))
-        self.logger.info("Summary created with {} measures. Contains {} total written characters.".format(
+        self.logger.info("Summary created with {} measures, file is {} characters long.".format(
             len(self.measures), len(output)))
         return output
 
@@ -105,11 +105,11 @@ class StatBuilder(object):
         self.logger.debug("Opening csv file for writing at : {}".format(output_path))
         with open(output_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
-            headers = ['Path'] + ['IdentifierEngine'] + list(self.measures)
+            headers = ['Path'] + ['Identifier'] + list(self.measures)
             csv_writer.writerow(headers)
             self.logger.info("Storing in CSV file with header : {}".format(str(headers)))
             # Supposing every file/folder is present in the first measure's dictionary
-            self.logger.debug("Iterating through every file/folder type to populate CSV.")
+            self.logger.debug("Iterating through every file/folder type to populate the CSV.")
             for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
                 "For every path found in the first measure, write all the measures for that path in the same row."
                 for path, value in paths.items():
@@ -117,4 +117,4 @@ class StatBuilder(object):
                     for measure in self.measures:
                         row.append(self.stat_dict[measure][file_identifier][path])
                     csv_writer.writerow([path] + [file_identifier] + row)
-        self.logger.info("CSV files closed. Contains {} bytes of data".format(Path(output_path).stat().st_size))
+        self.logger.info("CSV file closed. Contains {} bytes of data".format(Path(output_path).stat().st_size))

@@ -13,6 +13,7 @@ from smartDirectoryPath import SmartDirectoryPath
 from identifierEngine import IdentifierEngine
 import configparser
 import logging
+import re
 
 CONFIG_PATH = r"C:\Users\datbo\PycharmProjects\testNeuro\src\file_tree_check\config.ini"
 LOGGER_NAME = "file_tree_check"
@@ -66,14 +67,23 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
     logger = logging.getLogger(LOGGER_NAME)
     root = Path(str(root))
     # A criteria could be used to ignore specific files or folder
-    criteria = criteria or SmartPath.default_criteria
+    if criteria is not None:
+        try:
+            criteria = re.compile(criteria)
+        except TypeError as e:
+            logger.warning("Search Criteria {} is invalid, resuming without criteria : {}".format(criteria, e))
+            criteria = None
 
     # Begin by generating the root path
     smart_root = SmartDirectoryPath(root, parent, is_last)
     yield smart_root
 
     # Get a list of every files or folder in the root and iterate over them
-    children = sorted(list(path for path in root.iterdir()), key=lambda s: str(s).lower())
+    if criteria is not None:
+        children = sorted(list(path for path in root.iterdir() if criteria.match(str(path.name)) is not None), key=lambda s: str(s).lower())
+    else:
+        children = sorted(list(path for path in root.iterdir()), key=lambda s: str(s).lower())
+
     count = 1
     for path in children:
         try:
@@ -82,8 +92,7 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
             # If the children is a folder, another instance of the method is called and
             # its output is propagated up the generator
             if path.is_dir():
-                yield from generate_tree(path, parent=smart_root,
-                                         is_last=is_last, criteria=criteria)
+                yield from generate_tree(path, parent=smart_root, is_last=is_last)
             # If the children is a file, generate a single instance of SmartPath associated to its path
             else:
                 yield SmartFilePath(path, smart_root, is_last)
@@ -93,9 +102,9 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
             continue
 
 
-def explore_with_generator(root):
+def explore_with_generator(root, criteria=None):
     """ Generate an instance of SmartPath for every file and folder (recursively) and store them"""
-    return generate_tree(root, criteria=None)
+    return generate_tree(root, criteria=criteria)
 
 
 def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_configurations=False, target_depth=None):
@@ -195,11 +204,13 @@ def main():
     identifier = IdentifierEngine(config["Categorization"]["regular expression for file identifier"],
                                   config["Categorization"]["regular expression for folder identifier"])
 
+    if config["Search Criteria"].getboolean("use search criteria"):
+        criteria = config["Search Criteria"]["regular expression for search criteria"]
+    else:
+        criteria = None
+
     logger.info("Output file paths, Tree:{}, Summary:{}, CSV:{}".format(str(tree_output_path), str(summary_output_path),
                                                                         str(csv_output_path)))
-
-    # Verifying number of files for debug
-    # print(get_total_file_count(root))
 
     logger.debug("Launching exploration of the target folder")
     measure_list = []
@@ -207,7 +218,7 @@ def main():
         if config["Measures"].getboolean(key):
             measure_list.append(key)
 
-    paths = explore_with_generator(root)
+    paths = explore_with_generator(root, criteria=criteria)
     stat_dict, configurations = get_data_from_paths(paths,
                                                     identifier, output_path=tree_output_path, measures=measure_list,
                                                     get_configurations=config['Configurations']
