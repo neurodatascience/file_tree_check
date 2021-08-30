@@ -1,10 +1,10 @@
 import csv
 import logging
-import operator
 from collections import Counter
 from matplotlib import pyplot as plt
 import seaborn as sns
 from pathlib import Path
+import time
 
 FIG_SIZE = (20, 12)
 
@@ -18,7 +18,7 @@ class StatBuilder(object):
         self.stat_dict = stat_dict
         self.measures = measures
         self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
-        self.logger.info("Created an instance of statBuilder")
+        self.logger.info("Created an instance of StatBuilder")
 
     def create_graphs(self, save_file=None, show_graph=True, max_size=8):
         """Will create a comparison graph for each measure given in a single figure."""
@@ -56,9 +56,21 @@ class StatBuilder(object):
             self.logger.debug("Displaying plots")
             plt.show()
 
-    def create_summary(self):
+    def create_summary(self, root, configurations):
         self.logger.debug("Initializing summary output")
-        output = ""
+        output = "***** Analysis of file structure at : '{}' *****" \
+                 "\nCreated: {}\nTarget directory : {}\n\n".format(root.name, time.ctime(), root)
+
+        if configurations is not None:
+            for identifier, configuration_list in configurations.items():
+                output += "\nConfigurations for folder **{}**:".format(identifier)
+                sorted_config_list = [v for v in sorted(configuration_list,
+                                                        key=lambda item: len(item["paths"]), reverse=True)]
+                for i in range(len(sorted_config_list)):
+                    output += "\n     Configuration #{} was found in {} folders. Contains the following : " \
+                              "\n            {}".format(i+1, len(sorted_config_list[i]["paths"]),
+                                                        sorted_config_list[i]["structure"])
+
         for measure_name in self.measures:
             self.logger.debug("Calculating most common occurrences for measure {}".format(measure_name))
             output += "\n\nOccurrences for measure  :     **{}**\n".format(measure_name)
@@ -66,14 +78,19 @@ class StatBuilder(object):
                                                       key=lambda item: len(item[1]), reverse=True)}
             for folder_name, paths in sorted_folders.items():
                 most_common_value, most_common_counter = 0, 0
-                output += "    In '{}' :\n".format(folder_name)
+
                 counter = Counter()
                 for path, value in paths.items():
                     counter[value] += 1
                 most_common_value = counter.most_common(1)[0][0]
                 most_common_counter = counter.most_common(1)[0][1]
-                output += "        {} of {} found in {} folders\n".format(measure_name, most_common_value,
-                                                                                        most_common_counter)
+
+                if most_common_value is None:
+                    continue
+
+                output += "    In '{}' :\n        {} of {} found {} time\n".format(folder_name,
+                                                                                   measure_name, most_common_value,
+                                                                                   most_common_counter)
                 if most_common_counter < len(paths):
                     output += "          Outliers :\n"
                     for path, value in paths.items():
@@ -84,11 +101,11 @@ class StatBuilder(object):
             len(self.measures), len(output)))
         return output
 
-    def create_csv(self, file_path):
-        self.logger.debug("Opening csv file for writing at : {}".format(file_path))
-        with open(file_path, 'w', newline='') as csv_file:
+    def create_csv(self, output_path):
+        self.logger.debug("Opening csv file for writing at : {}".format(output_path))
+        with open(output_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
-            headers = ['Path'] + ['Identifier'] + list(self.measures)
+            headers = ['Path'] + ['IdentifierEngine'] + list(self.measures)
             csv_writer.writerow(headers)
             self.logger.info("Storing in CSV file with header : {}".format(str(headers)))
             # Supposing every file/folder is present in the first measure's dictionary
@@ -100,4 +117,4 @@ class StatBuilder(object):
                     for measure in self.measures:
                         row.append(self.stat_dict[measure][file_identifier][path])
                     csv_writer.writerow([path] + [file_identifier] + row)
-        self.logger.info("CSV files closed. Contains {} bytes of data".format(Path(file_path).stat().st_size))
+        self.logger.info("CSV files closed. Contains {} bytes of data".format(Path(output_path).stat().st_size))

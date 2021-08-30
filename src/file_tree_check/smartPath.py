@@ -6,11 +6,11 @@ class SmartPath(ABC):
     """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
     in a readable format and allow retrieval of some statistics.
 
-    Each instance stores their parent directory and their depth relative to the first path.
+    Each instance stores their parent directory and their target_depth relative to the first path.
 
     This is an abstract class for both files and folder Paths.
     """
-    # Credit to stack overflow abstrus
+    # Credit to stack overflow abstrus for the visual part
 
     # The separators for the visual representation of the file structure
     display_filename_prefix_middle = '├──'
@@ -18,18 +18,16 @@ class SmartPath(ABC):
     display_parent_prefix_middle = '    '
     display_parent_prefix_last = '│   '
 
-    def __init__(self, path, parent_path, is_last):
+    def __init__(self, path, parent_smart_path, is_last):
         self.path = Path(str(path))
-        self.parent = parent_path
+        self.parent = parent_smart_path
         self.is_last = is_last
         if self.parent:
             self.depth = self.parent.depth + 1
         else:
             self.depth = 0
 
-    def add_stats(self, stat_dict, measures=(), separator="_"):
-        identifier = self.get_identifier(stat_dict, separator)
-
+    def add_stats(self, stat_dict, identifier, measures=()):
         for measure in measures:
             if identifier not in stat_dict[measure]:
                 stat_dict[measure][identifier] = dict()
@@ -54,15 +52,11 @@ class SmartPath(ABC):
 
     @abstractmethod
     def file_count(self):
-        pass
+        raise NotImplementedError()
 
     @abstractmethod
     def dir_count(self):
-        pass
-
-    @abstractmethod
-    def get_identifier(self, stat_dict, separator="_"):
-        pass
+        raise NotImplementedError()
 
     @classmethod
     def default_criteria(cls, path):
@@ -85,7 +79,8 @@ class SmartPath(ABC):
         parts = ['{!s} {!s}'.format(_filename_prefix,
                                     self.display(measures, name_max_length))]
 
-        # Now that the display for the current directory is ready, we need to add the separator for each depth level
+        # Now that the display for the current directory is ready, we need to add
+        # the separator for each target_depth level
         parent = self.parent
         # Going up the parent hierarchy
         while parent and parent.parent is not None:

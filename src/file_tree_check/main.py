@@ -10,6 +10,7 @@ from statBuilder import StatBuilder
 from smartPath import SmartPath
 from smartFilePath import SmartFilePath
 from smartDirectoryPath import SmartDirectoryPath
+from identifierEngine import IdentifierEngine
 import configparser
 import logging
 
@@ -56,26 +57,6 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     return logger
 
 
-def explore_with_generator(root, output_path=None, measures=(), separator="_"):
-    # Generate an instance of SmartPath for every file and folder (recursively) and store them
-    paths = generate_tree(root, criteria=None)
-
-    # Display the file tree either in the std_output or a text_file and get the measures on each file/folder
-    stat_dict = {}
-    for measure_name in measures:
-        stat_dict[measure_name] = {}
-    if output_path is None:
-        for path in paths:
-            stat_dict = path.add_stats(stat_dict, separator=separator)
-            print(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH), end='')
-    else:
-        with open(output_path, 'wt', encoding="utf-8") as f:
-            for path in paths:
-                stat_dict = path.add_stats(stat_dict, measures=measures, separator=separator)
-                f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
-    return stat_dict
-
-
 def generate_tree(root, parent=None, is_last=False, criteria=None):
     """Generator that creates a SmartFilePath or SmartDirectoryPath object for every item found
     within the root directory given.
@@ -108,7 +89,78 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
                 yield SmartFilePath(path, smart_root, is_last)
             count += 1
         except FileNotFoundError as e:
-            logger.error("FileNotFoundError", e)
+            logger.warning("FileNotFoundError", e)
+            continue
+
+
+def explore_with_generator(root):
+    """ Generate an instance of SmartPath for every file and folder (recursively) and store them"""
+    return generate_tree(root, criteria=None)
+
+
+def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_configurations=False, target_depth=None):
+    """Get the measures on each file/folder and create the file tree as you go if requested"""
+    logger = logging.getLogger(LOGGER_NAME)
+    stat_dict = {}
+    configurations = {}
+    for measure_name in measures:
+        stat_dict[measure_name] = {}
+    if output_path is None:
+        for path in paths:
+            stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path), measures=measures)
+            if get_configurations:
+                configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+            print(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH), end='')
+    else:
+        with open(output_path, 'wt', encoding="utf-8") as f:
+            for path in paths:
+                stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path.path), measures=measures)
+                if get_configurations:
+                    configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+                f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
+    return stat_dict, configurations
+
+
+def add_configuration(path, configurations, identifier, target_depth=None):
+    """For each folder (excluding root) look at how it's content is structured and save that structure as a configuration.
+    """
+    logger = logging.getLogger(LOGGER_NAME)
+    # The root is skipped since it is alone at his target_depth level and thus can't be compared
+    # and files are skipped
+    if isinstance(path, SmartFilePath) or path.depth == 0:
+        return configurations
+    # If a target depth is given, we exclude directories from other depth levels
+    path_unique_identifier = identifier.get_identifier(path.path)
+    if target_depth is not None:
+        if path.depth != target_depth:
+            return configurations
+    if path_unique_identifier not in configurations:
+        configurations[path_unique_identifier] = []
+    # Extract the organisation of the folder
+    children_list = []
+    for children in os.listdir(path.path):
+        children_path = path.path.joinpath(children)
+        # For the list of every children in the folder, we don't include the parent folder prefix
+        children_list.append(identifier.get_identifier(children_path, prefix_file_with_parent_folder=False))
+        children_list.sort()
+
+    # Compare that organisation with others already found
+    # The list of children is the key of the dict and the value is a list of every path with that configuration
+    if len(configurations[path_unique_identifier]) == 0:
+        # configurations has a list of every configuration associated to every identifier, each element of the list
+        # is a dict containing the list of children and the path to all folder following this configuration
+        configurations[path_unique_identifier] = [{"structure": children_list, "paths" : [str(path.path)]}]
+        return configurations
+    else:
+        # Searching if current configuration has already been seen
+        for configuration in configurations[path_unique_identifier]:
+            if configuration["structure"] == children_list:
+                # If the configuration is known, add the current path to the list of that configuration
+                configuration["paths"].append(str(path.path))
+                return configurations
+        # if no match were found, a new configuration is added to the identifier's list of configurations
+        configurations[path_unique_identifier].append({"structure": children_list, "paths": [str(path.path)]})
+        return configurations
 
 
 def main():
@@ -140,6 +192,8 @@ def main():
         csv_output_path = Path(config['Output']['csv output path'])
     else:
         csv_output_path = None
+    identifier = IdentifierEngine(config["Categorization"]["regular expression for file identifier"],
+                                  config["Categorization"]["regular expression for folder identifier"])
 
     logger.info("Output file paths, Tree:{}, Summary:{}, CSV:{}".format(str(tree_output_path), str(summary_output_path),
                                                                         str(csv_output_path)))
@@ -153,8 +207,12 @@ def main():
         if config["Measures"].getboolean(key):
             measure_list.append(key)
 
-    stat_dict = explore_with_generator(root, output_path=tree_output_path, measures=measure_list,
-                                       separator=config['Categorization']['separator'])
+    paths = explore_with_generator(root)
+    stat_dict, configurations = get_data_from_paths(paths,
+                                                    identifier, output_path=tree_output_path, measures=measure_list,
+                                                    get_configurations=config['Configurations']
+                                                    .getboolean("get number of unique configurations"),
+                                                    target_depth=config['Configurations'].getint('target depth'))
     logger.info("Retrieved {} measures for {} different folders name".format(len(stat_dict),
                                                                              len(stat_dict["file_count"])))
     logger.debug("Creating instance of StatBuilder with the measures")
@@ -172,10 +230,28 @@ def main():
 
     if summary_output_path is not None:
         with open(summary_output_path, 'wt', encoding="utf-8") as f:
-            f.write(stat_builder.create_summary())
+            f.write(stat_builder.create_summary(root, configurations))
 
     if csv_output_path is not None:
         stat_builder.create_csv(csv_output_path)
+
+    if config["Pipeline"].getboolean("pipe file data at end of execution") is True:
+        """After the successful execution of the script, the output can be outputted in the standard output.
+        By default this will print in the console which is not recommended for large dataset if given a pipe, this will
+        pass the data to the other script or command.
+        Only outputs the files currently because folder shouldn't be relevant for the custom tests.
+        Outputted format is  a single line per file : 'path,identifier,file_size,modified_time'. """
+        if config["Pipeline"].getboolean("ask confirmation") is True:
+            logger.debug("Giving the data of every file to the standard output")
+            confirm = input('All outputs created. Do you wish to send the data to the standard output? (y/n)').lower()
+            if confirm.startswith('y'):
+                for path in paths:
+                    if isinstance(path, SmartPath):
+                        print(path.path + ',' + identifier.get_identifier(path.path) + ',' + path.file_size
+                              + ',' + path.modified_time)
+                logger.info("File data was given to standard output.")
+
+    logger.info("Script executed successfully.")
 
 
 if __name__ == "__main__":

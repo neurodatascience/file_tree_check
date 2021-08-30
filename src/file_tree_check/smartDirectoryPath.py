@@ -1,19 +1,11 @@
 import os
-import logging
-from pathlib import Path
 from smartPath import SmartPath
-
-module_logger = logging.getLogger("file_tree_check.{}".format(__name__))
 
 
 class SmartDirectoryPath(SmartPath):
     """
     The Child class of SmartPath for path pointing to a directory.
     """
-
-    def get_identifier(self, stat_dict, separator="_"):
-        """For a folder, stats are saved directly with the folder name ("anat", "sub-..") for comparison"""
-        return self.path.name
 
     @property
     def file_count(self):
