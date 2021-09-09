@@ -236,8 +236,8 @@ def main():
             image_path = Path(vis_config["image path"])
         else:
             image_path = None
-        stat_builder.create_graphs(max_size=vis_config.getint('shown folder count'),
-                                   save_file=image_path, show_graph=vis_config.getboolean("print plots"))
+        stat_builder.create_plots(plots_per_measure=vis_config.getint('shown folder count'),
+                                  save_path=image_path, show_plot=vis_config.getboolean("print plots"))
 
     if summary_output_path is not None:
         with open(summary_output_path, 'wt', encoding="utf-8") as f:
