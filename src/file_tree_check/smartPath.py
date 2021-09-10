@@ -8,9 +8,21 @@ class SmartPath(ABC):
 
     Each instance stores their parent directory and their depth relative to the first path.
 
-    This is an abstract class for both files and folder Paths.
+    This is an abstract class for both files and directory Paths.
+
+    Attributes
+    ----------
+    path : pathlib.Path
+        The path to the file/directory in question.
+    parent : SmartPath
+        Reference to the parent SmartPath. Used to determine this path's depth recursively.
+    is_last : bool
+        Whether or not this path is the last one to be displayed in his directory. Used to create the tree-like output.
+    depth : int
+        The path's depth in the file structure relative to the initial target directory.
+
+    Credit to stack overflow abstrus for the visual part
     """
-    # Credit to stack overflow abstrus for the visual part
 
     # The separators for the visual representation of the file structure
     display_filename_prefix_middle = '├──'
@@ -28,6 +40,34 @@ class SmartPath(ABC):
             self.depth = 0
 
     def add_stats(self, stat_dict, identifier, measures=()):
+        """For each measure desired adds the value from this path to the dictionary.
+
+        Parameters
+        ----------
+        stat_dict : dict
+        The dictionary containing the the values for each measures.
+            stat_dict contains nested dictionaries with the following structure:
+            stat_dict={
+                'measure1' :
+                    {'identifier1' : {
+                        'path1' : value, 'path2' : value, ...},
+                    'identifier2' : {
+                        'path3' : value, 'path4' : value}, ...},
+                    }
+                'measure2' :
+                    {'identifier1' : {}, 'identifier2' : {}, ...}
+                }
+        identifier : string
+            The path's identifier. Used to aggregate this path's values to the correct place in order to add it with
+            files/directories with the same identifier across the repeating file structure.
+        measures : list of string
+            The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
+
+        Returns
+        -------
+        stat_dict : dict
+            The same dictionary that was given but with the path's values added in.
+        """
         for measure in measures:
             if identifier not in stat_dict[measure]:
                 stat_dict[measure][identifier] = dict()
@@ -62,7 +102,7 @@ class SmartPath(ABC):
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
     def displayable(self, measures=(), name_max_length=60):
-        """Returns a str corresponding to a single line in the file structure visualisation."""
+        """Returns a string corresponding to a single line in the file structure tree visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
             return self.display(measures, name_max_length)
@@ -71,7 +111,7 @@ class SmartPath(ABC):
         _filename_prefix = (self.display_filename_prefix_last if self.is_last
                             else self.display_filename_prefix_middle)
 
-        # Display the info about the file/folder after the prefix chose above
+        # Display the info about the file/directory after the prefix chose above
         parts = ['{!s} {!s}'.format(_filename_prefix,
                                     self.display(measures, name_max_length))]
 

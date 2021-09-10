@@ -55,10 +55,11 @@ class StatBuilder(object):
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
         """Create a comparison plot for each measure given in a single figure.
         One row of plots per measure.
-        Will show the distribution for a given amount of file/folder identifier per measure.
+        Will show the distribution for a given amount of file/directory identifier per measure.
         Will prioritize the distributions with the highest amount of data points.
-            E.g. will show distributions for a folder type that was found 1000 time before folders that were found 500
-            times in the file structure since each folder contributes one data point to it's folder type distribution.
+            E.g. will show distributions for a directory type that was found 1000 time before directories that were
+            found 500 times in the file structure since each directory contributes one data point to
+            it's directory type distribution.
 
         Parameters
         ----------
@@ -76,7 +77,7 @@ class StatBuilder(object):
         self.logger.debug("Iterating over the measures in the data")
         for measure_index, measure_name in enumerate(self.measures):
             i = 0
-            self.logger.debug("Iterating over the folders in the measure {}".format(measure_name))
+            self.logger.debug("Iterating over the directories in the measure {}".format(measure_name))
             # Sort the measure dict (containing 'identifier' : {'path' : value}) for identifiers with the highest
             # amount of paths (and therefore values) first
             sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
@@ -91,7 +92,7 @@ class StatBuilder(object):
                 axes[measure_index, i].set_title(identifier, color="r")
                 i += 1
                 if i >= plots_per_measure:
-                    self.logger.debug("Reached the maximum number of folder shown on the visualization")
+                    self.logger.debug("Reached the maximum number of directories shown on the visualization")
                     break
         plt.tight_layout()
         self.logger.info("Plots created")
@@ -108,14 +109,14 @@ class StatBuilder(object):
         """Produce the 'Summary' text file output.
 
         This output highlights common file configurations if requested and will point to outliers for each measure and
-        file/folder type.
+        file/directory type.
 
         Parameters
         ----------
         root :  pahlib.Path
-            Path to the root folder (target folder) of the file structure.
+            Path to the root directory (target directory) of the file structure.
         configurations : dict
-            Contains the file configurations found for each file/folder identifier with the following structure :
+            Contains the file configurations found for each file/directory identifier with the following structure :
             configurations={
                 'identifier1' :
                     [ {'structure' : ['identifier3', 'identifier4', 'identifier5'], 'paths' : ['path1', 'path2']},
@@ -136,11 +137,11 @@ class StatBuilder(object):
 
         if configurations is not None:
             for identifier, configuration_list in configurations.items():
-                output += "\nConfigurations for folder **{}**:".format(identifier)
+                output += "\nConfigurations for directory **{}**:".format(identifier)
                 sorted_config_list = [v for v in sorted(configuration_list,
                                                         key=lambda item: len(item["paths"]), reverse=True)]
                 for i in range(len(sorted_config_list)):
-                    output += "\n     Configuration #{} was found in {} folders. Contains the following : " \
+                    output += "\n     Configuration #{} was found in {} directories. Contains the following : " \
                               "\n            {}".format(i+1, len(sorted_config_list[i]["paths"]),
                                                         sorted_config_list[i]["structure"])
 
@@ -169,7 +170,7 @@ class StatBuilder(object):
                     for path, value in paths.items():
                         if value != most_common_value:
                             output += "            {}  has : {}\n".format(str(path), value)
-            self.logger.info("Found {} folder/files for measure {}".format(len(sorted_folders), measure_name))
+            self.logger.info("Found {} directories/files for measure {}".format(len(sorted_folders), measure_name))
         self.logger.info("Summary created with {} measures, file is {} characters long.".format(
             len(self.measures), len(output)))
         return output
@@ -178,14 +179,14 @@ class StatBuilder(object):
         """Produce the CSV (comma-separated value) file output at the target path.
 
                 As the name says, a CSV contains values separated by a comma.
-                In this case, each line represent a single file/folder with it's identifier and the measures done.
+                In this case, each line represent a single file/directory with it's identifier and the measures done.
                 Format of each line is :
                     path,identifier,measure1,measure2,measure3,...
                 Order of measures (but presence depends on config file option):
                     file_count, dir_count, file_size, modified_time
                 All are integers:
-                    file_count = number of files directly under given folder (ignores files inside subfolders)
-                    dir_count = number of directories directly under given folder (ignores folders inside subfolders)
+                    file_count = number of files directly under given directory (ignores files inside subdirectories)
+                    dir_count = number of directories directly under given directory (ignores inside subdirectories)
                     file_size = size in bytes rounded to the nearest integer
                     modified_time = time of last modification in number of seconds since 1st January 1970 (Epoch time)
 
@@ -200,8 +201,8 @@ class StatBuilder(object):
             headers = ['Path'] + ['Identifier'] + list(self.measures)
             csv_writer.writerow(headers)
             self.logger.info("Storing in CSV file with header : {}".format(str(headers)))
-            # Supposing every file/folder is present in the first measure's dictionary
-            self.logger.debug("Iterating through every file/folder type to populate the CSV.")
+            # Supposing every file/directory is present in the first measure's dictionary (which should be the case)
+            self.logger.debug("Iterating through every file/directory type to populate the CSV.")
             for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
                 "For every path found in the first measure, write all the measures for that path in the same row."
                 for path, value in paths.items():

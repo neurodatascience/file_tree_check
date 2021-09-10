@@ -3,8 +3,7 @@ import time
 
 
 class SmartFilePath(SmartPath):
-    """
-    The Child class of SmartPath for path pointing to a file.
+    """The Child class of SmartPath for files.
     """
 
     @property

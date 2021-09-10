@@ -3,8 +3,7 @@ from smartPath import SmartPath
 
 
 class SmartDirectoryPath(SmartPath):
-    """
-    The Child class of SmartPath for path pointing to a directory.
+    """The Child class of SmartPath for directories (folder).
     """
 
     @property
