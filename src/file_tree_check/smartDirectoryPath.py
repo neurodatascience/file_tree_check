@@ -20,7 +20,7 @@ class SmartDirectoryPath(SmartPath):
         return len(directories)
 
     def display(self, measures=(), name_max_length=60):
-        # We display the name and some statistics further in the line if asked
+        """Call the SmartPath display and add some relevant measures to be printed alongside it."""
         output = SmartPath.display(self, measures, name_max_length)
         if "file_size" in measures:
             output += 'File size = {!s} bytes'.format(self.file_size).ljust(40)

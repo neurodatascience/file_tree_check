@@ -15,6 +15,7 @@ import configparser
 import logging
 import re
 
+# Edit the following line to point to the config file location in your current installation:
 CONFIG_PATH = r"C:\Users\datbo\PycharmProjects\testNeuro\src\file_tree_check\config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
@@ -23,8 +24,25 @@ FILENAME_MAX_LENGTH = 60
 
 
 def _arg_parser():
+    """Extract the arguments given to the script.
+
+    Arguments are the part given after the main.py call in the command line.
+
+    Only 1 required argument : the path to the folder to be used as the root for the analysis.
+    2 optional and mutually exclusive arguments : "verbose" and "debug" to print logs of various levels to the console.
+
+    If neither "verbose" nor "debug" is given, logs will not be output to the console (or other standard output)
+    although they could be saved in a file via an option in the config files.
+    "debug" will show more detailed information to the console compared to "verbose".
+    Activating the log to console with either "verbose" or "debug" is independent and not mutually exclusive to the
+    logs to file.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        A parser object to be used in main() containing the argument data.
+    """
     pars = argparse.ArgumentParser(description="Insert doc here")
-    # The only required argument is the location of the directory to explore
     pars.add_argument('start_location', type=str, help="Directory to explore")
     console_log = pars.add_mutually_exclusive_group()
     console_log.add_argument('-v', '--verbose', dest="verbose", action='store_true',
@@ -35,6 +53,27 @@ def _arg_parser():
 
 
 def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
+    """Instantiate the logger object that will collect and print logs during the script execution.
+
+    File logging include the date but console logs do not.
+    If is_verbose and is_debug are both false, they will be no logs printed to the console.
+
+    Parameters
+    ----------
+    file_log_path : string
+        The path to the file where to save the logs. If is None, will not save path to any files.
+    file_log_level : string
+        The level of logging for the log file. Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
+    is_verbose : bool
+        Indicate if the console logger is to be set to the "INFO" level.
+    is_debug : bool
+        Indicate if the console logger is to be set to the "DEBUG" level for more detailed console logs.
+
+    Returns
+    -------
+    logging.Logger
+        The logger object who will redirect the log line given during the script execution to the desired outputs.
+    """
     logger = logging.getLogger(LOGGER_NAME)
     logger.setLevel(file_log_level.upper())
     file_format = logging.Formatter(fmt=LOGGER_FILE_FORMAT, datefmt="%m-%d %H:%M")
@@ -59,10 +98,37 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
 
 
 def generate_tree(root, parent=None, is_last=False, criteria=None):
-    """Generator that creates a SmartFilePath or SmartDirectoryPath object for every item found
-    within the root directory given.
-    Returns an iterable of the file structure that can be used with display() over each element.
-    When a subdirectory is found under the given path, will call another instance of this method with it as the root
+    """Create a SmartFilePath or SmartDirectoryPath generator object for every item found within the root directory.
+    These generator objects will have to be iterated over to get the SmartPath items themselves.
+    Returns an iterable of the file structure that can be used over each element.
+    When a subdirectory is found under the given path, will call another instance of this method with it as the root.
+
+    Parameters
+    ----------
+    root : string or pathlib.Path
+        The path for which to generate the SmartPath instance and recursively run this function on it's children files
+        and directories.
+    parent : SmartPath
+        The instance of the parent SmartPath. This reference allows the children SmartPath to calculate their depth
+        relative to the first root of the file structure.
+    is_last : bool
+        Indicate whether or not this file/directory was the last to be generated in it's parent folder.
+        Only relevant for visual display of the file structure.
+    criteria : string
+        A regular expression to be used to filter files and directories included in the generator output.
+        Files and folder that do not match the regular expression will be discarded, including all their children.
+        If no criteria is given, every file and directory present will have SmartPath generator created for them.
+
+    Yields
+    ----------
+    generator object
+        Each execution of generate_tree yields a single instance of SmartFilePath or SmartDirectoryPath to the generator
+        that will create them when iterated upon.
+        However, since another generate_tree() function is called on each children found, while each function yield
+        a single object, the end result will be that a object will be yielded for every file and directory found in the
+        initial root (or for every one that matches the criteria).
+        Iterating over the output generator object will then allow to act on a SmartPath instance of every file and
+        directory after only having to call ourself generate_tree() once on the target folder.
     """
     logger = logging.getLogger(LOGGER_NAME)
     root = Path(str(root))
@@ -102,13 +168,61 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
             continue
 
 
-def explore_with_generator(root, criteria=None):
-    """ Generate an instance of SmartPath for every file and directory (recursively) and store them"""
-    return generate_tree(root, criteria=criteria)
+def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_configurations=False,
+                        target_depth=None, pipe_file_data=False):
+    """Iterate over each file/directory in the generator to get measure and, create the file tree  if requested.
 
+    Parameters
+    ----------
+    paths : iterable containing SmartPath objects
+        Expected to be the generator object created by generate_tree() but can theoretically be any iterable containing
+        SmartPath objects.
+    identifier : IdentifierEngine
+        Used to extract the identifier of each path to aggregate it with similar ones resent in the file structure.
+        This IdentifierEngine is also passed to add_configuration to allow it to extract identifiers as well.
+    output_path : string
+        The path to the text file where the file tree output will be saved. If none, the type of output is skipped.
+    measures : list of string
+        The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
+    get_configurations : bool
+        Whether or not to compare the configuration of the folders in the repeating structure.
+    target_depth : int
+        Passed to add_configuration() to specify which depth of folder to use for configuration comparison.
+    pipe_file_data : bool
+        Whether to output the data from each file found directly to the standard output during the execution.
+        By default this will print in the console which is not recommended for large dataset.
+        If the script is followed by a pipe, this will pass the data to the other script or command.
+        Only outputs files because directories shouldn't be relevant for the custom tests.
+        Outputted format is  a single string per file in the format : 'path,identifier,file_size,modified_time'.
+        File_size is in bytes, modified_time is in seconds (epoch time).
 
-def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_configurations=False, target_depth=None):
-    """Get the measures on each file/directory and create the file tree as you go if requested"""
+    Returns
+    -------
+    stat_dict : dict
+    The dictionary containing the the values for each measures.
+        stat_dict contains nested dictionaries with the following structure:
+        stat_dict={
+            'measure1' :
+                {'identifier1' : {
+                    'path1' : value, 'path2' : value, ...},
+                'identifier2' : {
+                    'path3' : value, 'path4' : value}, ...},
+                }
+            'measure2' :
+                {'identifier1' : {}, 'identifier2' : {}, ...}
+            }
+    configurations : dict
+        Contains the file configurations found for each file/directory identifier with the following structure :
+            configurations={
+                'identifier1' :
+                    [ {'structure' : ['identifier3', 'identifier4', 'identifier5'], 'paths' : ['path1', 'path2']},
+                    {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
+                    ... ]
+                'identifier2' :
+                    [{'structure' : [], 'paths' : []}, ...]
+                }
+    """
+
     logger = logging.getLogger(LOGGER_NAME)
     stat_dict = {}
     configurations = {}
@@ -119,7 +233,10 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
             stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path), measures=measures)
             if get_configurations:
                 configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
-            print(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH), end='')
+            if pipe_file_data:
+                if isinstance(path, SmartFilePath):
+                    print(path.path + ',' + identifier.get_identifier(path.path) + ','
+                          + path.file_size + ',' + path.modified_time)
     else:
         with open(output_path, 'wt', encoding="utf-8") as f:
             for path in paths:
@@ -127,12 +244,45 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
                 if get_configurations:
                     configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
+                if pipe_file_data:
+                    if isinstance(path, SmartFilePath):
+                        print(path.path + ',' + identifier.get_identifier(path.path) + ','
+                              + path.file_size + ',' + path.modified_time)
     return stat_dict, configurations
 
 
 def add_configuration(path, configurations, identifier, target_depth=None):
-    """For each directory (excluding root) look at how it's content is structured and save that structure as a configuration.
+    """For each directory look at how it's content is structured and save that structure as a configuration.
+
+    Only compare directory of a specific depth relative to the original target directory.
+    This prevents computing configurations for folder that aren't relevant since we are expecting the repeating
+    file structure to have each unit we want to compare at the same depth in the file structure.
+
+    Parameters
+    ----------
+    path : SmartPath
+    configurations : dict
+        Contains the file configurations found for each file/directory identifier with the following structure :
+                configurations={
+                    'identifier1' :
+                        [ {'structure' : ['identifier3', 'identifier4', 'identifier5'], 'paths' : ['path1', 'path2']},
+                        {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
+                        ... ]
+                    'identifier2' :
+                        [{'structure' : [], 'paths' : []}, ...]
+                    }
+    identifier : IdentifierEngine
+        Used to extract the identifier of each path to aggregate it with similar ones resent in the file structure.
+    target_depth : int
+        The depth at which the repeating directories for which to compare their configuration will be.
+        Any directory found at a different depth will be ignored by this function.
+
+    Returns
+    -------
+    configurations : dict
+        The updated dict now containing the configuration data from the path that was given as parameter.
     """
+
     logger = logging.getLogger(LOGGER_NAME)
     # The root is skipped since it is alone at his target_depth level and thus can't be compared
     # and files are skipped
@@ -173,6 +323,8 @@ def add_configuration(path, configurations, identifier, target_depth=None):
 
 
 def main():
+    """########## The execution sequence of the script. ##########"""
+
     # Parsing the config file
     config = configparser.ConfigParser()
     config.read(Path(CONFIG_PATH))
@@ -218,12 +370,13 @@ def main():
         if config["Measures"].getboolean(key):
             measure_list.append(key)
 
-    paths = explore_with_generator(root, criteria=criteria)
+    paths = generate_tree(root, criteria=criteria)
     stat_dict, configurations = get_data_from_paths(paths,
                                                     identifier, output_path=tree_output_path, measures=measure_list,
                                                     get_configurations=config['Configurations']
                                                     .getboolean("get number of unique configurations"),
-                                                    target_depth=config['Configurations'].getint('target depth'))
+                                                    target_depth=config['Configurations'].getint('target depth'),
+                                                    pipe_file_data=config["Pipeline"].getboolean("pipe file data"))
     logger.info("Retrieved {} measures for {} different directory name".format(len(stat_dict),
                                                                                len(stat_dict["file_count"])))
     logger.debug("Creating instance of StatBuilder with the measures")
@@ -245,22 +398,6 @@ def main():
 
     if csv_output_path is not None:
         stat_builder.create_csv(csv_output_path)
-
-    if config["Pipeline"].getboolean("pipe file data at end of execution") is True:
-        """After the successful execution of the script, the output can be outputted in the standard output.
-        By default this will print in the console which is not recommended for large dataset if given a pipe, this will
-        pass the data to the other script or command.
-        Only outputs the files currently because directories shouldn't be relevant for the custom tests.
-        Outputted format is  a single line per file : 'path,identifier,file_size,modified_time'. """
-        if config["Pipeline"].getboolean("ask confirmation") is True:
-            logger.debug("Giving the data of every file to the standard output")
-            confirm = input('All outputs created. Do you wish to send the data to the standard output? (y/n)').lower()
-            if confirm.startswith('y'):
-                for path in paths:
-                    if isinstance(path, SmartPath):
-                        print(path.path + ',' + identifier.get_identifier(path.path) + ',' + path.file_size
-                              + ',' + path.modified_time)
-                logger.info("File data was given to standard output.")
 
     logger.info("Script executed successfully.")
 

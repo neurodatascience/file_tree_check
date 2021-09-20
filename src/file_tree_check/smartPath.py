@@ -65,7 +65,7 @@ class SmartPath(ABC):
 
         Returns
         -------
-        stat_dict : dict
+        dict
             The same dictionary that was given but with the path's values added in.
         """
         for measure in measures:
@@ -99,6 +99,17 @@ class SmartPath(ABC):
         raise NotImplementedError()
 
     def display(self, measures=(), name_max_length=60):
+        """Return the name of the file/folder with whitespaces to fit the standard length.
+
+        Parameters
+        ----------
+        measures : list of string
+        name_max_length : int
+
+        Returns
+        -------
+        string
+        """
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
     def displayable(self, measures=(), name_max_length=60):
