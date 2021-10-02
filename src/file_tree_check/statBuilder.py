@@ -92,7 +92,8 @@ class StatBuilder(object):
                 axes[measure_index, i].set_title(identifier, color="r")
                 i += 1
                 if i >= plots_per_measure:
-                    self.logger.debug("Reached the maximum number of directories shown on the visualization")
+                    self.logger.debug("Reached the maximum number of directories shown on the visualization for"
+                                      "measure {}".format(measure_name))
                     break
         plt.tight_layout()
         self.logger.info("Plots created")
@@ -162,9 +163,9 @@ class StatBuilder(object):
                 if most_common_value is None:
                     continue
 
-                output += "    In '{}' :\n        {} of {} found {} time\n".format(folder_name,
-                                                                                   measure_name, most_common_value,
-                                                                                   most_common_counter)
+                output += "    In '{}' :\n        {} of {} found {} times\n".format(folder_name,
+                                                                                    measure_name, most_common_value,
+                                                                                    most_common_counter)
                 if most_common_counter < len(paths):
                     output += "          Outliers :\n"
                     for path, value in paths.items():

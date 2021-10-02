@@ -97,7 +97,7 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     return logger
 
 
-def generate_tree(root, parent=None, is_last=False, criteria=None):
+def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False):
     """Create a SmartFilePath or SmartDirectoryPath generator object for every item found within the root directory.
     These generator objects will have to be iterated over to get the SmartPath items themselves.
     Returns an iterable of the file structure that can be used over each element.
@@ -114,10 +114,15 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
     is_last : bool
         Indicate whether or not this file/directory was the last to be generated in it's parent folder.
         Only relevant for visual display of the file structure.
-    criteria : string
-        A regular expression to be used to filter files and directories included in the generator output.
-        Files and folder that do not match the regular expression will be discarded, including all their children.
-        If no criteria is given, every file and directory present will have SmartPath generator created for them.
+    criteria : re.Pattern
+        A regular expression compiled into a Pattern object to be used to filter files and/or directories included
+        in the generator output. Files/directories that do not match the regular expression will be discarded including
+        all their children regardless of their name for directories. If no criteria is given, every file and directory
+        will be included in the generation.
+    filter_files : bool
+        Whether or not the search critera will be used to discard files whose names do not match the regular expression.
+    filter_dir : bool
+        Whether or not the search critera will be used to discard directories whose names do not match.
 
     Yields
     ----------
@@ -132,13 +137,6 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
     """
     logger = logging.getLogger(LOGGER_NAME)
     root = Path(str(root))
-    # A criteria can be used to ignore specific files or directories
-    if criteria is not None:
-        try:
-            criteria = re.compile(criteria)
-        except TypeError as e:
-            logger.warning("Search Criteria {} is invalid, resuming without criteria : {}".format(criteria, e))
-            criteria = None
 
     # Begin by generating the root path
     smart_root = SmartDirectoryPath(root, parent, is_last)
@@ -146,7 +144,10 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
 
     # Get a list of every file/directory in the root and iterate over them
     if criteria is not None:
-        children = sorted(list(path for path in root.iterdir() if criteria.match(str(path.name)) is not None), key=lambda s: str(s).lower())
+        filtered_children = list(path for path in root.iterdir() if criteria.match(str(path.name)) is not None
+                                 or (path.is_dir() and not filter_dir)
+                                 or (path.is_file() and not filter_files))
+        children = sorted(filtered_children, key=lambda s: str(s).lower())
     else:
         children = sorted(list(path for path in root.iterdir()), key=lambda s: str(s).lower())
 
@@ -158,7 +159,8 @@ def generate_tree(root, parent=None, is_last=False, criteria=None):
             # If the children is a directory, another instance of the method is called and
             # its output is propagated up the generator
             if path.is_dir():
-                yield from generate_tree(path, parent=smart_root, is_last=is_last)
+                yield from generate_tree(path, parent=smart_root, is_last=is_last, criteria=criteria,
+                                         filter_files=filter_files, filter_dir=filter_dir)
             # If the children is a file, generate a single instance of SmartPath associated to its path
             else:
                 yield SmartFilePath(path, smart_root, is_last)
@@ -180,7 +182,7 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
     identifier : IdentifierEngine
         Used to extract the identifier of each path to aggregate it with similar ones resent in the file structure.
         This IdentifierEngine is also passed to add_configuration to allow it to extract identifiers as well.
-    output_path : string
+    output_path : pathlib.Path
         The path to the text file where the file tree output will be saved. If none, the type of output is skipped.
     measures : list of string
         The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
@@ -342,27 +344,47 @@ def main():
     logger.info("Target directory is : {}".format(root))
 
     logger.debug("Initializing variables from config file")
-    if config['Output'].getboolean('create text files'):
-        tree_output_path = Path(config['Output']['tree output path'])
-        summary_output_path = Path(config['Output']['summary output path'])
-    else:
-        tree_output_path = None
-        summary_output_path = None
-
-    if config['Output'].getboolean('create csv'):
-        csv_output_path = Path(config['Output']['csv output path'])
-    else:
-        csv_output_path = None
     identifier = IdentifierEngine(config["Categorization"]["regular expression for file identifier"],
                                   config["Categorization"]["regular expression for directory identifier"])
 
     if config["Search Criteria"].getboolean("use search criteria"):
         criteria = config["Search Criteria"]["regular expression for search criteria"]
+        filter_files = config["Search Criteria"].getboolean("filter files")
+        filter_dir = config["Search Criteria"].getboolean("filter directories")
+        try:
+            criteria = re.compile(criteria)
+        except TypeError as e:
+            logger.warning("Search Criteria {} is invalid, resuming without criteria : {}".format(criteria, e))
+            criteria = None
     else:
         criteria = None
+        filter_files = False
+        filter_dir = False
 
-    logger.info("Output file paths, Tree:{}, Summary:{}, CSV:{}".format(str(tree_output_path), str(summary_output_path),
-                                                                        str(csv_output_path)))
+    if config['Output'].getboolean('create summary'):
+        summary_output_path = Path(config['Output']['summary output path'])
+    else:
+        summary_output_path = None
+
+    if config['Output'].getboolean('create text tree'):
+        tree_output_path = Path(config['Output']['tree output path'])
+    else:
+        tree_output_path = None
+
+    if config['Output'].getboolean('create csv'):
+        csv_output_path = Path(config['Output']['csv output path'])
+    else:
+        csv_output_path = None
+
+    if config['Configurations'].getboolean("get number of unique configurations"):
+        get_configurations = True
+        target_depth = config['Configurations'].getint('target depth')
+    else :
+        get_configurations = False
+        target_depth = -1
+
+    logger.info("Output file paths : Summary:'{}', Tree:'{}', CSV:'{}'"
+                .format(str(summary_output_path), str(tree_output_path), str(csv_output_path)))
 
     logger.debug("Launching exploration of the target directory")
     measure_list = []
@@ -370,12 +392,11 @@ def main():
         if config["Measures"].getboolean(key):
             measure_list.append(key)
 
-    paths = generate_tree(root, criteria=criteria)
+    paths = generate_tree(root, criteria=criteria, filter_files=filter_files, filter_dir=filter_dir)
     stat_dict, configurations = get_data_from_paths(paths,
                                                     identifier, output_path=tree_output_path, measures=measure_list,
-                                                    get_configurations=config['Configurations']
-                                                    .getboolean("get number of unique configurations"),
-                                                    target_depth=config['Configurations'].getint('target depth'),
+                                                    get_configurations=get_configurations,
+                                                    target_depth=target_depth,
                                                     pipe_file_data=config["Pipeline"].getboolean("pipe file data"))
     logger.info("Retrieved {} measures for {} different directory name".format(len(stat_dict),
                                                                                len(stat_dict["file_count"])))
@@ -389,14 +410,16 @@ def main():
             image_path = Path(vis_config["image path"])
         else:
             image_path = None
-        stat_builder.create_plots(plots_per_measure=vis_config.getint('shown directory count'),
+        stat_builder.create_plots(plots_per_measure=vis_config.getint('number of plot per measure'),
                                   save_path=image_path, show_plot=vis_config.getboolean("print plots"))
 
     if summary_output_path is not None:
+        logger.debug("Launching summary text output generation.")
         with open(summary_output_path, 'wt', encoding="utf-8") as f:
             f.write(stat_builder.create_summary(root, configurations))
 
     if csv_output_path is not None:
+        logger.debug("Launching CSV output generation.")
         stat_builder.create_csv(csv_output_path)
 
     logger.info("Script executed successfully.")
