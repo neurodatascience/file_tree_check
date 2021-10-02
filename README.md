@@ -10,18 +10,18 @@ Written initially for neural imaging data structure like [BIDS](https://bids.neu
 
 ### Clone the repository
 
-Fork the repository first to allow to save your modification of the config file on github, then clone the forked repository on your machine.
+First fork the repository to allow to save your modifications of the config file on github, then clone the forked repository on your machine.
 
 ### Modify the config file for your need
-Inside the src/file_tree_check folder in your local installation, open the config.ini file and change the options to suit your need and use case.
+Inside the *src/file_tree_check* folder in your local installation, open the *config.ini* file and change the options to suit your need and use case.
 
-Be sure to modify the path to the proper location you want the output to be saved in.
+Be sure to modify the paths to the proper locations you want the outputs to be saved in.
 
 The config options are detailed in the "Config File" section of the readme below.
 
 ### Enter your config file path at line ~19 of main.py
 
-For the script to locate your config file no matter from where the script is run, the absolute path to the config file should be given at the top of the main.py file found under src/file_tree_check.
+For the script to locate your config file no matter from where the script is run, the absolute path to the config file should be given at the top of the *main.py* file found under *src/file_tree_check*.
 
 ## Usage
 
@@ -29,7 +29,7 @@ For the script to locate your config file no matter from where the script is run
 
 Given a directory, will explore recursively every directory and file under it while taking some measures for each (e.g. file size, time of modification, how many files in the directory, etc...).
 
-Then, it will output a comparison between folder and files with similar name, in the form of plot distribution, a summary text file, a visualization of the file tree or/and a csv file containing every point of measure taken.
+Then, it will output a comparison between folders and files with similar name, in the form of plot distribution, a summary text file, a visualization of the file tree or/and a csv file containing every point of measure taken.
 
 This information can be used to find outliers and problematic files in a directory were a regular structure in term of file count and file size is expected.
 
@@ -50,12 +50,12 @@ Note that if the script is run from outside "src/file_tree_check", don't forget 
 ### Use case examples
 
 This section will provide config files for some common use case dependent on the analysis and the outputs necessary for each one.
-In the config file example, sections with <text> need to be replaced for your environement like the path to the output file to be generated.
+In the examples of config file, sections with text between <> need to be replaced with your values or preferences (e.g. the path to the output file to be generated, whether or not to print plots to the screen).
 
 #### 1: Get the tree-like text representation of a file structure to understand how it is organized.
 If understanding the organization of your files is what you want more than any metrics, this is how to get the tree structure in a text file.
 
-Modify the config file the produce only the tree output and set the search criteria and categorization section with regular expression to not exclude any file.
+This config file produces only the tree output and sets the search criteria and categorization section with regular expression that do not exclude any file.
 Any measures set to "yes" in the config will be displayed in the tree output alongside their file/directory.
 Example of config file :
 ```
@@ -109,7 +109,9 @@ In a neuroimaging dataset, we expect files to be strictly following a file organ
 In this case, using the summary output and the [Configurations] section will find the most common configuration (here the file and folders present under each sub-xx folder).
 
 To this end, first, it is assumed that all the subject folders are directly under the folder given to the script (depth=1).
-Second, the [Categorization] section uses the regular expression "_.*$" to remove any subject number from the file identifiers (sub-123_T1.gz -> _T1.gz) and the regular expression "^.*-" is used to remove the subject number from directories (sub-123 -> sub-).
+Second, the [Categorization] section uses the regular expression "_.*$" to remove any subject number from the file identifiers (sub-123_T1.gz -> _T1.gz). 
+
+The regular expression "^.*-" is used to remove the subject number from directories (sub-123 -> sub-).
 Removing the uniques numbers means that every sub folder and every file can be compared to each other to find outliers.
 
 
@@ -165,12 +167,12 @@ Files and/or directories (depending on settings) will be discarded if they do no
 
 The search criteria is matched to the path's name itself, not any identifier created using the regular expressions of [Categorization].
 
-Note that discarded directories will have their content discarded from the search as well regardless if they match the expression or not. However this will only occur when *filter directories* is set to true.
+Note that when filtering directories, the sub-directories and files contained within will be discarded from the search as well, regardless if those match the expression or not.
 
 Filtering only files is useful for keeping only a specific type of file in every folder. 
 
 Filtering only directories is useful for finding and analysing a single directory or type of directory. However, if this directory has a parent that does not match the regular expression, it will be discarded along with its parent before being found.
-Calling the script on the directory that directly contains the directories to keep could avoid that.
+Therefore these folders should be contained directly under the directory on which the script is run.
 
 ```
 [Categorization]
@@ -217,13 +219,17 @@ pipe file data = no
 ```
 
 
-#### 4) Run an automated test on specific files contained in a large dataset
+#### 4) Run an automated test on specific type of files contained in a large dataset
 
 With the *pipe file data* setting, the script will print to the standard output a string for every file as it goes along exploring the file structure in the target folder.
 
-This string contains the path, along with some metrics, and can be then used as input for a automated test on the file at that path.
+This string contains the path, along with some metrics, and can be then used as input for a automated test on the file using the path in the string.
+
+The string output for each file will have this format : 'absolute_path,identifier,file_size,modified_time' 
 
 Combining the search criteria and this string output, the script will only output a string for every file whose name match the criteria. For example, if a test needs to be run only on json files, a search criteria that matched files ending with ".json" will have the script generate a string for every json file that can be piped to an automated test script.
+
+This config file will also create a csv that can be uses by other type of tests.
 
 ```
 [Categorization]
@@ -354,11 +360,11 @@ PurePosixPath('my/library/setup.py').name
 * ***identifierEngine.py*** contains the IdentifierEngine class. This class is used to extract the identifier string from files and directories based on the regular expression given to it (from the config file).
 
 * ***smartPath.py*** contains the SmartPath abstract class. 
-The SmartFilePath and SmartDirectoryPath both inherit from this class.
+The SmartFilePath and SmartDirectoryPath both inherit from it.
 
-* ***smartFilePath.py*** contains the SmartDirectoryPath class, the implementation of SmartPath for directories.
+* ***smartFilePath.py*** contains the SmartDirectoryPath class, the implementation of SmartPath for files.
 
-* ***smartDirectoryPath.py*** contains the SmartFilePath class, the implementation of SmartPath for files.
+* ***smartDirectoryPath.py*** contains the SmartFilePath class, the implementation of SmartPath for directories.
 
 
 
@@ -385,19 +391,18 @@ took 12 minutes to run using a Intel Gold 6148 Skylake @ 2.4 GHz and less than 9
 It is likely that the script is not stuck but is busy in the exploration phase where it will index and create SmartPath
 objects for each file and directory present inside the root folder. For large dataset, this step can take several minutes.
 If you are logging at the DEBUG level, to the console or to the log file, the last line before this step is "Launching exploration of the target folder".
-If this is not the case or if this 
 
 ## Potential improvement to the script
 
-### Somewhat unclear plots
+### Create clearer plots
 Not much is done in statBuilder.create_plots() to make the image look better and clear when a lot of plots are shown at once.
 
-### No rounding in measures of file size and modification time
-Presently, having a 1 bytes difference in size or a difference of 1 second in time of last modification is enough for files and directories to be flagged as different and potential outlier.
-Having a rounding in these values or a threshold would make for more relevant comparison.
+### Apply rounding in measures of file size and modification time
+Presently, having a 1 byte difference in size or a difference of 1 second in time of last modification is enough for files and directories to be flagged as different and potential outlier.
+Rounding these values or using thresholds would make for more relevant comparisons.
 However, this threshold or rounding factor should ideally be modifiable by the user.
 
-### Use of unique objects for each file and directory
+### Avoid creating a new object for each file/directory
 The creation and usage of SmartPath objects takes time and memory that is not insignificant for large dataset.
-Using pathlib.Path or simply iterating once with os.walk() and getting every single operation and metrics at once might yield significant improvements in performance but would require a major rewrite.
+Using pathlib.Path or simply iterating once with os.walk() and getting every single operation and metrics at once might yield significant improvements in performance but would require a major rewrite and could be challenging to keep readable and maintanable.
 
