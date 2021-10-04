@@ -68,6 +68,8 @@ class StatBuilder(object):
         show_plot : bool, default=True
             Whether to show or not the plots with matplotlib.pyplot.show() before exiting the function.
         plots_per_measure : int
+            How many identifiers will be included in the plots, starting from the ones with the highest number of occurences.
+            Corresponds to the number of column of the plot figure, it's rows being dictated by the number of measures taken.
         """
         sns.set(style="darkgrid")
         self.logger.debug("Creating subplots objects")
