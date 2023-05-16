@@ -6,16 +6,16 @@ build-backend = "hatchling.build"
 name = "file_tree_check"
 description = "File checking script in a repeating folder organization e.g. BIDS."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = { file="LICENSE.txt" }
 authors = [
   { name = "Bertrand Toutée", email = "bertrand.toutee@gmail.com"},
 ]
 version = "0.1.0"
 dependencies = [
-  "seaborn~=0.11.1",
-  "matplotlib~=3.4.2",
-  "setuptools~=57.0.0",
+  "seaborn",
+  "matplotlib",
+  "packaging"
 ]
 
 [project.optional-dependencies]
