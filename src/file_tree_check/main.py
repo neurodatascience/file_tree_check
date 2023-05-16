@@ -144,12 +144,16 @@ def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=
 
     # Get a list of every file/directory in the root and iterate over them
     if criteria is not None:
-        filtered_children = list(path for path in root.iterdir() if criteria.match(str(path.name)) is not None
-                                 or (path.is_dir() and not filter_dir)
-                                 or (path.is_file() and not filter_files))
+        filtered_children = [
+            path
+            for path in root.iterdir()
+            if criteria.match(str(path.name)) is not None
+            or (path.is_dir() and not filter_dir)
+            or (path.is_file() and not filter_files)
+        ]
         children = sorted(filtered_children, key=lambda s: str(s).lower())
     else:
-        children = sorted(list(path for path in root.iterdir()), key=lambda s: str(s).lower())
+        children = sorted(list(root.iterdir()), key=lambda s: str(s).lower())
 
     count = 1
     for path in children:
@@ -226,10 +230,8 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
     """
 
     logger = logging.getLogger(LOGGER_NAME)
-    stat_dict = {}
     configurations = {}
-    for measure_name in measures:
-        stat_dict[measure_name] = {}
+    stat_dict = {measure_name: {} for measure_name in measures}
     if output_path is None:
         for path in paths:
             stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path), measures=measures)
@@ -237,8 +239,9 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
                 configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
             if pipe_file_data:
                 if isinstance(path, SmartFilePath):
-                    print(path.path + ',' + identifier.get_identifier(path.path) + ','
-                          + path.file_size + ',' + path.modified_time)
+                    print(
+                        f'{path.path},{identifier.get_identifier(path.path)},{path.file_size},{path.modified_time}'
+                    )
     else:
         with open(output_path, 'wt', encoding="utf-8") as f:
             for path in paths:
@@ -248,8 +251,9 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
                 if pipe_file_data:
                     if isinstance(path, SmartFilePath):
-                        print(path.path + ',' + identifier.get_identifier(path.path) + ','
-                              + path.file_size + ',' + path.modified_time)
+                        print(
+                            f'{path.path},{identifier.get_identifier(path.path)},{path.file_size},{path.modified_time}'
+                        )
     return stat_dict, configurations
 
 
@@ -311,7 +315,6 @@ def add_configuration(path, configurations, identifier, target_depth=None):
         # configurations has a list of every configuration associated to every identifier, each element of the list
         # is a dict containing the list of children and the path to all directories following this configuration
         configurations[path_unique_identifier] = [{"structure": children_list, "paths" : [str(path.path)]}]
-        return configurations
     else:
         # Searching if current configuration has already been seen
         for configuration in configurations[path_unique_identifier]:
@@ -321,7 +324,8 @@ def add_configuration(path, configurations, identifier, target_depth=None):
                 return configurations
         # if no match were found, a new configuration is added to the identifier's list of configurations
         configurations[path_unique_identifier].append({"structure": children_list, "paths": [str(path.path)]})
-        return configurations
+
+    return configurations
 
 
 def main():
@@ -341,7 +345,7 @@ def main():
 
     logger.debug("Initializing variables from arguments")
     root = Path(args.start_location)
-    logger.info("Target directory is : {}".format(root))
+    logger.info(f"Target directory is : {root}")
 
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(config["Categorization"]["regular expression for file identifier"],
@@ -354,7 +358,9 @@ def main():
         try:
             criteria = re.compile(criteria)
         except TypeError as e:
-            logger.warning("Search Criteria {} is invalid, resuming without criteria : {}".format(criteria, e))
+            logger.warning(
+                f"Search Criteria {criteria} is invalid, resuming without criteria : {e}"
+            )
             criteria = None
     else:
         criteria = None
@@ -383,23 +389,23 @@ def main():
         get_configurations = False
         target_depth = -1
 
-    logger.info("Output file paths : Summary:'{}', Tree:'{}', CSV:'{}'"
-                .format(str(summary_output_path), str(tree_output_path), str(csv_output_path)))
+    logger.info(
+        f"Output file paths : Summary:'{str(summary_output_path)}', Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
+    )
 
     logger.debug("Launching exploration of the target directory")
-    measure_list = []
-    for key in config["Measures"]:
-        if config["Measures"].getboolean(key):
-            measure_list.append(key)
-
+    measure_list = [
+        key for key in config["Measures"] if config["Measures"].getboolean(key)
+    ]
     paths = generate_tree(root, criteria=criteria, filter_files=filter_files, filter_dir=filter_dir)
     stat_dict, configurations = get_data_from_paths(paths,
                                                     identifier, output_path=tree_output_path, measures=measure_list,
                                                     get_configurations=get_configurations,
                                                     target_depth=target_depth,
                                                     pipe_file_data=config["Pipeline"].getboolean("pipe file data"))
-    logger.info("Retrieved {} measures for {} different directory name".format(len(stat_dict),
-                                                                               len(stat_dict["file_count"])))
+    logger.info(
+        f'Retrieved {len(stat_dict)} measures for {len(stat_dict["file_count"])} different directory name'
+    )
     logger.debug("Creating instance of StatBuilder with the measures")
     stat_builder = StatBuilder(stat_dict, measure_list)
 

@@ -49,7 +49,7 @@ class StatBuilder(object):
         """
         self.stat_dict = stat_dict
         self.measures = measures
-        self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
+        self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of StatBuilder")
 
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
@@ -79,11 +79,18 @@ class StatBuilder(object):
         self.logger.debug("Iterating over the measures in the data")
         for measure_index, measure_name in enumerate(self.measures):
             i = 0
-            self.logger.debug("Iterating over the directories in the measure {}".format(measure_name))
+            self.logger.debug(
+                f"Iterating over the directories in the measure {measure_name}"
+            )
             # Sort the measure dict (containing 'identifier' : {'path' : value}) for identifiers with the highest
             # amount of paths (and therefore values) first
-            sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
-                                                      key=lambda item: len(item[1]), reverse=True)}
+            sorted_folders = dict(
+                sorted(
+                    self.stat_dict[measure_name].items(),
+                    key=lambda item: len(item[1]),
+                    reverse=True,
+                )
+            )
             for identifier, paths in sorted_folders.items():
                 # Do not show on plot when all values are 0 or None
                 if all(value == 0 or value is None for value in paths.values()):
@@ -94,8 +101,9 @@ class StatBuilder(object):
                 axes[measure_index, i].set_title(identifier, color="r")
                 i += 1
                 if i >= plots_per_measure:
-                    self.logger.debug("Reached the maximum number of directories shown on the visualization for"
-                                      "measure {}".format(measure_name))
+                    self.logger.debug(
+                        f"Reached the maximum number of directories shown on the visualization formeasure {measure_name}"
+                    )
                     break
         plt.tight_layout()
         self.logger.info("Plots created")
@@ -103,7 +111,7 @@ class StatBuilder(object):
         if save_path is not None:
             self.logger.debug("Saving plot to file")
             fig.savefig(Path(save_path))
-            self.logger.info("Saved plot at path {}".format(save_path))
+            self.logger.info(f"Saved plot at path {save_path}")
         if show_plot:
             self.logger.debug("Displaying plots")
             plt.show()
@@ -135,24 +143,33 @@ class StatBuilder(object):
             The entire generated summary text as a single string, to be handled by main.py for saving or printing.
         """
         self.logger.debug("Initializing summary output")
-        output = "***** Analysis of file structure at : '{}' *****" \
-                 "\nCreated: {}\nTarget directory : {}\n\n".format(root.name, time.ctime(), root)
+        output = f"***** Analysis of file structure at : '{root.name}' *****\nCreated: {time.ctime()}\nTarget directory : {root}\n\n"
 
         if configurations is not None:
             for identifier, configuration_list in configurations.items():
-                output += "\nConfigurations for directory **{}**:".format(identifier)
-                sorted_config_list = [v for v in sorted(configuration_list,
-                                                        key=lambda item: len(item["paths"]), reverse=True)]
+                output += f"\nConfigurations for directory **{identifier}**:"
+                sorted_config_list = list(
+                    sorted(
+                        configuration_list,
+                        key=lambda item: len(item["paths"]),
+                        reverse=True,
+                    )
+                )
                 for i in range(len(sorted_config_list)):
-                    output += "\n     Configuration #{} was found in {} directories. Contains the following : " \
-                              "\n            {}".format(i+1, len(sorted_config_list[i]["paths"]),
-                                                        sorted_config_list[i]["structure"])
+                    output += f'\n     Configuration #{i + 1} was found in {len(sorted_config_list[i]["paths"])} directories. Contains the following : \n            {sorted_config_list[i]["structure"]}'
 
         for measure_name in self.measures:
-            self.logger.debug("Calculating most common occurrences for measure {}".format(measure_name))
-            output += "\n\nOccurrences for measure  :     **{}**\n".format(measure_name)
-            sorted_folders = {k: v for k, v in sorted(self.stat_dict[measure_name].items(),
-                                                      key=lambda item: len(item[1]), reverse=True)}
+            self.logger.debug(
+                f"Calculating most common occurrences for measure {measure_name}"
+            )
+            output += f"\n\nOccurrences for measure  :     **{measure_name}**\n"
+            sorted_folders = dict(
+                sorted(
+                    self.stat_dict[measure_name].items(),
+                    key=lambda item: len(item[1]),
+                    reverse=True,
+                )
+            )
             for folder_name, paths in sorted_folders.items():
                 most_common_value, most_common_counter = 0, 0
 
@@ -165,17 +182,18 @@ class StatBuilder(object):
                 if most_common_value is None:
                     continue
 
-                output += "    In '{}' :\n        {} of {} found {} times\n".format(folder_name,
-                                                                                    measure_name, most_common_value,
-                                                                                    most_common_counter)
+                output += f"    In '{folder_name}' :\n        {measure_name} of {most_common_value} found {most_common_counter} times\n"
                 if most_common_counter < len(paths):
                     output += "          Outliers :\n"
                     for path, value in paths.items():
                         if value != most_common_value:
-                            output += "            {}  has : {}\n".format(str(path), value)
-            self.logger.info("Found {} directories/files for measure {}".format(len(sorted_folders), measure_name))
-        self.logger.info("Summary created with {} measures, file is {} characters long.".format(
-            len(self.measures), len(output)))
+                            output += f"            {str(path)}  has : {value}\n"
+            self.logger.info(
+                f"Found {len(sorted_folders)} directories/files for measure {measure_name}"
+            )
+        self.logger.info(
+            f"Summary created with {len(self.measures)} measures, file is {len(output)} characters long."
+        )
         return output
 
     def create_csv(self, output_path):
@@ -198,19 +216,22 @@ class StatBuilder(object):
                 output_path :  pahlib.Path or string
                     Path to where the CSV should be saved.
         """
-        self.logger.debug("Opening csv file for writing at : {}".format(output_path))
+        self.logger.debug(f"Opening csv file for writing at : {output_path}")
         with open(output_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             headers = ['Path'] + ['Identifier'] + list(self.measures)
             csv_writer.writerow(headers)
-            self.logger.info("Storing in CSV file with header : {}".format(str(headers)))
+            self.logger.info(f"Storing in CSV file with header : {str(headers)}")
             # Supposing every file/directory is present in the first measure's dictionary (which should be the case)
             self.logger.debug("Iterating through every file/directory type to populate the CSV.")
             for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
                 "For every path found in the first measure, write all the measures for that path in the same row."
                 for path, value in paths.items():
-                    row = list()
-                    for measure in self.measures:
-                        row.append(self.stat_dict[measure][file_identifier][path])
+                    row = [
+                        self.stat_dict[measure][file_identifier][path]
+                        for measure in self.measures
+                    ]
                     csv_writer.writerow([path] + [file_identifier] + row)
-        self.logger.info("CSV file closed. Contains {} bytes of data".format(Path(output_path).stat().st_size))
+        self.logger.info(
+            f"CSV file closed. Contains {Path(output_path).stat().st_size} bytes of data"
+        )

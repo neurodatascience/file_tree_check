@@ -34,10 +34,7 @@ class SmartPath(ABC):
         self.path = Path(str(path))
         self.parent = parent_smart_path
         self.is_last = is_last
-        if self.parent:
-            self.depth = self.parent.depth + 1
-        else:
-            self.depth = 0
+        self.depth = self.parent.depth + 1 if self.parent else 0
 
     def add_stats(self, stat_dict, identifier, measures=()):
         """For each measure desired adds the value from this path to the dictionary.
@@ -70,7 +67,7 @@ class SmartPath(ABC):
         """
         for measure in measures:
             if identifier not in stat_dict[measure]:
-                stat_dict[measure][identifier] = dict()
+                stat_dict[measure][identifier] = {}
 
         if "file_size" in measures:
             stat_dict["file_size"][identifier][self.path] = self.file_size
