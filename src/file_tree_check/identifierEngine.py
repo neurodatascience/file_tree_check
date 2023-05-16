@@ -25,7 +25,7 @@ class IdentifierEngine:
     def __init__(self, file_expression, directory_expression):
         self.file_expression = file_expression
         self.directory_expression = directory_expression
-        self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
+        self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of IdentifierEngine")
 
     def get_identifier(self, path, prefix_file_with_parent_directory=False):
@@ -61,7 +61,7 @@ class IdentifierEngine:
         """
         path = Path(path)
         if prefix_file_with_parent_directory and path.is_file():
-            identifier = self.get_identifier(path.parent) + "/"
+            identifier = f"{self.get_identifier(path.parent)}/"
         else:
             identifier = ""
 
@@ -70,11 +70,7 @@ class IdentifierEngine:
         elif path.is_dir():
             match = re.search(self.directory_expression, path.name)
         else:
-            raise TypeError("Path is not a file nor a directory : {}".format(path))
+            raise TypeError(f"Path is not a file nor a directory : {path}")
         # When the entire name is filtered out, we prefer using a identifier that is maybe too unique over an empty one
-        if match is None:
-            identifier += path.name
-        else:
-            # Take the first match
-            identifier += match.group(0)
+        identifier += path.name if match is None else match.group(0)
         return identifier
