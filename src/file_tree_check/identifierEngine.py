@@ -50,9 +50,9 @@ class IdentifierEngine:
 
             "sept_6_weekly_report.txt" -> "_weekly_report.txt"
 
-        However the details of what precisely to extract and treat as an identifier
-        is handled by the regular expressions given on creating the class instance.
-        Since the regular expression is used with re.search(), only the first match is kept.
+        However the details of what precisely to extract and treat as an identifier is handled
+        by the regular expressions given on creating the class instance.
+        Since the regular expression is used with ``re.search()``, only the first match is kept.
 
         If no match is found, the entire file/directory name is used instead
         since we prefer to have identifier
@@ -83,7 +83,8 @@ class IdentifierEngine:
         Returns
         -------
         identifier: string
-            The path's extracted identifier. Will be used to aggregate data on files/directories
+            The path's extracted identifier.
+            Will be used to aggregate data on files/directories
             with the same identifier across the repeating file structure.
         """
         path = Path(path)
@@ -98,6 +99,7 @@ class IdentifierEngine:
             match = re.search(self.directory_expression, path.name)
         else:
             raise TypeError(f"Path is not a file nor a directory: {path}")
+
         # When the entire name is filtered out, we prefer using a identifier
         # that is maybe too unique over an empty one
         identifier += path.name if match is None else match.group(0)
