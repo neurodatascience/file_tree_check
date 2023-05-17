@@ -52,25 +52,6 @@ For the script to locate your config file no matter from where the script is
 run, the absolute path to the config file should be given at the top of the
 `src/file_tree_check/main.py`.
 
-## Structure of the script
-
-- **_main.py_** is where the sequential series of processing takes places.
-
-- **_statBuilder.py_** handles the creation of the output files.
-
-- **_identifierEngine.py_** contains the IdentifierEngine class. This class is
-  used to extract the identifier string from files and directories based on the
-  regular expression given to it (from the config file).
-
-- **_smartPath.py_** contains the SmartPath abstract class. The SmartFilePath
-  and SmartDirectoryPath both inherit from it.
-
-- **_smartFilePath.py_** contains the SmartDirectoryPath class, the
-  implementation of SmartPath for files.
-
-- **_smartDirectoryPath.py_** contains the SmartFilePath class, the
-  implementation of SmartPath for directories.
-
 ## Usage
 
 ### Overview
