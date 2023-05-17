@@ -101,33 +101,3 @@ This will run the file checking script with the target folder as root and create
 the outputs requested in the config file. Note that if the script is run from
 outside `src/file_tree_check`, don't forget to include the actual path to the
 `main.py` file instead.
-
-## Potential improvement to the script
-
-### Create clearer plots
-
-Not much is done in statBuilder.create_plots() to make the image look better and
-clear when a lot of plots are shown at once.
-
-### Apply rounding in measures of file size and modification time
-
-Presently, having a 1 byte difference in size or a difference of 1 second in
-time of last modification is enough for files and directories to be flagged as
-different and potential outlier. Rounding these values or using thresholds would
-make for more relevant comparisons. However, this threshold or rounding factor
-should ideally be modifiable by the user.
-
-### Avoid creating a new object for each file/directory
-
-The creation and usage of SmartPath objects takes time and memory that is not
-insignificant for large dataset. Using pathlib.Path or simply iterating once
-with os.walk() and getting every single operation and metrics at once might
-yield significant improvements in performance but would require a major rewrite
-and could be challenging to keep readable and maintanable.
-
-### Create a branch of the script without the plot generation for easier installation
-
-Currently, the only functions that necessitate the 3.6+ python and the required
-libraries are the plot generation. Having a branch without the plot functions
-would allow the script to run without installing any libraries and with a python
-version potentially down to 3.2 (when argparse was introduced).
