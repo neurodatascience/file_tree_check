@@ -6,8 +6,10 @@ Welcome to file_tree_check's documentation!
    :caption: Contents:
 
    config
+   examples
    faq
    glossary
+   modules
 
 
 Indices and tables
