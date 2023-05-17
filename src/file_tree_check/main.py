@@ -461,6 +461,10 @@ def main():
     parser = _arg_parser()
     args = parser.parse_args()
 
+    if not Path(config["Logging"]["file_log_path"]).exists():
+        Path(config["Logging"]["file_log_path"]).parent.mkdir(parents=True, exist_ok=True)
+        Path(config["Logging"]["file_log_path"]).touch()
+
     # Initializing logger
     logger = _create_logger(
         config["Logging"]["file_log_path"],
