@@ -12,7 +12,12 @@ def check_permissions(path, min_permissions=(4, 4, 0)):
     path = Path(path)
     perm = list(oct(path.stat().st_mode))
 
-    return perm[-3] >= min_permissions[-3] & perm[-2] >= min_permissions[-2] & perm[-1] >= min_permissions[-1]
+    return (
+        perm[-3]
+        >= min_permissions[-3] & perm[-2]
+        >= min_permissions[-2] & perm[-1]
+        >= min_permissions[-1]
+    )
 
 
 def get_total_file_count(path, print_items=False):

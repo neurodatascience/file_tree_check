@@ -36,4 +36,4 @@ dev = ["file_tree_check[doc,test]"]
 skip = "./.git,.mypy_cache,env,venv,tests,*bval,*bvec"
 
 [tool.black]
-line-length = 120
+line-length = 100
