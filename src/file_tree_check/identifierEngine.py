@@ -13,18 +13,18 @@ class IdentifierEngine:
     The regular expression in the config files are relied on
     to remove these unique parts of the file/directory name.
 
-    Example : "sub-15464521_image.png" and "sub-25484441_image.png"
+    Example: "sub-15464521_image.png" and "sub-25484441_image.png"
         would both have the same identifier "_image.png" if
         using a regular expression that is keeping everything
         after the first "_" like "/_.*$/".
 
     Attributes
     ----------
-    file_expression : string
+    file_expression: string
         The regular expression to filter the identifier from the name of files.
-    directory_expression : string
+    directory_expression: string
         The regular expression to filter the identifier from the name of directories.
-    logger : logging.Logger
+    logger: logging.Logger
         Logger to save info and debug message.
         Will send the log lines to the appropriate outputs following
         the logger configuration in main.py.
@@ -50,17 +50,17 @@ class IdentifierEngine:
         since we prefer to have identifier
         that are unique but can still be used in the output vs an empty identifier.
 
-        Extraction method with the default regular expression :
-            Files = "_.*$"  : Keep everything after the first "_". to remove the subject number.
-            Directories = "^.*-" : Keep everything until the first "-".
+        Extraction method with the default regular expression:
+            Files = "_.*$" : Keep everything after the first "_". to remove the subject number.
+            Directories = "^.*-": Keep everything until the first "-".
             This way, subject directories like "sub-012012" are all aggregated
             under "sub-" while directory names without "-" are kept entirely.
 
         Parameters
         ----------
-        path : pathlib.Path or string
+        path: pathlib.Path or string
             The path to the file/directory for which to extract the identifier.
-        prefix_file_with_parent_directory : bool, default = False
+        prefix_file_with_parent_directory: bool, default = False
             Whether to include the parent directory as a prefix to the file's identifier.
             This is used to discriminate files that have the same name
             but are located under different subdirectories
@@ -69,7 +69,7 @@ class IdentifierEngine:
 
         Returns
         -------
-        identifier : string
+        identifier: string
             The path's extracted identifier. Will be used to aggregate data on files/directories
             with the same identifier across the repeating file structure.
         """
@@ -84,7 +84,7 @@ class IdentifierEngine:
         elif path.is_dir():
             match = re.search(self.directory_expression, path.name)
         else:
-            raise TypeError(f"Path is not a file nor a directory : {path}")
+            raise TypeError(f"Path is not a file nor a directory: {path}")
         # When the entire name is filtered out, we prefer using a identifier
         # that is maybe too unique over an empty one
         identifier += path.name if match is None else match.group(0)

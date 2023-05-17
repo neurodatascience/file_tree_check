@@ -15,14 +15,14 @@ class SmartPath(ABC):
 
     Attributes
     ----------
-    path : pathlib.Path
+    path: pathlib.Path
         The path to the file/directory in question.
-    parent : SmartPath
+    parent: SmartPath
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
-    is_last : bool
+    is_last: bool
         Whether or not this path is the last one to be displayed in his directory.
         Used to create the tree-like output.
-    depth : int
+    depth: int
         The path's depth in the file structure relative to the initial target directory.
 
     Credit to stack overflow abstrus for the visual part
@@ -45,24 +45,24 @@ class SmartPath(ABC):
 
         Parameters
         ----------
-        stat_dict : dict
+        stat_dict: dict
         The dictionary containing the the values for each measures.
             stat_dict contains nested dictionaries with the following structure:
             stat_dict={
-                'measure1' :
-                    {'identifier1' : {
-                        'path1' : value, 'path2' : value, ...},
-                    'identifier2' : {
-                        'path3' : value, 'path4' : value}, ...},
+                'measure1':
+                    {'identifier1': {
+                        'path1': value, 'path2': value, ...},
+                    'identifier2': {
+                        'path3': value, 'path4': value}, ...},
                     }
-                'measure2' :
-                    {'identifier1' : {}, 'identifier2' : {}, ...}
+                'measure2':
+                    {'identifier1': {}, 'identifier2': {}, ...}
                 }
-        identifier : string
+        identifier: string
             The path's identifier.
             Used to aggregate this path's values to the correct place in order to add it
             with files/directories with the same identifier across the repeating file structure.
-        measures : list of string
+        measures: list of string
             The name of the measures to be used in the outputs.
             Each corresponds to a dictionary nested in stat_dict.
 
@@ -106,8 +106,8 @@ class SmartPath(ABC):
 
         Parameters
         ----------
-        measures : list of string
-        name_max_length : int
+        measures: list of string
+        name_max_length: int
 
         Returns
         -------
