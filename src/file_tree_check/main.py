@@ -11,6 +11,7 @@ from pathlib import Path
 from file_tree_check.identifierEngine import IdentifierEngine
 from file_tree_check.smartDirectoryPath import SmartDirectoryPath
 from file_tree_check.smartFilePath import SmartFilePath
+from file_tree_check.smartPath import SmartPath
 from file_tree_check.statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
@@ -65,7 +66,9 @@ def _arg_parser():
     return pars
 
 
-def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
+def _create_logger(
+    file_log_path: str, file_log_level: str, is_verbose: bool, is_debug: bool
+) -> logging.Logger:
     """Instantiate the logger object that will collect and print logs during the script execution.
 
     File logging include the date but console logs do not.
@@ -75,11 +78,14 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     ----------
     file_log_path: string
         The path to the file where to save the logs. If is None, will not save path to any files.
+
     file_log_level: string
         The level of logging for the log file.
         Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
+
     is_verbose: bool
         Indicate if the console logger is to be set to the "INFO" level.
+
     is_debug: bool
         Indicate if the console logger is to be set to the "DEBUG" level
         for more detailed console logs.
@@ -104,7 +110,7 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
         console_handler.setLevel(logging.DEBUG)
         logger.addHandler(console_handler)
 
-    if str(file_log_path) != "None":
+    if file_log_path != "None":
         file_handler = logging.FileHandler(file_log_path, mode="w")
         file_handler.setLevel(file_log_level.upper())
         file_handler.setFormatter(file_format)
@@ -114,7 +120,12 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
 
 
 def generate_tree(
-    root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False
+    root: str | Path,
+    parent: SmartPath | None = None,
+    is_last: bool = False,
+    criteria: re.Pattern | None = None,
+    filter_files: bool = False,
+    filter_dir: bool = False,
 ):
     """Create a SmartFilePath or SmartDirectoryPath generator object \
     for every item found within the root directory.
@@ -132,23 +143,28 @@ def generate_tree(
         The path for which to generate the SmartPath instance and recursively run
         this function on it's children files
         and directories.
+
     parent: SmartPath
         The instance of the parent SmartPath.
         This reference allows the children SmartPath to calculate their depth
         relative to the first root of the file structure.
+
     is_last: bool
         Indicate whether or not this file/directory was the last to be generated
         in it's parent folder.
         Only relevant for visual display of the file structure.
+
     criteria: re.Pattern
         A regular expression compiled into a Pattern object to be used
         to filter_files and/or directories included
         in the generator output. Files/directories that do not match the regular expression
         will be discarded including all their children regardless of their name for directories.
         If no criteria is given, every file and directory will be included in the generation.
+
     filter_files: bool
         Whether or not the search criteria will be used to discard files
         whose names do not match the regular expression.
+
     filter_dir: bool
         Whether or not the search criteria will be used to discard directories
         whose names do not match.
@@ -215,13 +231,13 @@ def generate_tree(
 
 def get_data_from_paths(
     paths,
-    identifier,
-    output_path=None,
-    measures=(),
-    get_configurations=False,
-    target_depth=None,
-    pipe_file_data=False,
-):
+    identifier: IdentifierEngine,
+    output_path: Path | None = None,
+    measures: list[str] = [],
+    get_configurations: bool = False,
+    target_depth: int | None = None,
+    pipe_file_data: bool = False,
+) -> tuple[dict, dict]:
     """Iterate over each file/directory in the generator to get measure and, \
     create the file tree  if requested.
 
@@ -230,22 +246,28 @@ def get_data_from_paths(
     paths: iterable containing SmartPath objects
         Expected to be the generator object created by generate_tree()
         but can theoretically be any iterable containing SmartPath objects.
+
     identifier: IdentifierEngine
         Used to extract the identifier of each path to aggregate it
         with similar ones resent in the file structure.
         This IdentifierEngine is also passed to add_configuration
         to allow it to extract identifiers as well.
+
     output_path: pathlib.Path
         The path to the text file where the file tree output will be saved.
         If none, the type of output is skipped.
+
     measures: list of string
         The name of the measures to be used in the outputs.
         Each corresponds to a dictionary nested in stat_dict.
+
     get_configurations: bool
         Whether or not to compare the configuration of the folders in the repeating structure.
+
     target_depth: int
         Passed to add_configuration() to specify which depth of folder
         to use for configuration comparison.
+
     pipe_file_data: bool
         Whether to output the data from each file found directly
         to the standard output during the execution.
@@ -260,7 +282,10 @@ def get_data_from_paths(
     -------
     stat_dict: dict
     The dictionary containing the the values for each measures.
+
     stat_dict contains nested dictionaries with the following structure:
+
+    .. code-block:: python
 
         stat_dict={
             'measure1':
@@ -276,6 +301,8 @@ def get_data_from_paths(
     configurations: dict
         Contains the file configurations found for each file/directory identifier
         with the following structure:
+
+        .. code-block:: python
 
             configurations={
                 'identifier1':
@@ -323,7 +350,12 @@ def get_data_from_paths(
     return stat_dict, configurations
 
 
-def add_configuration(path, configurations, identifier, target_depth=None):
+def add_configuration(
+    path: SmartPath,
+    configurations: dict,
+    identifier: IdentifierEngine,
+    target_depth: int | None = None,
+) -> dict:
     """For each directory look at how it's content is structured and save \
        that structure as a configuration.
 
@@ -335,6 +367,7 @@ def add_configuration(path, configurations, identifier, target_depth=None):
     Parameters
     ----------
     path: SmartPath
+
     configurations: dict
         Contains the file configurations found for each file/directory identifier
         with the following structure:
@@ -354,6 +387,7 @@ def add_configuration(path, configurations, identifier, target_depth=None):
     identifier: IdentifierEngine
         Used to extract the identifier of each path to aggregate it with similar ones resent
         in the file structure.
+
     target_depth: int
         The depth at which the repeating directories for which
         to compare their configuration will be.

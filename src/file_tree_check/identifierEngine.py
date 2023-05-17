@@ -13,30 +13,36 @@ class IdentifierEngine:
     The regular expression in the config files are relied on
     to remove these unique parts of the file/directory name.
 
-    Example: "sub-15464521_image.png" and "sub-25484441_image.png"
-        would both have the same identifier "_image.png" if
-        using a regular expression that is keeping everything
-        after the first "_" like "/_.*$/".
+    Example:
+
+    "sub-15464521_image.png" and "sub-25484441_image.png"
+    would both have the same identifier "_image.png"
+    if using a regular expression that is keeping everything
+    after the first "_" like "/_.*$/".
 
     Attributes
     ----------
     file_expression: string
         The regular expression to filter the identifier from the name of files.
+
     directory_expression: string
         The regular expression to filter the identifier from the name of directories.
+
     logger: logging.Logger
         Logger to save info and debug message.
         Will send the log lines to the appropriate outputs following
         the logger configuration in main.py.
     """
 
-    def __init__(self, file_expression, directory_expression):
+    def __init__(self, file_expression: str, directory_expression: str):
         self.file_expression = file_expression
         self.directory_expression = directory_expression
         self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of IdentifierEngine")
 
-    def get_identifier(self, path, prefix_file_with_parent_directory=False):
+    def get_identifier(
+        self, path: str | Path, prefix_file_with_parent_directory: bool = False
+    ) -> str:
         """Extract the identifier from the file/directory.
 
         The identifier should be the repeating part of the name that ties it
@@ -66,6 +72,7 @@ class IdentifierEngine:
         ----------
         path: pathlib.Path or string
             The path to the file/directory for which to extract the identifier.
+
         prefix_file_with_parent_directory: bool, default = False
             Whether to include the parent directory as a prefix to the file's identifier.
             This is used to discriminate files that have the same name

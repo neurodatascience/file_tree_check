@@ -4,11 +4,11 @@ import os
 from pathlib import Path
 
 
-def check_size(path, min_size=50):
+def check_size(path, min_size: int = 50) -> bool:
     return path.stat().st_size > min_size
 
 
-def check_permissions(path, min_permissions=(4, 4, 0)):
+def check_permissions(path: str | Path, min_permissions: tuple[int, int, int] = (4, 4, 0)):
     path = Path(path)
     perm = list(oct(path.stat().st_mode))
 
@@ -20,8 +20,8 @@ def check_permissions(path, min_permissions=(4, 4, 0)):
     )
 
 
-def get_total_file_count(path, print_items=False):
-    # Count and optionally list all files in directory using pathlib
+def get_total_file_count(path: str | Path, print_items: bool = False):
+    """Count and optionally list all files in directory using pathlib."""
     base_path = Path(path)
     # Get the files in the given path
     files_in_base_path = (entry for entry in base_path.iterdir() if entry.is_file())

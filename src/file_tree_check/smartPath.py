@@ -17,11 +17,14 @@ class SmartPath(ABC):
     ----------
     path: pathlib.Path
         The path to the file/directory in question.
+
     parent: SmartPath
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
+
     is_last: bool
         Whether or not this path is the last one to be displayed in his directory.
         Used to create the tree-like output.
+
     depth: int
         The path's depth in the file structure relative to the initial target directory.
 
@@ -40,7 +43,7 @@ class SmartPath(ABC):
         self.is_last = is_last
         self.depth = self.parent.depth + 1 if self.parent else 0
 
-    def add_stats(self, stat_dict, identifier, measures=()):
+    def add_stats(self, stat_dict: dict, identifier: str, measures: list[str] = []) -> dict:
         """For each measure desired adds the value from this path to the dictionary.
 
         Parameters
@@ -67,6 +70,7 @@ class SmartPath(ABC):
             The path's identifier.
             Used to aggregate this path's values to the correct place in order to add it
             with files/directories with the same identifier across the repeating file structure.
+
         measures: list of string
             The name of the measures to be used in the outputs.
             Each corresponds to a dictionary nested in stat_dict.
@@ -106,7 +110,7 @@ class SmartPath(ABC):
     def dir_count(self):
         raise NotImplementedError()
 
-    def display(self, measures=(), name_max_length=60):
+    def display(self, measures=(), name_max_length: int = 60) -> str:
         """Return the name of the file/folder with whitespaces to fit the standard length.
 
         Parameters
@@ -120,7 +124,7 @@ class SmartPath(ABC):
         """
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
-    def displayable(self, measures=(), name_max_length=60):
+    def displayable(self, measures=(), name_max_length: int = 60) -> str:
         """Return a string corresponding to a single line \
            in the file structure tree visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
