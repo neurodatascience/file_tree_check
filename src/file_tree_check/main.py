@@ -15,7 +15,9 @@ from file_tree_check.smartPath import SmartPath
 from file_tree_check.statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
-CONFIG_PATH = r"/home/remi/github/file_tree_check/src/file_tree_check/config.ini"
+CONFIG_PATH = str(
+    Path(__file__).parent / "config.ini"
+)  # r"/home/remi/github/file_tree_check/src/file_tree_check/config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
