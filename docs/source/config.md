@@ -29,125 +29,159 @@ fact to know :
   interpret the value. This means for example that an option that is expecting
   an int will raise an error if you write letters in the value.
 
-**[Categorization]**
+#### Categorization
 
-regular expression for file identifier = string
+##### regular_expression_file_identifier = string
 
-    The regular expression to filter the identifier from the name of files. Will be used to re.search() on any file's name. The first match found will be kep as identifier
+The regular expression to filter the identifier from the name of files. Will be
+used to re.search() on any file's name. The first match found will be kep as
+identifier
 
-regular expression for directory identifier = string
+##### regular_expression_directory_identifier = string
 
-    The regular expression to filter the identifier from the name of directories.
+The regular expression to filter the identifier from the name of directories.
 
-**[Search Criteria]**
+#### Search Criteria
 
-use search criteria = bool
+##### use_search_criteria = bool
 
-    Whether or not to filter files and/or directory to extract data and metrics from only the subset that match the regular expressions below.
+Whether or not to filter_files and/or directory to extract data and metrics from
+only the subset that match the regular expressions below.
 
-regular expression for search criteria = string
+##### regular_expression_search_criteria = string
 
-    A regular expression to be used to filter files and/or directories included in the analysis. Uses re.match() to filter with the regular expression.
+A regular expression to be used to filter_files and/or directories included in
+the analysis. Uses re.match() to filter with the regular expression.
 
-filter files = bool
+##### filter_files = bool
 
-    Whether or not the search criteria will be used to discard files whose names do not match the regular expression.
+Whether or not the search criteria will be used to discard files whose names do
+not match the regular expression.
 
-filter directories = bool
+##### filter_directories = bool
 
-    Whether or not the search criteria will be used to discard directories whose names do not match.
+Whether or not the search criteria will be used to discard directories whose
+names do not match.
 
-**[Measures]**
+#### Measures
 
-file_count = bool
+##### file_count = bool
 
-    Take or not the measure of the number of files present in each directory (does not include files in sub-directories).
+Take or not the measure of the number of files present in each directory (does
+not include files in sub-directories).
 
-dir_count = bool
+##### dir_count = bool
 
-    Take or not the measure of the number of sub-directories present in each directory (does not include directories nested inside those sub-directories).
+Take or not the measure of the number of sub-directories present in each
+directory (does not include directories nested inside those sub-directories).
 
-file_size = bool
+##### file_size = bool
 
-    Take or not the measure of the size of the file/directory in bytes.
+Take or not the measure of the size of the file/directory in bytes.
 
-modified_time = bool
+##### modified_time = bool
 
-    Take or not the measure of the time of last modification, in seconds since 1st January 1970 (epoch time).
+Take or not the measure of the time of last modification, in seconds since 1st
+January 1970 (epoch time).
 
-**[Visualization]**
+#### Visualization
 
-create plots = bool
+##### create_plots = bool
 
-    Whether or not to create the plots that will show the distribution of the collected metrics between files and directories with the same identifier
+Whether or not to create the plots that will show the distribution of the
+collected metrics between files and directories with the same identifier
 
-number of plot per measure = int
+##### number_plot_per_measure = int
 
-    How many identifiers will be included in the plots, starting from the ones with the highest number of occurrences.
-    Corresponds to the number of column of the plot figure, it's rows being dictated by the number of measures taken.
+How many identifiers will be included in the plots, starting from the ones with
+the highest number of occurrences. Corresponds to the number of column of the
+plot figure, it's rows being dictated by the number of measures taken.
 
-print plots = bool
+##### print_plots = bool
 
-    Whether to show or not the plots with matplotlib.pyplot.show() before exiting the function.
+Whether to show or not the plots with matplotlib.pyplot.show() before exiting
+the function.
 
-save plots = bool
+##### save_plots = bool
 
-    Whether or not to save the plots generated as a image file.
+Whether or not to save the plots generated as a image file.
 
-image path = string
+##### image_path = string
 
-    The path to where the graphs should be saved. If not given or None, will not save the plots as file.
+The path to where the graphs should be saved. If not given or None, will not
+save the plots as file.
 
-**[Output]**
+#### Output
 
-create summary = bool
+##### create_summary = bool
 
-    Whether or not to create the text summary file that will highlights common file configurations if requested and will point to outliers for each measure and file/directory type.
+Whether or not to create the text summary file that will highlights common file
+configurations if requested and will point to outliers for each measure and
+file/directory type.
 
-summary output path = string
+##### summary_output_path = string
 
-    The path to where the text summary file should be saved.
+The path to where the text summary file should be saved.
 
-create text tree = bool
+##### create_text_tree = bool
 
-    Whether or not to create the tree-like file structure visualization in a text file.
+Whether or not to create the tree-like file structure visualization in a text
+file.
 
-tree output path = string
+##### tree_output_path = string
 
-    The path to the text file where the file tree output will be saved. If none, the type of output is skipped.
+The path to the text file where the file tree output will be saved. If none, the
+type of output is skipped.
 
-create csv = bool
+##### create_csv = bool
 
-    Whether or not to create the csv file containing a row for each file and directory found along with the metrics for each.
+Whether or not to create the csv file containing a row for each file and
+directory found along with the metrics for each.
 
-csv output path = string
+##### csv_output_path = string
 
-    Path to where the CSV should be saved.
+Path to where the CSV should be saved.
 
-**[Configurations]**
+#### Configurations
 
-get number of unique configurations = bool
+##### get_number_unique_configurations = bool
 
-    Whether or not to compare the configuration of the folders in the repeating structure.
+Whether or not to compare the configuration of the folders in the repeating
+structure.
 
-target depth = int
+##### target_depth = int
 
-    Specify which depth of folder to use for configuration comparison. (e.g. if comparing each sub folders found directly under the target folder given to the script, depth=1)
+Specify which depth of folder to use for configuration comparison. (e.g. if
+comparing each sub folders found directly under the target folder given to the
+script, depth=1)
 
-**[Logging]**
+#### Logging
 
-file log path = string
+##### file_log_path = string
 
-    The path to the file where to save the logs. If is None, will not save path to any files.
+The path to the file where to save the logs. If is None, will not save path to
+any files.
 
-file log level = string
+##### file_log_level = string
 
-    The level of logging for the log file. Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
+The level of logging for the log file. Either:
 
-**[Pipeline]**
+- "CRITICAL"
+- "ERROR"
+- "WARNING"
+- "INFO"
+- "DEBUG"
+- "NOTSET"
 
-pipe file data = bool
+#### Pipeline
 
-    Whether to output the data from each file found directly to the standard output during the execution. By default this will print in the console which is not recommended for large dataset.
-    If the script is followed by a pipe, this will pass the data to the other script or command. Only outputs files because directories shouldn't be relevant for the custom tests.
-    Outputted format is  a single string per file in the format : 'path,identifier,file_size,modified_time'. File_size is in bytes, modified_time is in seconds (epoch time).
+##### pipe_file_data = bool
+
+Whether to output the data from each file found directly to the standard output
+during the execution. By default this will print in the console which is not
+recommended for large dataset. If the script is followed by a pipe, this will
+pass the data to the other script or command. Only outputs files because
+directories shouldn't be relevant for the custom tests. Outputted format is a
+single string per file in the format :
+'path,identifier,file_size,modified_time'. File_size is in bytes, modified_time
+is in seconds (epoch time).
