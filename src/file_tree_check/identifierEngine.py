@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+import logging
 import re
 from pathlib import Path
-import logging
 
 
 class IdentifierEngine:
     """Class that can extract an "identifier" from a path.
+
     The identifier is a name that is used for comparison between directories and
     should not contain any part that is unique (like a subject number). The regular expression in
     the config files are relied on to remove these unique parts of the file/directory name.
@@ -22,6 +25,7 @@ class IdentifierEngine:
         Logger to save info and debug message. Will send the log lines to the appropriate outputs following the logger
         configuration in main.py.
     """
+
     def __init__(self, file_expression, directory_expression):
         self.file_expression = file_expression
         self.directory_expression = directory_expression
@@ -30,9 +34,10 @@ class IdentifierEngine:
 
     def get_identifier(self, path, prefix_file_with_parent_directory=False):
         """Extract the identifier from the file/directory.
+
         The identifier should be the repeating part of the name that ties it to it's type for comparison
             e.g. "sept_6_weekly_report.txt" -> "_weekly_report.txt".
-        However the details of what precisely to exract and treat as an identifier is handled by the regular expressions
+        However the details of what precisely to extract and treat as an identifier is handled by the regular expressions
             given on creating the class instance.
         Since the regular expression is used with re.search(), only the first match is kept.
 

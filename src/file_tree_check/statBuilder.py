@@ -1,16 +1,19 @@
+from __future__ import annotations
+
 import csv
 import logging
-from collections import Counter
-from matplotlib import pyplot as plt
-import seaborn as sns
-from pathlib import Path
 import time
+from collections import Counter
+from pathlib import Path
+
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 # Modify for a different figure size, (width, height)
 FIG_SIZE = (20, 12)
 
 
-class StatBuilder(object):
+class StatBuilder:
     """Store the data in a dictionary and create the output plots and files .
 
     Attributes
@@ -54,6 +57,7 @@ class StatBuilder(object):
 
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
         """Create a comparison plot for each measure given in a single figure.
+
         One row of plots per measure.
         Will show the distribution for a given amount of file/directory identifier per measure.
         Will prioritize the distributions with the highest amount of data points.
@@ -68,20 +72,18 @@ class StatBuilder(object):
         show_plot : bool, default=True
             Whether to show or not the plots with matplotlib.pyplot.show() before exiting the function.
         plots_per_measure : int
-            How many identifiers will be included in the plots, starting from the ones with the highest number of occurences.
+            How many identifiers will be included in the plots, starting from the ones with the highest number of occurrences.
             Corresponds to the number of column of the plot figure, it's rows being dictated by the number of measures taken.
         """
         sns.set(style="darkgrid")
         self.logger.debug("Creating subplots objects")
         height = len(self.measures)
         fig, axes = plt.subplots(height, int(plots_per_measure), figsize=FIG_SIZE)
-        fig.suptitle('Distribution in the file structure')
+        fig.suptitle("Distribution in the file structure")
         self.logger.debug("Iterating over the measures in the data")
         for measure_index, measure_name in enumerate(self.measures):
             i = 0
-            self.logger.debug(
-                f"Iterating over the directories in the measure {measure_name}"
-            )
+            self.logger.debug(f"Iterating over the directories in the measure {measure_name}")
             # Sort the measure dict (containing 'identifier' : {'path' : value}) for identifiers with the highest
             # amount of paths (and therefore values) first
             sorted_folders = dict(
@@ -159,9 +161,7 @@ class StatBuilder(object):
                     output += f'\n     Configuration #{i + 1} was found in {len(sorted_config_list[i]["paths"])} directories. Contains the following : \n            {sorted_config_list[i]["structure"]}'
 
         for measure_name in self.measures:
-            self.logger.debug(
-                f"Calculating most common occurrences for measure {measure_name}"
-            )
+            self.logger.debug(f"Calculating most common occurrences for measure {measure_name}")
             output += f"\n\nOccurrences for measure  :     **{measure_name}**\n"
             sorted_folders = dict(
                 sorted(
@@ -188,38 +188,34 @@ class StatBuilder(object):
                     for path, value in paths.items():
                         if value != most_common_value:
                             output += f"            {str(path)}  has : {value}\n"
-            self.logger.info(
-                f"Found {len(sorted_folders)} directories/files for measure {measure_name}"
-            )
-        self.logger.info(
-            f"Summary created with {len(self.measures)} measures, file is {len(output)} characters long."
-        )
+            self.logger.info(f"Found {len(sorted_folders)} directories/files for measure {measure_name}")
+        self.logger.info(f"Summary created with {len(self.measures)} measures, file is {len(output)} characters long.")
         return output
 
     def create_csv(self, output_path):
         """Produce the CSV (comma-separated value) file output at the target path.
 
-                As the name says, a CSV contains values separated by a comma.
-                In this case, each line represent a single file/directory with it's identifier and the measures done.
-                Format of each line is :
-                    path,identifier,measure1,measure2,measure3,...
-                Order of measures (but presence depends on config file option):
-                    file_count, dir_count, file_size, modified_time
-                All are integers:
-                    file_count = number of files directly under given directory (ignores files inside subdirectories)
-                    dir_count = number of directories directly under given directory (ignores inside subdirectories)
-                    file_size = size in bytes rounded to the nearest integer
-                    modified_time = time of last modification in number of seconds since 1st January 1970 (Epoch time)
+        As the name says, a CSV contains values separated by a comma.
+        In this case, each line represent a single file/directory with it's identifier and the measures done.
+        Format of each line is :
+            path,identifier,measure1,measure2,measure3,...
+        Order of measures (but presence depends on config file option):
+            file_count, dir_count, file_size, modified_time
+        All are integers:
+            file_count = number of files directly under given directory (ignores files inside subdirectories)
+            dir_count = number of directories directly under given directory (ignores inside subdirectories)
+            file_size = size in bytes rounded to the nearest integer
+            modified_time = time of last modification in number of seconds since 1st January 1970 (Epoch time)
 
-                Parameters
-                ----------
-                output_path :  pahlib.Path or string
-                    Path to where the CSV should be saved.
+        Parameters
+        ----------
+        output_path :  pahlib.Path or string
+            Path to where the CSV should be saved.
         """
         self.logger.debug(f"Opening csv file for writing at : {output_path}")
-        with open(output_path, 'w', newline='') as csv_file:
+        with open(output_path, "w", newline="") as csv_file:
             csv_writer = csv.writer(csv_file)
-            headers = ['Path'] + ['Identifier'] + list(self.measures)
+            headers = ["Path"] + ["Identifier"] + list(self.measures)
             csv_writer.writerow(headers)
             self.logger.info(f"Storing in CSV file with header : {str(headers)}")
             # Supposing every file/directory is present in the first measure's dictionary (which should be the case)
@@ -227,11 +223,6 @@ class StatBuilder(object):
             for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
                 "For every path found in the first measure, write all the measures for that path in the same row."
                 for path, value in paths.items():
-                    row = [
-                        self.stat_dict[measure][file_identifier][path]
-                        for measure in self.measures
-                    ]
+                    row = [self.stat_dict[measure][file_identifier][path] for measure in self.measures]
                     csv_writer.writerow([path] + [file_identifier] + row)
-        self.logger.info(
-            f"CSV file closed. Contains {Path(output_path).stat().st_size} bytes of data"
-        )
+        self.logger.info(f"CSV file closed. Contains {Path(output_path).stat().st_size} bytes of data")

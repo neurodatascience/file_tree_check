@@ -32,4 +32,8 @@ docs = ["file_tree_check[doc]"]
 tests = ["file_tree_check[test]"]
 dev = ["file_tree_check[doc,test]"]
 
+[tool.codespell]
+skip = "./.git,.mypy_cache,env,venv,tests,*bval,*bvec"
 
+[tool.black]
+line-length = 120
