@@ -142,7 +142,7 @@ def generate_tree(
         Only relevant for visual display of the file structure.
     criteria: re.Pattern
         A regular expression compiled into a Pattern object to be used
-        to filter files and/or directories included
+        to filter_files and/or directories included
         in the generator output. Files/directories that do not match the regular expression
         will be discarded including all their children regardless of their name for directories.
         If no criteria is given, every file and directory will be included in the generation.
@@ -260,7 +260,8 @@ def get_data_from_paths(
     -------
     stat_dict: dict
     The dictionary containing the the values for each measures.
-        stat_dict contains nested dictionaries with the following structure:
+    stat_dict contains nested dictionaries with the following structure:
+
         stat_dict={
             'measure1':
                 {'identifier1': {
@@ -271,9 +272,11 @@ def get_data_from_paths(
             'measure2':
                 {'identifier1': {}, 'identifier2': {}, ...}
             }
+
     configurations: dict
         Contains the file configurations found for each file/directory identifier
         with the following structure:
+
             configurations={
                 'identifier1':
                     [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
@@ -283,6 +286,7 @@ def get_data_from_paths(
                 'identifier2':
                     [{'structure': [], 'paths': []}, ...]
                 }
+
     """
     configurations = {}
     stat_dict = {measure_name: {} for measure_name in measures}
@@ -295,12 +299,11 @@ def get_data_from_paths(
                 configurations = add_configuration(
                     path, configurations, identifier, target_depth=target_depth
                 )
-            if pipe_file_data:
-                if isinstance(path, SmartFilePath):
-                    print(
-                        f"{path.path},{identifier.get_identifier(path.path)},"
-                        f"{path.file_size},{path.modified_time}"
-                    )
+            if pipe_file_data and isinstance(path, SmartFilePath):
+                print(
+                    f"{path.path},{identifier.get_identifier(path.path)},"
+                    f"{path.file_size},{path.modified_time}"
+                )
     else:
         with open(output_path, "w", encoding="utf-8") as f:
             for path in paths:
@@ -312,12 +315,11 @@ def get_data_from_paths(
                         path, configurations, identifier, target_depth=target_depth
                     )
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
-                if pipe_file_data:
-                    if isinstance(path, SmartFilePath):
-                        print(
-                            f"{path.path},{identifier.get_identifier(path.path)},"
-                            f"{path.file_size},{path.modified_time}"
-                        )
+                if pipe_file_data and isinstance(path, SmartFilePath):
+                    print(
+                        f"{path.path},{identifier.get_identifier(path.path)},"
+                        f"{path.file_size},{path.modified_time}"
+                    )
     return stat_dict, configurations
 
 
@@ -368,11 +370,10 @@ def add_configuration(path, configurations, identifier, target_depth=None):
     # and files are skipped
     if isinstance(path, SmartFilePath) or path.depth == 0:
         return configurations
-    # If a target depth is given, we exclude directories from other depth levels
+    # If a target_depth is given, we exclude directories from other depth levels
     path_unique_identifier = identifier.get_identifier(path.path)
-    if target_depth is not None:
-        if path.depth != target_depth:
-            return configurations
+    if target_depth is not None and path.depth != target_depth:
+        return configurations
     if path_unique_identifier not in configurations:
         configurations[path_unique_identifier] = []
     # Extract the organisation of the directory
@@ -426,8 +427,8 @@ def main():
 
     # Initializing logger
     logger = _create_logger(
-        config["Logging"]["file log path"],
-        config["Logging"]["file log level"],
+        config["Logging"]["file_log_path"],
+        config["Logging"]["file_log_level"],
         is_verbose=args.verbose,
         is_debug=args.debug,
     )
@@ -438,14 +439,14 @@ def main():
 
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(
-        config["Categorization"]["regular expression for file identifier"],
-        config["Categorization"]["regular expression for directory identifier"],
+        config["Categorization"]["regular_expression_file_identifier"],
+        config["Categorization"]["regular_expression_directory_identifier"],
     )
 
-    if config["Search Criteria"].getboolean("use search criteria"):
-        criteria = config["Search Criteria"]["regular expression for search criteria"]
-        filter_files = config["Search Criteria"].getboolean("filter files")
-        filter_dir = config["Search Criteria"].getboolean("filter directories")
+    if config["Search Criteria"].getboolean("use_search_criteria"):
+        criteria = config["Search Criteria"]["regular_expression_search_criteria"]
+        filter_files = config["Search Criteria"].getboolean("filter_files")
+        filter_dir = config["Search Criteria"].getboolean("filter_directories")
         try:
             criteria = re.compile(criteria)
         except TypeError as e:
@@ -456,24 +457,24 @@ def main():
         filter_files = False
         filter_dir = False
 
-    if config["Output"].getboolean("create summary"):
-        summary_output_path = Path(config["Output"]["summary output path"])
+    if config["Output"].getboolean("create_summary"):
+        summary_output_path = Path(config["Output"]["summary_output_path"])
     else:
         summary_output_path = None
 
-    if config["Output"].getboolean("create text tree"):
-        tree_output_path = Path(config["Output"]["tree output path"])
+    if config["Output"].getboolean("create_text_tree"):
+        tree_output_path = Path(config["Output"]["tree_output_path"])
     else:
         tree_output_path = None
 
-    if config["Output"].getboolean("create csv"):
-        csv_output_path = Path(config["Output"]["csv output path"])
+    if config["Output"].getboolean("create_csv"):
+        csv_output_path = Path(config["Output"]["csv_output_path"])
     else:
         csv_output_path = None
 
-    if config["Configurations"].getboolean("get number of unique configurations"):
+    if config["Configurations"].getboolean("get_number_unique_configurations"):
         get_configurations = True
-        target_depth = config["Configurations"].getint("target depth")
+        target_depth = config["Configurations"].getint("target_depth")
     else:
         get_configurations = False
         target_depth = -1
@@ -493,7 +494,7 @@ def main():
         measures=measure_list,
         get_configurations=get_configurations,
         target_depth=target_depth,
-        pipe_file_data=config["Pipeline"].getboolean("pipe file data"),
+        pipe_file_data=config["Pipeline"].getboolean("pipe_file_data"),
     )
     logger.info(
         f"Retrieved {len(stat_dict)} measures for "
@@ -503,16 +504,16 @@ def main():
     stat_builder = StatBuilder(stat_dict, measure_list)
 
     vis_config = config["Visualization"]
-    if vis_config.getboolean("create plots"):
+    if vis_config.getboolean("create_plots"):
         logger.debug("Giving the data to the graphic creator")
-        if vis_config.getboolean("save plots"):
-            image_path = Path(vis_config["image path"])
+        if vis_config.getboolean("save_plots"):
+            image_path = Path(vis_config["image_path"])
         else:
             image_path = None
         stat_builder.create_plots(
-            plots_per_measure=vis_config.getint("number of plot per measure"),
+            plots_per_measure=vis_config.getint("number_plot_per_measure"),
             save_path=image_path,
-            show_plot=vis_config.getboolean("print plots"),
+            show_plot=vis_config.getboolean("print_plots"),
         )
 
     if summary_output_path is not None:

@@ -4,7 +4,7 @@ This section will provide config files for some common use case dependent on the
 analysis and the outputs necessary for each one. In the examples of config file,
 sections with text between <> need to be replaced with your values or
 preferences (e.g. the path to the output file to be generated, whether or not to
-print plots to the screen).
+print_plots to the screen).
 
 ## Get the tree-like text representation of a file structure to understand how it is organized.
 
@@ -18,14 +18,14 @@ alongside their file/directory. Example of config file :
 
 ```
 [Categorization]
-regular expression for file identifier = ^.*$
-regular expression for directory identifier = ^.*$
+regular_expression_file_identifier = ^.*$
+regular_expression_directory_identifier = ^.*$
 
 [Search Criteria]
-use search criteria = no
-regular expression for search criteria =
-filter files = no
-filter directories = no
+use_search_criteria = no
+regular_expression_search_criteria =
+filter_files = no
+filter_directories = no
 
 [Measures]
 file_count = yes
@@ -34,30 +34,30 @@ file_size = yes
 modified_time = yes
 
 [Visualization]
-create plots = no
-number of plot per measure =
-print plots =
-save plots =
-image path =
+create_plots = no
+number_plot_per_measure =
+print_plots =
+save_plots =
+image_path =
 
 [Output]
-create summary = no
-summary output path =
-create text tree = yes
-tree output path = <output path>
-create csv = no
-csv output path =
+create_summary = no
+summary_output_path =
+create_text_tree = yes
+tree_output_path = <output path>
+create_csv = no
+csv_output_path =
 
 [Configurations]
-get number of unique configurations = no
-target depth =
+get_number_unique_configurations = no
+target_depth =
 
 [Logging]
-file log path = <log path>
-file log level = DEBUG
+file_log_path = <log path>
+file_log_level = DEBUG
 
 [Pipeline]
-pipe file data = no
+pipe_file_data = no
 ```
 
 ## Verify a neuroimaging dataset for anomalies.
@@ -81,14 +81,14 @@ folder and every file can be compared to each other to find outliers.
 
 ```
 [Categorization]
-regular expression for file identifier = _.*$
-regular expression for directory identifier = ^.*-
+regular_expression_file_identifier = _.*$
+regular_expression_directory_identifier = ^.*-
 
 [Search Criteria]
-use search criteria = no
-regular expression for search criteria =
-filter files = no
-filter directories = no
+use_search_criteria = no
+regular_expression_search_criteria =
+filter_files = no
+filter_directories = no
 
 [Measures]
 file_count = yes
@@ -97,30 +97,30 @@ file_size = yes
 modified_time = yes
 
 [Visualization]
-create plots = yes
-number of plot per measure = <your value>
-print plots = <yes/no>
-save plots = yes
-image path = <output path 1>
+create_plots = yes
+number_plot_per_measure = <your value>
+print_plots = <yes/no>
+save_plots = yes
+image_path = <output path 1>
 
 [Output]
-create summary = yes
-summary output path = <output path 2>
-create text tree = no
-tree output path =
-create csv = yes
-csv output path = <output path 3>
+create_summary = yes
+summary_output_path = <output path 2>
+create_text_tree = no
+tree_output_path =
+create_csv = yes
+csv_output_path = <output path 3>
 
 [Configurations]
-get number of unique configurations = yes
-target depth = 1
+get_number_unique_configurations = yes
+target_depth = 1
 
 [Logging]
-file log path = <log path>
-file log level = DEBUG
+file_log_path = <log path>
+file_log_level = DEBUG
 
 [Pipeline]
-pipe file data = no
+pipe_file_data = no
 ```
 
 ## Get data on only a specific selection of files or directories in a large file structure.
@@ -149,14 +149,14 @@ under the directory on which the script is run.
 
 ```
 [Categorization]
-regular expression for file identifier = ^.*$
-regular expression for directory identifier = ^.*$
+regular_expression_file_identifier = ^.*$
+regular_expression_directory_identifier = ^.*$
 
 [Search Criteria]
-use search criteria = yes
-regular expression for search criteria = <your regular expression>
-filter files = <yes/no>
-filter directories = <yes/no>
+use_search_criteria = yes
+regular_expression_search_criteria = <your regular expression>
+filter_files = <yes/no>
+filter_directories = <yes/no>
 
 [Measures]
 file_count = yes
@@ -165,35 +165,35 @@ file_size = yes
 modified_time = yes
 
 [Visualization]
-create plots = no
-number of plot per measure =
-print plots =
-save plots = no
-image path =
+create_plots = no
+number_plot_per_measure =
+print_plots =
+save_plots = no
+image_path =
 
 [Output]
-create summary = yes
-summary output path = <output path 2>
-create text tree = no
-tree output path =
-create csv = yes
-csv output path = <output path 3>
+create_summary = yes
+summary_output_path = <output path 2>
+create_text_tree = no
+tree_output_path =
+create_csv = yes
+csv_output_path = <output path 3>
 
 [Configurations]
-get number of unique configurations = no
-target depth = 1
+get_number_unique_configurations = no
+target_depth = 1
 
 [Logging]
-file log path = <log path>
-file log level = DEBUG
+file_log_path = <log path>
+file_log_level = DEBUG
 
 [Pipeline]
-pipe file data = no
+pipe_file_data = no
 ```
 
 ## Run an automated test on specific type of files contained in a large dataset
 
-With the _pipe file data_ setting, the script will print to the standard output
+With the _pipe_file_data_ setting, the script will print to the standard output
 a string for every file as it goes along exploring the file structure in the
 target folder.
 
@@ -213,14 +213,14 @@ This config file will also create a csv that can be uses by other type of tests.
 
 ```
 [Categorization]
-regular expression for file identifier = ^.*$
-regular expression for directory identifier = ^.*$
+regular_expression_file_identifier = ^.*$
+regular_expression_directory_identifier = ^.*$
 
 [Search Criteria]
-use search criteria = yes
-regular expression for search criteria = <your regular expression>
-filter files = yes
-filter directories = no
+use_search_criteria = yes
+regular_expression_search_criteria = <your regular expression>
+filter_files = yes
+filter_directories = no
 
 [Measures]
 file_count = yes
@@ -229,28 +229,28 @@ file_size = yes
 modified_time = yes
 
 [Visualization]
-create plots = no
-number of plot per measure =
-print plots =
-save plots = no
-image path =
+create_plots = no
+number_plot_per_measure =
+print_plots =
+save_plots = no
+image_path =
 
 [Output]
-create summary = no
-summary output path =
-create text tree = no
-tree output path =
-create csv = yes
-csv output path = <output path>
+create_summary = no
+summary_output_path =
+create_text_tree = no
+tree_output_path =
+create_csv = yes
+csv_output_path = <output path>
 
 [Configurations]
-get number of unique configurations = no
-target depth = 1
+get_number_unique_configurations = no
+target_depth = 1
 
 [Logging]
-file log path = <log path>
-file log level = DEBUG
+file_log_path = <log path>
+file_log_level = DEBUG
 
 [Pipeline]
-pipe file data = yes
+pipe_file_data = yes
 ```
