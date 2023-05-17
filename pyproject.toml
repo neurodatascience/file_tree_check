@@ -15,7 +15,6 @@ version = "0.1.0"
 dependencies = [
   "seaborn",
   "matplotlib",
-  "packaging"
 ]
 
 [project.optional-dependencies]
@@ -29,7 +28,6 @@ doc = [
 ]
 test = [
   "pytest",
-  "pytest-cov",
   "coverage[toml]",
 ]
 docs = ["file_tree_check[doc]"]
