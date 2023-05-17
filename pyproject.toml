@@ -29,10 +29,20 @@ doc = [
 ]
 test = [
   "pytest",
+  "pytest-cov",
+  "coverage[toml]",
 ]
 docs = ["file_tree_check[doc]"]
 tests = ["file_tree_check[test]"]
 dev = ["file_tree_check[doc,test]"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -vv"
+
+[tool.coverage.run]
+branch = true
+source = ["src/file_tree_check/"]
+
 
 [tool.codespell]
 skip = "./.git,.mypy_cache,env,venv,tests,*bval,*bvec"
