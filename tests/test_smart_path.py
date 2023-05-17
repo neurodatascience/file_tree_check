@@ -1,5 +1,5 @@
-import pytest
-from file_tree_check import smartPath
+from __future__ import annotations
+
 
 def test_simple_case():
     pass

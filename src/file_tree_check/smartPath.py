@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+from abc import ABC
+from abc import abstractmethod
 from pathlib import Path
-from abc import ABC, abstractmethod
 
 
 class SmartPath(ABC):
-    """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
+    """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed \
     in a readable format and allow retrieval of some statistics.
 
     Each instance stores their parent directory and their depth relative to the first path.
@@ -25,10 +28,10 @@ class SmartPath(ABC):
     """
 
     # The separators for the visual representation of the file structure
-    display_filename_prefix_middle = '├──'
-    display_filename_prefix_last = '└──'
-    display_parent_prefix_middle = '    '
-    display_parent_prefix_last = '│   '
+    display_filename_prefix_middle = "├──"
+    display_filename_prefix_last = "└──"
+    display_parent_prefix_middle = "    "
+    display_parent_prefix_last = "│   "
 
     def __init__(self, path, parent_smart_path, is_last):
         self.path = Path(str(path))
@@ -110,18 +113,16 @@ class SmartPath(ABC):
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
     def displayable(self, measures=(), name_max_length=60):
-        """Returns a string corresponding to a single line in the file structure tree visualisation."""
+        """Return a string corresponding to a single line in the file structure tree visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
             return self.display(measures, name_max_length)
 
         # If the path is the last in it's directory, it will begin with └── instead of ├──"
-        _filename_prefix = (self.display_filename_prefix_last if self.is_last
-                            else self.display_filename_prefix_middle)
+        _filename_prefix = self.display_filename_prefix_last if self.is_last else self.display_filename_prefix_middle
 
         # Display the info about the file/directory after the prefix chose above
-        parts = ['{!s} {!s}'.format(_filename_prefix,
-                                    self.display(measures, name_max_length))]
+        parts = [f"{_filename_prefix!s} {self.display(measures, name_max_length)!s}"]
 
         # Now that the display for the current directory is ready, we need to add
         # the separator for each target_depth level
@@ -129,9 +130,8 @@ class SmartPath(ABC):
         # Going up the parent hierarchy
         while parent and parent.parent is not None:
             # If the parent was last in it's directory, the separator is '   ' otherwise it is '│   '
-            parts.append(self.display_parent_prefix_middle if parent.is_last
-                         else self.display_parent_prefix_last)
+            parts.append(self.display_parent_prefix_middle if parent.is_last else self.display_parent_prefix_last)
             parent = parent.parent
 
         # Putting it all together in a single string
-        return ''.join(reversed(parts))
+        return "".join(reversed(parts))
