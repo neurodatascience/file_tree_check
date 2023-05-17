@@ -24,6 +24,8 @@ doc = [
   "sphinx_rtd_theme",
   "myst-parser",
   "sphinx-copybutton",
+  "rstcheck",
+  "sphinx-argparse",
 ]
 test = [
   "pytest",
