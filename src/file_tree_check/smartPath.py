@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 class SmartPath(ABC):
-    """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed \
-    in a readable format and allow retrieval of some statistics.
+    """A SmartPath object is tied to a singular path (file or directory) \
+    and allows itself to be printed in a readable format and allow retrieval of some statistics.
 
     Each instance stores their parent directory and their depth relative to the first path.
 
@@ -20,7 +20,8 @@ class SmartPath(ABC):
     parent : SmartPath
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
     is_last : bool
-        Whether or not this path is the last one to be displayed in his directory. Used to create the tree-like output.
+        Whether or not this path is the last one to be displayed in his directory.
+        Used to create the tree-like output.
     depth : int
         The path's depth in the file structure relative to the initial target directory.
 
@@ -58,10 +59,12 @@ class SmartPath(ABC):
                     {'identifier1' : {}, 'identifier2' : {}, ...}
                 }
         identifier : string
-            The path's identifier. Used to aggregate this path's values to the correct place in order to add it with
-            files/directories with the same identifier across the repeating file structure.
+            The path's identifier.
+            Used to aggregate this path's values to the correct place in order to add it
+            with files/directories with the same identifier across the repeating file structure.
         measures : list of string
-            The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
+            The name of the measures to be used in the outputs.
+            Each corresponds to a dictionary nested in stat_dict.
 
         Returns
         -------
@@ -113,13 +116,19 @@ class SmartPath(ABC):
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
     def displayable(self, measures=(), name_max_length=60):
-        """Return a string corresponding to a single line in the file structure tree visualisation."""
+        """Return a string corresponding to a single line \
+           in the file structure tree visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
             return self.display(measures, name_max_length)
 
-        # If the path is the last in it's directory, it will begin with └── instead of ├──"
-        _filename_prefix = self.display_filename_prefix_last if self.is_last else self.display_filename_prefix_middle
+        # If the path is the last in it's directory,
+        # it will begin with └── instead of ├──"
+        _filename_prefix = (
+            self.display_filename_prefix_last
+            if self.is_last
+            else self.display_filename_prefix_middle
+        )
 
         # Display the info about the file/directory after the prefix chose above
         parts = [f"{_filename_prefix!s} {self.display(measures, name_max_length)!s}"]
@@ -129,8 +138,13 @@ class SmartPath(ABC):
         parent = self.parent
         # Going up the parent hierarchy
         while parent and parent.parent is not None:
-            # If the parent was last in it's directory, the separator is '   ' otherwise it is '│   '
-            parts.append(self.display_parent_prefix_middle if parent.is_last else self.display_parent_prefix_last)
+            # If the parent was last in it's directory,
+            # the separator is '   ' otherwise it is '│   '
+            parts.append(
+                self.display_parent_prefix_middle
+                if parent.is_last
+                else self.display_parent_prefix_last
+            )
             parent = parent.parent
 
         # Putting it all together in a single string

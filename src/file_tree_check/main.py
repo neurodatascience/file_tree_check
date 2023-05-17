@@ -26,14 +26,17 @@ def _arg_parser():
 
     Arguments are the part given after the main.py call in the command line.
 
-    Only 1 required argument : the path to the folder to be used as the root for the analysis.
-    2 optional and mutually exclusive arguments : "verbose" and "debug" to print logs of various levels to the console.
+    Only 1 required argument:
+    the path to the folder to be used as the root for the analysis.
+    2 optional and mutually exclusive arguments:
+    "verbose" and "debug" to print logs of various levels to the console.
 
-    If neither "verbose" nor "debug" is given, logs will not be output to the console (or other standard output)
+    If neither "verbose" nor "debug" is given, logs will not be output
+    to the console (or other standard output)
     although they could be saved in a file via an option in the config files.
     "debug" will show more detailed information to the console compared to "verbose".
-    Activating the log to console with either "verbose" or "debug" is independent and not mutually exclusive to the
-    logs to file.
+    Activating the log to console with either "verbose" or "debug"
+    is independent and not mutually exclusive to the logs to file.
 
     Returns
     -------
@@ -73,16 +76,19 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     file_log_path : string
         The path to the file where to save the logs. If is None, will not save path to any files.
     file_log_level : string
-        The level of logging for the log file. Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
+        The level of logging for the log file.
+        Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
     is_verbose : bool
         Indicate if the console logger is to be set to the "INFO" level.
     is_debug : bool
-        Indicate if the console logger is to be set to the "DEBUG" level for more detailed console logs.
+        Indicate if the console logger is to be set to the "DEBUG" level
+        for more detailed console logs.
 
     Returns
     -------
     logging.Logger
-        The logger object who will redirect the log line given during the script execution to the desired outputs.
+        The logger object who will redirect the log line given
+        during the script execution to the desired outputs.
     """
     logger = logging.getLogger(LOGGER_NAME)
     logger.setLevel(file_log_level.upper())
@@ -107,43 +113,58 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     return logger
 
 
-def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False):
-    """Create a SmartFilePath or SmartDirectoryPath generator object for every item found within the root directory.
+def generate_tree(
+    root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False
+):
+    """Create a SmartFilePath or SmartDirectoryPath generator object \
+    for every item found within the root directory.
 
-    These generator objects will have to be iterated over to get the SmartPath items themselves.
-    Returns an iterable of the file structure that can be used over each element.
-    When a subdirectory is found under the given path, will call another instance of this method with it as the root.
+    These generator objects will have to be iterated over
+    to get the SmartPath items themselves.
+    Returns an iterable of the file structure
+    that can be used over each element.
+    When a subdirectory is found under the given path,
+    will call another instance of this method with it as the root.
 
     Parameters
     ----------
     root : string or pathlib.Path
-        The path for which to generate the SmartPath instance and recursively run this function on it's children files
+        The path for which to generate the SmartPath instance and recursively run
+        this function on it's children files
         and directories.
     parent : SmartPath
-        The instance of the parent SmartPath. This reference allows the children SmartPath to calculate their depth
+        The instance of the parent SmartPath.
+        This reference allows the children SmartPath to calculate their depth
         relative to the first root of the file structure.
     is_last : bool
-        Indicate whether or not this file/directory was the last to be generated in it's parent folder.
+        Indicate whether or not this file/directory was the last to be generated
+        in it's parent folder.
         Only relevant for visual display of the file structure.
     criteria : re.Pattern
-        A regular expression compiled into a Pattern object to be used to filter files and/or directories included
-        in the generator output. Files/directories that do not match the regular expression will be discarded including
-        all their children regardless of their name for directories. If no criteria is given, every file and directory
-        will be included in the generation.
+        A regular expression compiled into a Pattern object to be used
+        to filter files and/or directories included
+        in the generator output. Files/directories that do not match the regular expression
+        will be discarded including all their children regardless of their name for directories.
+        If no criteria is given, every file and directory will be included in the generation.
     filter_files : bool
-        Whether or not the search criteria will be used to discard files whose names do not match the regular expression.
+        Whether or not the search criteria will be used to discard files
+        whose names do not match the regular expression.
     filter_dir : bool
-        Whether or not the search criteria will be used to discard directories whose names do not match.
+        Whether or not the search criteria will be used to discard directories
+        whose names do not match.
 
     Yields
     ------
     generator object
-        Each execution of generate_tree yields a single instance of SmartFilePath or SmartDirectoryPath to the generator
+        Each execution of generate_tree yields a single instance
+        of SmartFilePath or SmartDirectoryPath to the generator
         that will create them when iterated upon.
-        However, since another generate_tree() function is called on each children found, while each function yield
-        a single object, the end result will be that a object will be yielded for every file and directory found in the
-        initial root (or for every one that matches the criteria).
-        Iterating over the output generator object will then allow to act on a SmartPath instance of every file and
+        However, since another generate_tree() function is called on each children found,
+        while each function yield a single object,
+        the end result will be that a object will be yielded for every file
+        and directory found in the initial root (or for every one that matches the criteria).
+        Iterating over the output generator object will then allow to act
+        on a SmartPath instance of every file and
         directory after only having to call ourself generate_tree() once on the target folder.
     """
     logger = logging.getLogger(LOGGER_NAME)
@@ -182,7 +203,8 @@ def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=
                     filter_files=filter_files,
                     filter_dir=filter_dir,
                 )
-            # If the children is a file, generate a single instance of SmartPath associated to its path
+            # If the children is a file,
+            # generate a single instance of SmartPath associated to its path
             else:
                 yield SmartFilePath(path, smart_root, is_last)
             count += 1
@@ -200,30 +222,38 @@ def get_data_from_paths(
     target_depth=None,
     pipe_file_data=False,
 ):
-    """Iterate over each file/directory in the generator to get measure and, create the file tree  if requested.
+    """Iterate over each file/directory in the generator to get measure and, \
+    create the file tree  if requested.
 
     Parameters
     ----------
     paths : iterable containing SmartPath objects
-        Expected to be the generator object created by generate_tree() but can theoretically be any iterable containing
-        SmartPath objects.
+        Expected to be the generator object created by generate_tree()
+        but can theoretically be any iterable containing SmartPath objects.
     identifier : IdentifierEngine
-        Used to extract the identifier of each path to aggregate it with similar ones resent in the file structure.
-        This IdentifierEngine is also passed to add_configuration to allow it to extract identifiers as well.
+        Used to extract the identifier of each path to aggregate it
+        with similar ones resent in the file structure.
+        This IdentifierEngine is also passed to add_configuration
+        to allow it to extract identifiers as well.
     output_path : pathlib.Path
-        The path to the text file where the file tree output will be saved. If none, the type of output is skipped.
+        The path to the text file where the file tree output will be saved.
+        If none, the type of output is skipped.
     measures : list of string
-        The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
+        The name of the measures to be used in the outputs.
+        Each corresponds to a dictionary nested in stat_dict.
     get_configurations : bool
         Whether or not to compare the configuration of the folders in the repeating structure.
     target_depth : int
-        Passed to add_configuration() to specify which depth of folder to use for configuration comparison.
+        Passed to add_configuration() to specify which depth of folder
+        to use for configuration comparison.
     pipe_file_data : bool
-        Whether to output the data from each file found directly to the standard output during the execution.
+        Whether to output the data from each file found directly
+        to the standard output during the execution.
         By default this will print in the console which is not recommended for large dataset.
         If the script is followed by a pipe, this will pass the data to the other script or command.
         Only outputs files because directories shouldn't be relevant for the custom tests.
-        Outputted format is  a single string per file in the format : 'path,identifier,file_size,modified_time'.
+        Outputted format is  a single string per file in the format :
+        'path,identifier,file_size,modified_time'.
         File_size is in bytes, modified_time is in seconds (epoch time).
 
     Returns
@@ -242,10 +272,12 @@ def get_data_from_paths(
                 {'identifier1' : {}, 'identifier2' : {}, ...}
             }
     configurations : dict
-        Contains the file configurations found for each file/directory identifier with the following structure :
+        Contains the file configurations found for each file/directory identifier
+        with the following structure :
             configurations={
                 'identifier1' :
-                    [ {'structure' : ['identifier3', 'identifier4', 'identifier5'], 'paths' : ['path1', 'path2']},
+                    [ {'structure' : ['identifier3', 'identifier4', 'identifier5'],
+                                      'paths' : ['path1', 'path2']},
                     {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
                     ... ]
                 'identifier2' :
@@ -256,59 +288,79 @@ def get_data_from_paths(
     stat_dict = {measure_name: {} for measure_name in measures}
     if output_path is None:
         for path in paths:
-            stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path), measures=measures)
+            stat_dict = path.add_stats(
+                stat_dict, identifier.get_identifier(path), measures=measures
+            )
             if get_configurations:
-                configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+                configurations = add_configuration(
+                    path, configurations, identifier, target_depth=target_depth
+                )
             if pipe_file_data:
                 if isinstance(path, SmartFilePath):
-                    print(f"{path.path},{identifier.get_identifier(path.path)},{path.file_size},{path.modified_time}")
+                    print(
+                        f"{path.path},{identifier.get_identifier(path.path)},"
+                        f"{path.file_size},{path.modified_time}"
+                    )
     else:
         with open(output_path, "w", encoding="utf-8") as f:
             for path in paths:
-                stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path.path), measures=measures)
+                stat_dict = path.add_stats(
+                    stat_dict, identifier.get_identifier(path.path), measures=measures
+                )
                 if get_configurations:
-                    configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+                    configurations = add_configuration(
+                        path, configurations, identifier, target_depth=target_depth
+                    )
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
                 if pipe_file_data:
                     if isinstance(path, SmartFilePath):
                         print(
-                            f"{path.path},{identifier.get_identifier(path.path)},{path.file_size},{path.modified_time}"
+                            f"{path.path},{identifier.get_identifier(path.path)},"
+                            f"{path.file_size},{path.modified_time}"
                         )
     return stat_dict, configurations
 
 
 def add_configuration(path, configurations, identifier, target_depth=None):
-    """For each directory look at how it's content is structured and save that structure as a configuration.
+    """For each directory look at how it's content is structured and save \
+       that structure as a configuration.
 
     Only compare directory of a specific depth relative to the original target directory.
-    This prevents computing configurations for folder that aren't relevant since we are expecting the repeating
+    This prevents computing configurations for folder that aren't relevant
+    since we are expecting the repeating
     file structure to have each unit we want to compare at the same depth in the file structure.
 
     Parameters
     ----------
     path : SmartPath
     configurations : dict
-        Contains the file configurations found for each file/directory identifier with the following structure :
+        Contains the file configurations found for each file/directory identifier
+        with the following structure :
                 configurations={
                     'identifier1' :
-                        [ {'structure' : ['identifier3', 'identifier4', 'identifier5'], 'paths' : ['path1', 'path2']},
+                        [ {'structure' : ['identifier3', 'identifier4', 'identifier5'],
+                                          'paths' : ['path1', 'path2']},
                         {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
                         ... ]
                     'identifier2' :
                         [{'structure' : [], 'paths' : []}, ...]
                     }
     identifier : IdentifierEngine
-        Used to extract the identifier of each path to aggregate it with similar ones resent in the file structure.
+        Used to extract the identifier of each path to aggregate it with similar ones resent
+        in the file structure.
     target_depth : int
-        The depth at which the repeating directories for which to compare their configuration will be.
+        The depth at which the repeating directories for which
+        to compare their configuration will be.
         Any directory found at a different depth will be ignored by this function.
 
     Returns
     -------
     configurations : dict
-        The updated dict now containing the configuration data from the path that was given as parameter.
+        The updated dict now containing the configuration data \
+        from the path that was given as parameter.
     """
-    # The root is skipped since it is alone at his target_depth level and thus can't be compared
+    # The root is skipped since it is alone at his target_depth level
+    # and thus can't be compared
     # and files are skipped
     if isinstance(path, SmartFilePath) or path.depth == 0:
         return configurations
@@ -323,25 +375,37 @@ def add_configuration(path, configurations, identifier, target_depth=None):
     children_list = []
     for children in os.listdir(path.path):
         children_path = path.path.joinpath(children)
-        # For the list of every children in the directory, we don't include the parent directory prefix
-        children_list.append(identifier.get_identifier(children_path, prefix_file_with_parent_directory=False))
+        # For the list of every children in the directory,
+        # we don't include the parent directory prefix
+        children_list.append(
+            identifier.get_identifier(children_path, prefix_file_with_parent_directory=False)
+        )
         children_list.sort()
 
     # Compare that organisation with others already found
-    # The list of children is the key of the dict and the value is a list of every path with that configuration
+    # The list of children is the key of the dict and the value
+    # is a list of every path with that configuration
     if len(configurations[path_unique_identifier]) == 0:
-        # configurations has a list of every configuration associated to every identifier, each element of the list
-        # is a dict containing the list of children and the path to all directories following this configuration
-        configurations[path_unique_identifier] = [{"structure": children_list, "paths": [str(path.path)]}]
+        # configurations has a list of every configuration associated
+        # to every identifier, each element of the list
+        # is a dict containing the list of children and the path to all directories
+        # following this configuration
+        configurations[path_unique_identifier] = [
+            {"structure": children_list, "paths": [str(path.path)]}
+        ]
     else:
         # Searching if current configuration has already been seen
         for configuration in configurations[path_unique_identifier]:
             if configuration["structure"] == children_list:
-                # If the configuration is known, add the current path to the list of that configuration
+                # If the configuration is known, add the current path
+                # to the list of that configuration
                 configuration["paths"].append(str(path.path))
                 return configurations
-        # if no match were found, a new configuration is added to the identifier's list of configurations
-        configurations[path_unique_identifier].append({"structure": children_list, "paths": [str(path.path)]})
+        # if no match were found, a new configuration is added
+        # to the identifier's list of configurations
+        configurations[path_unique_identifier].append(
+            {"structure": children_list, "paths": [str(path.path)]}
+        )
 
     return configurations
 
@@ -381,7 +445,9 @@ def main():
         try:
             criteria = re.compile(criteria)
         except TypeError as e:
-            logger.warning(f"Search Criteria {criteria} is invalid, resuming without criteria : {e}")
+            logger.warning(
+                f"Search Criteria {criteria} is invalid, resuming without criteria : {e}"
+            )
             criteria = None
     else:
         criteria = None
@@ -411,7 +477,8 @@ def main():
         target_depth = -1
 
     logger.info(
-        f"Output file paths : Summary:'{str(summary_output_path)}', Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
+        f"Output file paths : Summary:'{str(summary_output_path)}', "
+        f"Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
     )
 
     logger.debug("Launching exploration of the target directory")
@@ -426,7 +493,10 @@ def main():
         target_depth=target_depth,
         pipe_file_data=config["Pipeline"].getboolean("pipe file data"),
     )
-    logger.info(f'Retrieved {len(stat_dict)} measures for {len(stat_dict["file_count"])} different directory name')
+    logger.info(
+        f"Retrieved {len(stat_dict)} measures for "
+        f"{len(stat_dict['file_count'])} different directory name"
+    )
     logger.debug("Creating instance of StatBuilder with the measures")
     stat_builder = StatBuilder(stat_dict, measure_list)
 
