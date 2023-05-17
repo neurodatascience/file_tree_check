@@ -18,23 +18,23 @@ class StatBuilder:
 
     Attributes
     ----------
-    stat_dict : dict
+    stat_dict: dict
         The dictionary containing the the values for each measures.
             stat_dict contains nested dictionaries with the following structure:
             stat_dict={
-                'measure1' :
-                    {'identifier1' : {
-                        'path1' : value, 'path2' : value, ...},
-                    'identifier2' : {
-                        'path3' : value, 'path4' : value}, ...},
+                'measure1':
+                    {'identifier1': {
+                        'path1': value, 'path2': value, ...},
+                    'identifier2': {
+                        'path3': value, 'path4': value}, ...},
                     }
-                'measure2' :
-                    {'identifier1' : {}, 'identifier2' : {}, ...}
+                'measure2':
+                    {'identifier1': {}, 'identifier2': {}, ...}
                 }
-    measures : list of string
+    measures: list of string
         The name of the measures to be used in the outputs.
         Each name corresponds to a dictionary nested in stat_dict.
-    logger : logging.Logger
+    logger: logging.Logger
         Logger to save info and debug message.
         Will send the log lines to the appropriate outputs
         following the logger configuration in main.py.
@@ -45,9 +45,9 @@ class StatBuilder:
 
         Parameters
         ----------
-        stat_dict : dict
+        stat_dict: dict
             Contains the values for each measures. See above for the structure
-        measures : list of string
+        measures: list of string
             The list of measure name the StatBuilder instance should care about.
             Used in the functions to iterate over stat_dict in a safer way.
             Any measures in stat_dict that are not in this list will be ignored
@@ -71,13 +71,13 @@ class StatBuilder:
 
         Parameters
         ----------
-        save_path :  pathlib.Path or string, default=None
+        save_path:  pathlib.Path or string, default=None
             The path to where the graphs should be saved.
             If not given or None, will not save the plots as file.
-        show_plot : bool, default=True
+        show_plot: bool, default=True
             Whether to show or not the plots with matplotlib.pyplot.show()
             before exiting the function.
-        plots_per_measure : int
+        plots_per_measure: int
             How many identifiers will be included in the plots,
             starting from the ones with the highest number of occurrences.
             Corresponds to the number of column of the plot figure,
@@ -92,7 +92,7 @@ class StatBuilder:
         for measure_index, measure_name in enumerate(self.measures):
             i = 0
             self.logger.debug(f"Iterating over the directories in the measure {measure_name}")
-            # Sort the measure dict (containing 'identifier' : {'path' : value})
+            # Sort the measure dict (containing 'identifier': {'path': value})
             # for identifiers with the highest
             # amount of paths (and therefore values) first
             sorted_folders = dict(
@@ -136,19 +136,19 @@ class StatBuilder:
 
         Parameters
         ----------
-        root :  pahlib.Path
+        root:  pahlib.Path
             Path to the root directory (target directory) of the file structure.
-        configurations : dict
+        configurations: dict
             Contains the file configurations found for each file/directory
             identifier with the following structure:
             configurations={
-                'identifier1' :
-                    [ {'structure' : ['identifier3', 'identifier4', 'identifier5'],
-                       'paths' : ['path1', 'path2']},
-                      {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
+                'identifier1':
+                    [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
+                       'paths': ['path1', 'path2']},
+                      {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
                     ... ]
-                'identifier2' :
-                    [{'structure' : [], 'paths' : []}, ...]
+                'identifier2':
+                    [{'structure': [], 'paths': []}, ...]
                 }
 
         Returns
@@ -159,8 +159,8 @@ class StatBuilder:
         """
         self.logger.debug("Initializing summary output")
         output = (
-            f"***** Analysis of file structure at : '{root.name}' *****\n"
-            f"Created: {time.ctime()}\nTarget directory : {root}\n\n"
+            f"***** Analysis of file structure at: '{root.name}' *****\n"
+            f"Created: {time.ctime()}\nTarget directory: {root}\n\n"
         )
 
         if configurations is not None:
@@ -177,13 +177,13 @@ class StatBuilder:
                     output += (
                         f"\n     Configuration #{i + 1} was found in "
                         f"{len(sorted_config_list[i]['paths'])} directories. "
-                        "Contains the following : \n            "
+                        "Contains the following: \n            "
                         "{sorted_config_list[i]['structure']}"
                     )
 
         for measure_name in self.measures:
             self.logger.debug(f"Calculating most common occurrences for measure {measure_name}")
-            output += f"\n\nOccurrences for measure  :     **{measure_name}**\n"
+            output += f"\n\nOccurrences for measure :     **{measure_name}**\n"
             sorted_folders = dict(
                 sorted(
                     self.stat_dict[measure_name].items(),
@@ -204,15 +204,15 @@ class StatBuilder:
                     continue
 
                 output += (
-                    f"    In '{folder_name}' :\n        "
+                    f"    In '{folder_name}':\n        "
                     f"{measure_name} of {most_common_value} "
                     f"found {most_common_counter} times\n"
                 )
                 if most_common_counter < len(paths):
-                    output += "          Outliers :\n"
+                    output += "          Outliers:\n"
                     for path, value in paths.items():
                         if value != most_common_value:
-                            output += f"            {str(path)}  has : {value}\n"
+                            output += f"            {str(path)}  has: {value}\n"
             self.logger.info(
                 f"Found {len(sorted_folders)} directories/files for measure {measure_name}"
             )
@@ -228,7 +228,7 @@ class StatBuilder:
         As the name says, a CSV contains values separated by a comma.
         In this case, each line represent a single file/directory
         with it's identifier and the measures done.
-        Format of each line is :
+        Format of each line is:
             path,identifier,measure1,measure2,measure3,...
         Order of measures (but presence depends on config file option):
             file_count, dir_count, file_size, modified_time
@@ -243,15 +243,15 @@ class StatBuilder:
 
         Parameters
         ----------
-        output_path :  pahlib.Path or string
+        output_path:  pahlib.Path or string
             Path to where the CSV should be saved.
         """
-        self.logger.debug(f"Opening csv file for writing at : {output_path}")
+        self.logger.debug(f"Opening csv file for writing at: {output_path}")
         with open(output_path, "w", newline="") as csv_file:
             csv_writer = csv.writer(csv_file)
             headers = ["Path"] + ["Identifier"] + list(self.measures)
             csv_writer.writerow(headers)
-            self.logger.info(f"Storing in CSV file with header : {str(headers)}")
+            self.logger.info(f"Storing in CSV file with header: {str(headers)}")
             # Supposing every file/directory is present
             # in the first measure's dictionary (which should be the case)
             self.logger.debug("Iterating through every file/directory type to populate the CSV.")

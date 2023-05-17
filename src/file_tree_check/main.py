@@ -73,14 +73,14 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
 
     Parameters
     ----------
-    file_log_path : string
+    file_log_path: string
         The path to the file where to save the logs. If is None, will not save path to any files.
-    file_log_level : string
+    file_log_level: string
         The level of logging for the log file.
         Either "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" or "NOTSET".
-    is_verbose : bool
+    is_verbose: bool
         Indicate if the console logger is to be set to the "INFO" level.
-    is_debug : bool
+    is_debug: bool
         Indicate if the console logger is to be set to the "DEBUG" level
         for more detailed console logs.
 
@@ -128,28 +128,28 @@ def generate_tree(
 
     Parameters
     ----------
-    root : string or pathlib.Path
+    root: string or pathlib.Path
         The path for which to generate the SmartPath instance and recursively run
         this function on it's children files
         and directories.
-    parent : SmartPath
+    parent: SmartPath
         The instance of the parent SmartPath.
         This reference allows the children SmartPath to calculate their depth
         relative to the first root of the file structure.
-    is_last : bool
+    is_last: bool
         Indicate whether or not this file/directory was the last to be generated
         in it's parent folder.
         Only relevant for visual display of the file structure.
-    criteria : re.Pattern
+    criteria: re.Pattern
         A regular expression compiled into a Pattern object to be used
         to filter files and/or directories included
         in the generator output. Files/directories that do not match the regular expression
         will be discarded including all their children regardless of their name for directories.
         If no criteria is given, every file and directory will be included in the generation.
-    filter_files : bool
+    filter_files: bool
         Whether or not the search criteria will be used to discard files
         whose names do not match the regular expression.
-    filter_dir : bool
+    filter_dir: bool
         Whether or not the search criteria will be used to discard directories
         whose names do not match.
 
@@ -227,61 +227,61 @@ def get_data_from_paths(
 
     Parameters
     ----------
-    paths : iterable containing SmartPath objects
+    paths: iterable containing SmartPath objects
         Expected to be the generator object created by generate_tree()
         but can theoretically be any iterable containing SmartPath objects.
-    identifier : IdentifierEngine
+    identifier: IdentifierEngine
         Used to extract the identifier of each path to aggregate it
         with similar ones resent in the file structure.
         This IdentifierEngine is also passed to add_configuration
         to allow it to extract identifiers as well.
-    output_path : pathlib.Path
+    output_path: pathlib.Path
         The path to the text file where the file tree output will be saved.
         If none, the type of output is skipped.
-    measures : list of string
+    measures: list of string
         The name of the measures to be used in the outputs.
         Each corresponds to a dictionary nested in stat_dict.
-    get_configurations : bool
+    get_configurations: bool
         Whether or not to compare the configuration of the folders in the repeating structure.
-    target_depth : int
+    target_depth: int
         Passed to add_configuration() to specify which depth of folder
         to use for configuration comparison.
-    pipe_file_data : bool
+    pipe_file_data: bool
         Whether to output the data from each file found directly
         to the standard output during the execution.
         By default this will print in the console which is not recommended for large dataset.
         If the script is followed by a pipe, this will pass the data to the other script or command.
         Only outputs files because directories shouldn't be relevant for the custom tests.
-        Outputted format is  a single string per file in the format :
+        Outputted format is  a single string per file in the format:
         'path,identifier,file_size,modified_time'.
         File_size is in bytes, modified_time is in seconds (epoch time).
 
     Returns
     -------
-    stat_dict : dict
+    stat_dict: dict
     The dictionary containing the the values for each measures.
         stat_dict contains nested dictionaries with the following structure:
         stat_dict={
-            'measure1' :
-                {'identifier1' : {
-                    'path1' : value, 'path2' : value, ...},
-                'identifier2' : {
-                    'path3' : value, 'path4' : value}, ...},
+            'measure1':
+                {'identifier1': {
+                    'path1': value, 'path2': value, ...},
+                'identifier2': {
+                    'path3': value, 'path4': value}, ...},
                 }
-            'measure2' :
-                {'identifier1' : {}, 'identifier2' : {}, ...}
+            'measure2':
+                {'identifier1': {}, 'identifier2': {}, ...}
             }
-    configurations : dict
+    configurations: dict
         Contains the file configurations found for each file/directory identifier
-        with the following structure :
+        with the following structure:
             configurations={
-                'identifier1' :
-                    [ {'structure' : ['identifier3', 'identifier4', 'identifier5'],
-                                      'paths' : ['path1', 'path2']},
-                    {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
+                'identifier1':
+                    [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
+                                      'paths': ['path1', 'path2']},
+                    {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
                     ... ]
-                'identifier2' :
-                    [{'structure' : [], 'paths' : []}, ...]
+                'identifier2':
+                    [{'structure': [], 'paths': []}, ...]
                 }
     """
     configurations = {}
@@ -332,30 +332,30 @@ def add_configuration(path, configurations, identifier, target_depth=None):
 
     Parameters
     ----------
-    path : SmartPath
-    configurations : dict
+    path: SmartPath
+    configurations: dict
         Contains the file configurations found for each file/directory identifier
-        with the following structure :
+        with the following structure:
                 configurations={
-                    'identifier1' :
-                        [ {'structure' : ['identifier3', 'identifier4', 'identifier5'],
-                                          'paths' : ['path1', 'path2']},
-                        {'structure' : ['identifier3', 'identifier5'], 'paths' : ['path4']},
+                    'identifier1':
+                        [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
+                                          'paths': ['path1', 'path2']},
+                        {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
                         ... ]
-                    'identifier2' :
-                        [{'structure' : [], 'paths' : []}, ...]
+                    'identifier2':
+                        [{'structure': [], 'paths': []}, ...]
                     }
-    identifier : IdentifierEngine
+    identifier: IdentifierEngine
         Used to extract the identifier of each path to aggregate it with similar ones resent
         in the file structure.
-    target_depth : int
+    target_depth: int
         The depth at which the repeating directories for which
         to compare their configuration will be.
         Any directory found at a different depth will be ignored by this function.
 
     Returns
     -------
-    configurations : dict
+    configurations: dict
         The updated dict now containing the configuration data \
         from the path that was given as parameter.
     """
@@ -430,7 +430,7 @@ def main():
 
     logger.debug("Initializing variables from arguments")
     root = Path(args.start_location)
-    logger.info(f"Target directory is : {root}")
+    logger.info(f"Target directory is: {root}")
 
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(
@@ -445,9 +445,7 @@ def main():
         try:
             criteria = re.compile(criteria)
         except TypeError as e:
-            logger.warning(
-                f"Search Criteria {criteria} is invalid, resuming without criteria : {e}"
-            )
+            logger.warning(f"Search Criteria {criteria} is invalid, resuming without criteria: {e}")
             criteria = None
     else:
         criteria = None
@@ -477,7 +475,7 @@ def main():
         target_depth = -1
 
     logger.info(
-        f"Output file paths : Summary:'{str(summary_output_path)}', "
+        f"Output file paths: Summary:'{str(summary_output_path)}', "
         f"Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
     )
 
