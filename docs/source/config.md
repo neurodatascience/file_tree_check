@@ -1,4 +1,4 @@
-# The Config File
+# Configuration
 
 Modifying the config file is the way to tell the program what you are looking
 for, what outputs do you want and what those outputs should contain. This

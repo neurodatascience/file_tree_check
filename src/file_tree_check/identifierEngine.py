@@ -41,7 +41,9 @@ class IdentifierEngine:
 
         The identifier should be the repeating part of the name that ties it
         to it's type for comparison
-            e.g. "sept_6_weekly_report.txt" -> "_weekly_report.txt".
+
+            "sept_6_weekly_report.txt" -> "_weekly_report.txt"
+
         However the details of what precisely to extract and treat as an identifier
         is handled by the regular expressions given on creating the class instance.
         Since the regular expression is used with re.search(), only the first match is kept.
@@ -51,10 +53,14 @@ class IdentifierEngine:
         that are unique but can still be used in the output vs an empty identifier.
 
         Extraction method with the default regular expression:
-            Files = "_.*$" : Keep everything after the first "_". to remove the subject number.
-            Directories = "^.*-": Keep everything until the first "-".
-            This way, subject directories like "sub-012012" are all aggregated
-            under "sub-" while directory names without "-" are kept entirely.
+
+        .. code-block::
+
+            Files = "_.*$" ; Keep everything after the first "_". to remove the subject number.
+            Directories = "^.*-" ; Keep everything until the first "-".
+
+            ; This way, subject directories like "sub-012012" are all aggregated
+            ; under "sub-" while directory names without "-" are kept entirely.
 
         Parameters
         ----------

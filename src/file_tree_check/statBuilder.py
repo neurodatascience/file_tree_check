@@ -20,7 +20,10 @@ class StatBuilder:
     ----------
     stat_dict: dict
         The dictionary containing the the values for each measures.
-            stat_dict contains nested dictionaries with the following structure:
+        stat_dict contains nested dictionaries with the following structure:
+
+        .. code-block:: python
+
             stat_dict={
                 'measure1':
                     {'identifier1': {
@@ -31,6 +34,7 @@ class StatBuilder:
                 'measure2':
                     {'identifier1': {}, 'identifier2': {}, ...}
                 }
+
     measures: list of string
         The name of the measures to be used in the outputs.
         Each name corresponds to a dictionary nested in stat_dict.
@@ -64,10 +68,11 @@ class StatBuilder:
         One row of plots per measure.
         Will show the distribution for a given amount of file/directory identifier per measure.
         Will prioritize the distributions with the highest amount of data points.
-            E.g. will show distributions for a directory type that was found
-            1000 time before directories that were
-            found 500 times in the file structure since each directory contributes one data point
-            to it's directory type distribution.
+
+        E.g. will show distributions for a directory type that was found
+        1000 time before directories that were
+        found 500 times in the file structure since each directory contributes one data point
+        to it's directory type distribution.
 
         Parameters
         ----------
@@ -141,15 +146,18 @@ class StatBuilder:
         configurations: dict
             Contains the file configurations found for each file/directory
             identifier with the following structure:
-            configurations={
-                'identifier1':
-                    [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
-                       'paths': ['path1', 'path2']},
-                      {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
-                    ... ]
-                'identifier2':
-                    [{'structure': [], 'paths': []}, ...]
-                }
+
+            .. code-block:: python
+
+                configurations={
+                    'identifier1':
+                        [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
+                        'paths': ['path1', 'path2']},
+                        {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
+                        ... ]
+                    'identifier2':
+                        [{'structure': [], 'paths': []}, ...]
+                    }
 
         Returns
         -------
@@ -228,18 +236,24 @@ class StatBuilder:
         As the name says, a CSV contains values separated by a comma.
         In this case, each line represent a single file/directory
         with it's identifier and the measures done.
+
         Format of each line is:
+
             path,identifier,measure1,measure2,measure3,...
+
         Order of measures (but presence depends on config file option):
+
             file_count, dir_count, file_size, modified_time
+
         All are integers:
-            file_count = number of files directly under given directory
-            (ignores files inside subdirectories)
-            dir_count = number of directories directly under given directory
-            (ignores inside subdirectories)
-            file_size = size in bytes rounded to the nearest integer
-            modified_time = time of last modification in number of seconds
-            since 1st January 1970 (Epoch time)
+
+            - file_count = number of files directly under given directory
+              (ignores files inside subdirectories)
+            - dir_count = number of directories directly under given directory
+              (ignores inside subdirectories)
+            - file_size = size in bytes rounded to the nearest integer
+            - modified_time = time of last modification in number of seconds
+              since 1st January 1970 (Epoch time)
 
         Parameters
         ----------

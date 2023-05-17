@@ -8,10 +8,10 @@ import os
 import re
 from pathlib import Path
 
-from identifierEngine import IdentifierEngine
-from smartDirectoryPath import SmartDirectoryPath
-from smartFilePath import SmartFilePath
-from statBuilder import StatBuilder
+from .identifierEngine import IdentifierEngine
+from .smartDirectoryPath import SmartDirectoryPath
+from .smartFilePath import SmartFilePath
+from .statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
 CONFIG_PATH = r"C:\Users\datbo\PycharmProjects\testNeuro\src\file_tree_check\config.ini"
@@ -336,15 +336,19 @@ def add_configuration(path, configurations, identifier, target_depth=None):
     configurations: dict
         Contains the file configurations found for each file/directory identifier
         with the following structure:
+
+        .. code-block:: python
+
                 configurations={
                     'identifier1':
                         [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
-                                          'paths': ['path1', 'path2']},
+                                            'paths': ['path1', 'path2']},
                         {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
                         ... ]
                     'identifier2':
                         [{'structure': [], 'paths': []}, ...]
                     }
+
     identifier: IdentifierEngine
         Used to extract the identifier of each path to aggregate it with similar ones resent
         in the file structure.

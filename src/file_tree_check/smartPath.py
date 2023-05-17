@@ -47,7 +47,11 @@ class SmartPath(ABC):
         ----------
         stat_dict: dict
         The dictionary containing the the values for each measures.
-            stat_dict contains nested dictionaries with the following structure:
+
+        stat_dict contains nested dictionaries with the following structure:
+
+        .. code-block:: python
+
             stat_dict={
                 'measure1':
                     {'identifier1': {
@@ -58,6 +62,7 @@ class SmartPath(ABC):
                 'measure2':
                     {'identifier1': {}, 'identifier2': {}, ...}
                 }
+
         identifier: string
             The path's identifier.
             Used to aggregate this path's values to the correct place in order to add it
