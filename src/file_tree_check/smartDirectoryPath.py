@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import os
 
-from smartPath import SmartPath
+from file_tree_check.smartPath import SmartPath
 
 
 class SmartDirectoryPath(SmartPath):
     """The Child class of SmartPath for directories (folder)."""
 
     @property
-    def file_count(self):
+    def file_count(self) -> int:
         """For a directory, indicates how many files are directly under it.
 
         Does not count subdirectories or files contained in them.
@@ -18,12 +18,12 @@ class SmartDirectoryPath(SmartPath):
         return len(files)
 
     @property
-    def dir_count(self):
+    def dir_count(self) -> int:
         """The number of directory found directly under this one."""
         directories = next(os.walk(self.path))[1]
         return len(directories)
 
-    def display(self, measures=(), name_max_length=60):
+    def display(self, measures=(), name_max_length: int = 60):
         """Call the SmartPath display and add some relevant measures \
            to be printed alongside it."""
         output = SmartPath.display(self, measures, name_max_length)

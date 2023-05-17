@@ -133,7 +133,7 @@ class StatBuilder:
             self.logger.debug("Displaying plots")
             plt.show()
 
-    def create_summary(self, root, configurations):
+    def create_summary(self, root: Path, configurations: dict) -> str:
         """Produce the 'Summary' text file output.
 
         This output highlights common file configurations
@@ -143,6 +143,7 @@ class StatBuilder:
         ----------
         root:  pahlib.Path
             Path to the root directory (target directory) of the file structure.
+
         configurations: dict
             Contains the file configurations found for each file/directory
             identifier with the following structure:
@@ -150,11 +151,15 @@ class StatBuilder:
             .. code-block:: python
 
                 configurations={
-                    'identifier1':
-                        [ {'structure': ['identifier3', 'identifier4', 'identifier5'],
-                        'paths': ['path1', 'path2']},
-                        {'structure': ['identifier3', 'identifier5'], 'paths': ['path4']},
-                        ... ]
+                    'identifier1': [
+                            {'structure': ['identifier3', 'identifier4', 'identifier5'],
+                            'paths': ['path1', 'path2']
+                            },
+                            {'structure': ['identifier3', 'identifier5'],
+                            'paths': ['path4']
+                            },
+                            ...
+                        ]
                     'identifier2':
                         [{'structure': [], 'paths': []}, ...]
                     }
@@ -230,7 +235,7 @@ class StatBuilder:
         )
         return output
 
-    def create_csv(self, output_path):
+    def create_csv(self, output_path: str | Path):
         """Produce the CSV (comma-separated value) file output at the target path.
 
         As the name says, a CSV contains values separated by a comma.
@@ -272,7 +277,7 @@ class StatBuilder:
             for file_identifier, paths in sorted(self.stat_dict[self.measures[0]].items()):
                 # For every path found in the first measure,
                 # write all the measures for that path in the same row."
-                for path, value in paths.items():
+                for path, _ in paths.items():
                     row = [
                         self.stat_dict[measure][file_identifier][path] for measure in self.measures
                     ]

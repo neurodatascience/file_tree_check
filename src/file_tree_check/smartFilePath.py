@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 
-from smartPath import SmartPath
+from file_tree_check.smartPath import SmartPath
 
 
 class SmartFilePath(SmartPath):
@@ -20,7 +20,7 @@ class SmartFilePath(SmartPath):
         is handled by the calling function."""
         return None
 
-    def display(self, measures=(), name_max_length=60):
+    def display(self, measures=(), name_max_length: int = 60) -> str:
         """Call the SmartPath display and add some relevant measures to be printed alongside it."""
         output = SmartPath.display(self, measures, name_max_length)
         if "file_size" in measures:
