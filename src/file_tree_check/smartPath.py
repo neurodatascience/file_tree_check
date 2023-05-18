@@ -18,7 +18,7 @@ class SmartPath(ABC):
     path: pathlib.Path
         The path to the file/directory in question.
 
-    parent: SmartPath
+    parent: SmartPath or None
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
 
     is_last: bool
@@ -37,7 +37,7 @@ class SmartPath(ABC):
     display_parent_prefix_middle = "    "
     display_parent_prefix_last = "│   "
 
-    def __init__(self, path: Path, parent_smart_path: SmartPath, is_last: bool):
+    def __init__(self, path: Path, parent_smart_path: SmartPath | None, is_last: bool):
         self.path = Path(str(path))
         self.parent = parent_smart_path
         self.is_last = is_last
