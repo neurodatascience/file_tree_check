@@ -18,7 +18,7 @@ class SmartPath(ABC):
     path: pathlib.Path
         The path to the file/directory in question.
 
-    parent: SmartPath
+    parent: SmartPath or None
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
 
     is_last: bool
@@ -37,11 +37,11 @@ class SmartPath(ABC):
     display_parent_prefix_middle = "    "
     display_parent_prefix_last = "│   "
 
-    def __init__(self, path, parent_smart_path, is_last):
+    def __init__(self, path: Path, parent_smart_path: SmartPath | None, is_last: bool):
         self.path = Path(str(path))
         self.parent = parent_smart_path
         self.is_last = is_last
-        self.depth = self.parent.depth + 1 if self.parent else 0
+        self.depth: int = self.parent.depth + 1 if self.parent else 0
 
     def add_stats(self, stat_dict: dict, identifier: str, measures: list[str] = []) -> dict:
         """For each measure desired adds the value from this path to the dictionary.
@@ -95,11 +95,11 @@ class SmartPath(ABC):
         return stat_dict
 
     @property
-    def file_size(self):
+    def file_size(self) -> int:
         return int(self.path.stat().st_size)
 
     @property
-    def modified_time(self):
+    def modified_time(self) -> int:
         return int(self.path.stat().st_mtime)
 
     @abstractmethod
