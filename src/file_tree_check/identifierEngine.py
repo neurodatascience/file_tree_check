@@ -22,11 +22,12 @@ class IdentifierEngine:
         Logger to save info and debug message. Will send the log lines to the appropriate outputs following the logger
         configuration in main.py.
     """
-    def __init__(self, file_expression, directory_expression):
+    def __init__(self, file_expression, directory_expression, check_file):
         self.file_expression = file_expression
         self.directory_expression = directory_expression
-        self.logger = logging.getLogger(f"file_tree_check.{__name__}")
+        self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
         self.logger.info("Created an instance of IdentifierEngine")
+        self.check_file = check_file
 
     def get_identifier(self, path, prefix_file_with_parent_directory=False):
         """Extract the identifier from the file/directory.
@@ -61,7 +62,7 @@ class IdentifierEngine:
         """
         path = Path(path)
         if prefix_file_with_parent_directory and path.is_file():
-            identifier = f"{self.get_identifier(path.parent)}/"
+            identifier = self.get_identifier(path.parent) + "/"
         else:
             identifier = ""
 
@@ -69,8 +70,10 @@ class IdentifierEngine:
             match = re.search(self.file_expression, path.name)
         elif path.is_dir():
             match = re.search(self.directory_expression, path.name)
+        elif not self.check_file:
+            match = re.search(self.file_expression, path.name)
         else:
-            raise TypeError(f"Path is not a file nor a directory : {path}")
+            raise TypeError("Path is not a file nor a directory : {}".format(path))
         # When the entire name is filtered out, we prefer using a identifier that is maybe too unique over an empty one
         identifier += path.name if match is None else match.group(0)
         return identifier

@@ -1,19 +1,22 @@
-07-30 11:57 file_tree_check DEBUG    Initializing variables from arguments
-07-30 11:57 file_tree_check INFO     Target folder is : C:\Users\datbo\PycharmProjects\testNeuro\bids_structure
-07-30 11:57 file_tree_check DEBUG    Initializing variables from config file
-07-30 11:57 file_tree_check INFO     Output file path is : results\File_Structure.txt
-07-30 11:57 file_tree_check DEBUG    Launching exploration of the target folder
-07-30 11:57 file_tree_check INFO     Retrieved 2 measures for 14 different folders name
-07-30 11:57 file_tree_check DEBUG    Creating a dataframe with the dicts
-07-30 11:57 file_tree_check.statBuilder INFO     Created an instance of statBuilder
-07-30 11:57 file_tree_check INFO     Created a dataframe with the measures
-07-30 11:57 file_tree_check DEBUG    Giving the data to the graphic creator
-07-30 11:57 file_tree_check.statBuilder DEBUG    Creating subplots objects
-07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the measures in the data
-07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_count
-07-30 11:57 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
-07-30 11:57 file_tree_check.statBuilder DEBUG    Iterating over the folders in the measure file_size
-07-30 11:57 file_tree_check.statBuilder DEBUG    Reached the maximum number of folder shown on the visualization
-07-30 11:57 file_tree_check.statBuilder INFO     Plots created
-07-30 11:57 file_tree_check.statBuilder DEBUG    Saving plot to file
-07-30 11:57 file_tree_check.statBuilder INFO     Saved plot at path results\plots.png
+06-02 15:32 file_tree_check DEBUG    Initializing variables from arguments
+06-02 15:32 file_tree_check INFO     Target directory is : C:\Users\James\Downloads\file_tree_check-master\Sample-Database
+06-02 15:32 file_tree_check DEBUG    Initializing variables from config file
+06-02 15:32 file_tree_check.identifierEngine INFO     Created an instance of IdentifierEngine
+06-02 15:32 file_tree_check INFO     Output file paths : Summary:'C:\Users\James\Github\file-tree-check\file_tree_check\results\Summary.txt', Tree:'C:\Users\James\Github\file-tree-check\file_tree_check\results\File_Tree', CSV:'C:\Users\James\Github\file-tree-check\file_tree_check\results\Data.csv'
+06-02 15:32 file_tree_check DEBUG    Launching exploration of the target directory
+06-02 15:32 file_tree_check INFO     Retrieved 2 measures for 18 different directory name
+06-02 15:32 file_tree_check DEBUG    Creating instance of StatBuilder with the measures
+06-02 15:32 file_tree_check.statBuilder INFO     Created an instance of StatBuilder
+06-02 15:32 file_tree_check DEBUG    Launching summary text output generation.
+06-02 15:32 file_tree_check.statBuilder DEBUG    Initializing summary output
+06-02 15:32 file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure file_count
+06-02 15:32 file_tree_check.statBuilder INFO     Found 18 directories/files for measure file_count
+06-02 15:32 file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure dir_count
+06-02 15:32 file_tree_check.statBuilder INFO     Found 18 directories/files for measure dir_count
+06-02 15:32 file_tree_check.statBuilder INFO     Summary created with 2 measures, file is 1923 characters long.
+06-02 15:32 file_tree_check DEBUG    Launching CSV output generation.
+06-02 15:32 file_tree_check.statBuilder DEBUG    Opening csv file for writing at : C:\Users\James\Github\file-tree-check\file_tree_check\results\Data.csv
+06-02 15:32 file_tree_check.statBuilder INFO     Storing in CSV file with header : ['Path', 'Identifier', 'file_count', 'dir_count']
+06-02 15:32 file_tree_check.statBuilder DEBUG    Iterating through every file/directory type to populate the CSV.
+06-02 15:32 file_tree_check.statBuilder INFO     CSV file closed. Contains 25512 bytes of data
+06-02 15:32 file_tree_check INFO     Script executed successfully.

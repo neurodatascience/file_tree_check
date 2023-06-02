@@ -16,14 +16,14 @@ import logging
 import re
 
 # Edit the following line to point to the config file location in your current installation:
-CONFIG_PATH = r"C:\Users\datbo\PycharmProjects\testNeuro\src\file_tree_check\config.ini"
+CONFIG_PATH = r"C:\Users\James\Github\file-tree-check\file_tree_check\src\file_tree_check\config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
 FILENAME_MAX_LENGTH = 60
 
 
-def _arg_parser():
+def _arg_parser(config=None):
     """Extract the arguments given to the script.
 
     Arguments are the part given after the main.py call in the command line.
@@ -43,7 +43,8 @@ def _arg_parser():
         A parser object to be used in main() containing the argument data.
     """
     pars = argparse.ArgumentParser(description="Insert doc here")
-    pars.add_argument('start_location', type=str, help="Directory to explore")
+    if config is None or (config is not None and not config["Root"].getboolean("use config")):
+        pars.add_argument('start_location', type=str, help="Directory to explore")
     console_log = pars.add_mutually_exclusive_group()
     console_log.add_argument('-v', '--verbose', dest="verbose", action='store_true',
                              default=False, help="Print info level logging to the console")
@@ -97,7 +98,8 @@ def _create_logger(file_log_path, file_log_level, is_verbose, is_debug):
     return logger
 
 
-def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False):
+def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=False, filter_dir=False,
+                   filter_hidden=False, ignore=[]):
     """Create a SmartFilePath or SmartDirectoryPath generator object for every item found within the root directory.
     These generator objects will have to be iterated over to get the SmartPath items themselves.
     Returns an iterable of the file structure that can be used over each element.
@@ -162,20 +164,28 @@ def generate_tree(root, parent=None, is_last=False, criteria=None, filter_files=
             is_last = count == len(children)
             # If the children is a directory, another instance of the method is called and
             # its output is propagated up the generator
-            if path.is_dir():
-                yield from generate_tree(path, parent=smart_root, is_last=is_last, criteria=criteria,
-                                         filter_files=filter_files, filter_dir=filter_dir)
-            # If the children is a file, generate a single instance of SmartPath associated to its path
-            else:
-                yield SmartFilePath(path, smart_root, is_last)
-            count += 1
+            skip = False
+            for ignore_name in ignore:
+                if(path.name == ignore_name):
+                    skip=True
+            if(not skip):
+                if path.is_dir():
+                    if(not(path.name.startswith('.') and filter_hidden)):
+                        yield from generate_tree(path, parent=smart_root, is_last=is_last, criteria=criteria,
+                                            filter_files=filter_files, filter_dir=filter_dir, filter_hidden=filter_hidden,
+                                            ignore=ignore)
+                # If the children is a file, generate a single instance of SmartPath associated to its path
+                else:
+                    yield SmartFilePath(path, smart_root, is_last)
+                count += 1
         except FileNotFoundError as e:
             logger.warning("FileNotFoundError", e)
             continue
 
 
 def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_configurations=False,
-                        target_depth=None, pipe_file_data=False):
+                        target_depth=None, depth_range=False, start_depth=-1, end_depth=-1,
+                          pipe_file_data=False):
     """Iterate over each file/directory in the generator to get measure and, create the file tree  if requested.
 
     Parameters
@@ -236,7 +246,8 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
         for path in paths:
             stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path), measures=measures)
             if get_configurations:
-                configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+                configurations = add_configuration(path, configurations, identifier, target_depth=target_depth,
+                                                   depth_range=depth_range, start_depth=start_depth, end_depth=end_depth)
             if pipe_file_data:
                 if isinstance(path, SmartFilePath):
                     print(
@@ -247,7 +258,8 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
             for path in paths:
                 stat_dict = path.add_stats(stat_dict, identifier.get_identifier(path.path), measures=measures)
                 if get_configurations:
-                    configurations = add_configuration(path, configurations, identifier, target_depth=target_depth)
+                    configurations = add_configuration(path, configurations, identifier, target_depth=target_depth,
+                                                       depth_range=depth_range, start_depth=start_depth, end_depth=end_depth)
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
                 if pipe_file_data:
                     if isinstance(path, SmartFilePath):
@@ -257,7 +269,7 @@ def get_data_from_paths(paths, identifier, output_path=None, measures=(), get_co
     return stat_dict, configurations
 
 
-def add_configuration(path, configurations, identifier, target_depth=None):
+def add_configuration(path, configurations, identifier, target_depth=None, depth_range=False, start_depth=-1, end_depth=-1):
     """For each directory look at how it's content is structured and save that structure as a configuration.
 
     Only compare directory of a specific depth relative to the original target directory.
@@ -296,7 +308,10 @@ def add_configuration(path, configurations, identifier, target_depth=None):
         return configurations
     # If a target depth is given, we exclude directories from other depth levels
     path_unique_identifier = identifier.get_identifier(path.path)
-    if target_depth is not None:
+    if depth_range and (start_depth is not None and end_depth is not None):
+        if path.depth<start_depth or path.depth>end_depth:
+            return configurations
+    elif target_depth is not None:
         if path.depth != target_depth:
             return configurations
     if path_unique_identifier not in configurations:
@@ -336,7 +351,7 @@ def main():
     config.read(Path(CONFIG_PATH))
 
     # Parsing arguments
-    parser = _arg_parser()
+    parser = _arg_parser(config)
     args = parser.parse_args()
 
     # Initializing logger
@@ -344,17 +359,22 @@ def main():
                             is_verbose=args.verbose, is_debug=args.debug)
 
     logger.debug("Initializing variables from arguments")
-    root = Path(args.start_location)
+    if config["Root"].getboolean("use config"):
+        root = Path(config["Root"]["database root path"])
+    else:
+        root = Path(args.start_location)
     logger.info(f"Target directory is : {root}")
 
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(config["Categorization"]["regular expression for file identifier"],
-                                  config["Categorization"]["regular expression for directory identifier"])
+                                  config["Categorization"]["regular expression for directory identifier"],
+                                  config["Hidden"].getboolean("check file"))
 
     if config["Search Criteria"].getboolean("use search criteria"):
         criteria = config["Search Criteria"]["regular expression for search criteria"]
         filter_files = config["Search Criteria"].getboolean("filter files")
         filter_dir = config["Search Criteria"].getboolean("filter directories")
+        filter_hidden = config["Hidden"].getboolean("filter hidden")
         try:
             criteria = re.compile(criteria)
         except TypeError as e:
@@ -385,9 +405,19 @@ def main():
     if config['Configurations'].getboolean("get number of unique configurations"):
         get_configurations = True
         target_depth = config['Configurations'].getint('target depth')
+        depth_range = config['Configurations'].getboolean('get depth range')
+        if depth_range:
+            start_depth = config["Configurations"].getint('start depth')
+            end_depth = config["Configurations"].getint('end depth')
+        else:
+            start_depth=-1
+            end_depth=-1
     else :
         get_configurations = False
         target_depth = -1
+        depth_range = False
+        start_depth=-1
+        end_depth = -1
 
     logger.info(
         f"Output file paths : Summary:'{str(summary_output_path)}', Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
@@ -401,7 +431,8 @@ def main():
     stat_dict, configurations = get_data_from_paths(paths,
                                                     identifier, output_path=tree_output_path, measures=measure_list,
                                                     get_configurations=get_configurations,
-                                                    target_depth=target_depth,
+                                                    target_depth=target_depth, depth_range=depth_range,
+                                                    start_depth=start_depth, end_depth=end_depth,
                                                     pipe_file_data=config["Pipeline"].getboolean("pipe file data"))
     logger.info(
         f'Retrieved {len(stat_dict)} measures for {len(stat_dict["file_count"])} different directory name'
