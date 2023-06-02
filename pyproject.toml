@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "file_tree_check"
+description = "File checking script in a repeating folder organization e.g. BIDS."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file="LICENSE.txt" }
+authors = [
+  { name = "Bertrand Toutée", email = "bertrand.toutee@gmail.com"},
+]
+version = "0.1.0"
+dependencies = [
+  "seaborn",
+  "matplotlib",
+]
+
+[project.optional-dependencies]
+doc = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "myst-parser",
+  "sphinx-copybutton",
+  "rstcheck",
+  "sphinx-argparse",
+]
+test = [
+  "pytest",
+  "coverage[toml]",
+]
+docs = ["file_tree_check[doc]"]
+tests = ["file_tree_check[test]"]
+dev = ["file_tree_check[doc,test]"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -vv"
+
+[tool.coverage.run]
+branch = true
+source = ["src/file_tree_check/"]
+
+
+[tool.codespell]
+skip = "./.git,.mypy_cache,env,venv,tests,*bval,*bvec"
+
+[tool.black]
+line-length = 100

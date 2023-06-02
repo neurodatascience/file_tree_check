@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+from abc import ABC
+from abc import abstractmethod
 from pathlib import Path
-from abc import ABC, abstractmethod
 
 
 class SmartPath(ABC):
-    """A SmartPath object is tied to a singular path (file or directory) and allows itself to be printed
-    in a readable format and allow retrieval of some statistics.
+    """A SmartPath object is tied to a singular path (file or directory) \
+    and allows itself to be printed in a readable format and allow retrieval of some statistics.
 
     Each instance stores their parent directory and their depth relative to the first path.
 
@@ -12,53 +15,65 @@ class SmartPath(ABC):
 
     Attributes
     ----------
-    path : pathlib.Path
+    path: pathlib.Path
         The path to the file/directory in question.
-    parent : SmartPath
+
+    parent: SmartPath or None
         Reference to the parent SmartPath. Used to determine this path's depth recursively.
-    is_last : bool
-        Whether or not this path is the last one to be displayed in his directory. Used to create the tree-like output.
-    depth : int
+
+    is_last: bool
+        Whether or not this path is the last one to be displayed in his directory.
+        Used to create the tree-like output.
+
+    depth: int
         The path's depth in the file structure relative to the initial target directory.
 
     Credit to stack overflow abstrus for the visual part
     """
 
     # The separators for the visual representation of the file structure
-    display_filename_prefix_middle = '├──'
-    display_filename_prefix_last = '└──'
-    display_parent_prefix_middle = '    '
-    display_parent_prefix_last = '│   '
+    display_filename_prefix_middle = "├──"
+    display_filename_prefix_last = "└──"
+    display_parent_prefix_middle = "    "
+    display_parent_prefix_last = "│   "
 
-    def __init__(self, path, parent_smart_path, is_last):
+    def __init__(self, path: Path, parent_smart_path: SmartPath | None, is_last: bool):
         self.path = Path(str(path))
         self.parent = parent_smart_path
         self.is_last = is_last
-        self.depth = self.parent.depth + 1 if self.parent else 0
+        self.depth: int = self.parent.depth + 1 if self.parent else 0
 
-    def add_stats(self, stat_dict, identifier, measures=()):
+    def add_stats(self, stat_dict: dict, identifier: str, measures: list[str] = []) -> dict:
         """For each measure desired adds the value from this path to the dictionary.
 
         Parameters
         ----------
-        stat_dict : dict
+        stat_dict: dict
         The dictionary containing the the values for each measures.
-            stat_dict contains nested dictionaries with the following structure:
+
+        stat_dict contains nested dictionaries with the following structure:
+
+        .. code-block:: python
+
             stat_dict={
-                'measure1' :
-                    {'identifier1' : {
-                        'path1' : value, 'path2' : value, ...},
-                    'identifier2' : {
-                        'path3' : value, 'path4' : value}, ...},
+                'measure1':
+                    {'identifier1': {
+                        'path1': value, 'path2': value, ...},
+                    'identifier2': {
+                        'path3': value, 'path4': value}, ...},
                     }
-                'measure2' :
-                    {'identifier1' : {}, 'identifier2' : {}, ...}
+                'measure2':
+                    {'identifier1': {}, 'identifier2': {}, ...}
                 }
-        identifier : string
-            The path's identifier. Used to aggregate this path's values to the correct place in order to add it with
-            files/directories with the same identifier across the repeating file structure.
-        measures : list of string
-            The name of the measures to be used in the outputs. Each corresponds to a dictionary nested in stat_dict.
+
+        identifier: string
+            The path's identifier.
+            Used to aggregate this path's values to the correct place in order to add it
+            with files/directories with the same identifier across the repeating file structure.
+
+        measures: list of string
+            The name of the measures to be used in the outputs.
+            Each corresponds to a dictionary nested in stat_dict.
 
         Returns
         -------
@@ -80,11 +95,11 @@ class SmartPath(ABC):
         return stat_dict
 
     @property
-    def file_size(self):
+    def file_size(self) -> int:
         return int(self.path.stat().st_size)
 
     @property
-    def modified_time(self):
+    def modified_time(self) -> int:
         return int(self.path.stat().st_mtime)
 
     @abstractmethod
@@ -95,13 +110,13 @@ class SmartPath(ABC):
     def dir_count(self):
         raise NotImplementedError()
 
-    def display(self, measures=(), name_max_length=60):
+    def display(self, measures=(), name_max_length: int = 60) -> str:
         """Return the name of the file/folder with whitespaces to fit the standard length.
 
         Parameters
         ----------
-        measures : list of string
-        name_max_length : int
+        measures: list of string
+        name_max_length: int
 
         Returns
         -------
@@ -109,29 +124,37 @@ class SmartPath(ABC):
         """
         return str(self.path.name).ljust(name_max_length - self.depth * 3)
 
-    def displayable(self, measures=(), name_max_length=60):
-        """Returns a string corresponding to a single line in the file structure tree visualisation."""
+    def displayable(self, measures=(), name_max_length: int = 60) -> str:
+        """Return a string corresponding to a single line \
+           in the file structure tree visualisation."""
         # If the path is the root, no separators are needed at the beginning of the line
         if self.parent is None:
             return self.display(measures, name_max_length)
 
-        # If the path is the last in it's directory, it will begin with └── instead of ├──"
-        _filename_prefix = (self.display_filename_prefix_last if self.is_last
-                            else self.display_filename_prefix_middle)
+        # If the path is the last in it's directory,
+        # it will begin with └── instead of ├──"
+        _filename_prefix = (
+            self.display_filename_prefix_last
+            if self.is_last
+            else self.display_filename_prefix_middle
+        )
 
         # Display the info about the file/directory after the prefix chose above
-        parts = ['{!s} {!s}'.format(_filename_prefix,
-                                    self.display(measures, name_max_length))]
+        parts = [f"{_filename_prefix!s} {self.display(measures, name_max_length)!s}"]
 
         # Now that the display for the current directory is ready, we need to add
         # the separator for each target_depth level
         parent = self.parent
         # Going up the parent hierarchy
         while parent and parent.parent is not None:
-            # If the parent was last in it's directory, the separator is '   ' otherwise it is '│   '
-            parts.append(self.display_parent_prefix_middle if parent.is_last
-                         else self.display_parent_prefix_last)
+            # If the parent was last in it's directory,
+            # the separator is '   ' otherwise it is '│   '
+            parts.append(
+                self.display_parent_prefix_middle
+                if parent.is_last
+                else self.display_parent_prefix_last
+            )
             parent = parent.parent
 
         # Putting it all together in a single string
-        return ''.join(reversed(parts))
+        return "".join(reversed(parts))

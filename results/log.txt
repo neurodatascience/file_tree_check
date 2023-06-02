@@ -1,3 +1,4 @@
+
 06-02 15:32 file_tree_check DEBUG    Initializing variables from arguments
 06-02 15:32 file_tree_check INFO     Target directory is : C:\Users\James\Downloads\file_tree_check-master\Sample-Database
 06-02 15:32 file_tree_check DEBUG    Initializing variables from config file
@@ -20,3 +21,4 @@
 06-02 15:32 file_tree_check.statBuilder DEBUG    Iterating through every file/directory type to populate the CSV.
 06-02 15:32 file_tree_check.statBuilder INFO     CSV file closed. Contains 25512 bytes of data
 06-02 15:32 file_tree_check INFO     Script executed successfully.
+

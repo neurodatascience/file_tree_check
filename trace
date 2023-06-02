@@ -1,0 +1,2228 @@
+versions pytest-7.3.1, python-3.11.3.final.0
+cwd=/home/remi/github/file_tree_check
+args=('--debug=trace',)
+
+  pytest_cmdline_main [hook]
+      config: <_pytest.config.Config object at 0x7f5842f9af90>
+    pytest_plugin_registered [hook]
+        plugin: <Session file_tree_check exitstatus='<UNSET>' testsfailed=0 testscollected=0>
+        manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+    finish pytest_plugin_registered --> [] [hook]
+    pytest_configure [hook]
+        config: <_pytest.config.Config object at 0x7f5842f9af90>
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x7f5842a4e790>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x7f5842e44cd0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: faulthandler [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: pdb [assertion]
+    early skip of rewriting module: cmd [assertion]
+    early skip of rewriting module: code [assertion]
+    early skip of rewriting module: codeop [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x7f5842f9af90>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/mark/__init__.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/main.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/runner.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/fixtures.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/helpconfig.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/python.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/terminal.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/debugging.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/unittest.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/capture.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/skipping.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/legacypath.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/tmpdir.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/monkeypatch.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/recwarn.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/pastebin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.nose' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/nose.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/assertion/__init__.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/junitxml.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/doctest.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/cacheprovider.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/freeze_support.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/setuponly.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/setupplan.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/stepwise.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/warnings.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/logging.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/reports.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python_path' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/python_path.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/unraisableexception.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/threadexception.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/faulthandler.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_cov.plugin' from '/home/remi/miniconda3/lib/python3.11/site-packages/pytest_cov/plugin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'anyio.pytest_plugin' from '/home/remi/miniconda3/lib/python3.11/site-packages/anyio/pytest_plugin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=5 _state='suspended' tmpfile=<_io.TextIOWrapper name="<_io.FileIO name=6 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=7 _state='suspended' tmpfile=<_io.TextIOWrapper name="<_io.FileIO name=8 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=3 _state='started' tmpfile=<_io.TextIOWrapper name='/dev/null' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x7f5842a4e790>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x7f5842e44cd0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x7f5842a62690>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x7f5842a60490>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+    finish pytest_configure --> [] [hook]
+    pytest_sessionstart [hook]
+        session: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x7f5842f9af90>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/mark/__init__.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/main.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/runner.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/fixtures.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/helpconfig.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/python.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/terminal.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/debugging.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/unittest.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/capture.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/skipping.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/legacypath.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/tmpdir.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/monkeypatch.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/recwarn.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/pastebin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.nose' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/nose.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/assertion/__init__.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/junitxml.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/doctest.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/cacheprovider.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/freeze_support.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/setuponly.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/setupplan.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/stepwise.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/warnings.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/logging.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/reports.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python_path' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/python_path.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/unraisableexception.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/threadexception.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/faulthandler.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_cov.plugin' from '/home/remi/miniconda3/lib/python3.11/site-packages/pytest_cov/plugin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'anyio.pytest_plugin' from '/home/remi/miniconda3/lib/python3.11/site-packages/anyio/pytest_plugin.py'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=5 _state='suspended' tmpfile=<_io.TextIOWrapper name="<_io.FileIO name=6 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=7 _state='suspended' tmpfile=<_io.TextIOWrapper name="<_io.FileIO name=8 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=3 _state='started' tmpfile=<_io.TextIOWrapper name='/dev/null' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x7f5842a4e790>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x7f5842e44cd0>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x7f5842a62690>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x7f5842a60490>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.fixtures.FixtureManager object at 0x7f5842a95650>
+          manager: <_pytest.config.PytestPluginManager object at 0x7f5843726fd0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_report_header [hook]
+          config: <_pytest.config.Config object at 0x7f5842f9af90>
+          start_path: /home/remi/github/file_tree_check
+          startdir: /home/remi/github/file_tree_check
+      early skip of rewriting module: email.parser [assertion]
+      early skip of rewriting module: email.feedparser [assertion]
+      finish pytest_report_header --> [['rootdir: /home/remi/github/file_tree_check', 'configfile: pyproject.toml', 'plugins: cov-4.0.0, anyio-3.6.2'], 'cachedir: .pytest_cache', ['using: pytest-7.3.1', 'setuptools registered plugins:', '  pytest-cov-4.0.0 at /home/remi/miniconda3/lib/python3.11/site-packages/pytest_cov/plugin.py', '  anyio-3.6.2 at /home/remi/miniconda3/lib/python3.11/site-packages/anyio/pytest_plugin.py']] [hook]
+    finish pytest_sessionstart --> [] [hook]
+    pytest_collection [hook]
+        session: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+    perform_collect <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0> ['/home/remi/github/file_tree_check'] [collection]
+        pytest_collectstart [hook]
+            collector: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        finish pytest_collectstart --> [] [hook]
+        pytest_make_collect_report [hook]
+            collector: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        processing argument (PosixPath('/home/remi/github/file_tree_check'), []) [collection]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.flake8
+                path: /home/remi/github/file_tree_check/.flake8
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/.flake8
+                path: /home/remi/github/file_tree_check/.flake8
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.gitignore
+                path: /home/remi/github/file_tree_check/.gitignore
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/.gitignore
+                path: /home/remi/github/file_tree_check/.gitignore
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.pre-commit-config.yaml
+                path: /home/remi/github/file_tree_check/.pre-commit-config.yaml
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/.pre-commit-config.yaml
+                path: /home/remi/github/file_tree_check/.pre-commit-config.yaml
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.readthedocs.yml
+                path: /home/remi/github/file_tree_check/.readthedocs.yml
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/.readthedocs.yml
+                path: /home/remi/github/file_tree_check/.readthedocs.yml
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/LICENSE.txt
+                path: /home/remi/github/file_tree_check/LICENSE.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/LICENSE.txt
+                path: /home/remi/github/file_tree_check/LICENSE.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/Makefile
+                path: /home/remi/github/file_tree_check/Makefile
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/Makefile
+                path: /home/remi/github/file_tree_check/Makefile
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/README.md
+                path: /home/remi/github/file_tree_check/README.md
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/README.md
+                path: /home/remi/github/file_tree_check/README.md
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/coverage.xml
+                path: /home/remi/github/file_tree_check/coverage.xml
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/coverage.xml
+                path: /home/remi/github/file_tree_check/coverage.xml
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/pyproject.toml
+                path: /home/remi/github/file_tree_check/pyproject.toml
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/pyproject.toml
+                path: /home/remi/github/file_tree_check/pyproject.toml
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/trace
+                path: /home/remi/github/file_tree_check/trace
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/trace
+                path: /home/remi/github/file_tree_check/trace
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.git
+                path: /home/remi/github/file_tree_check/.git
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.github
+                path: /home/remi/github/file_tree_check/.github
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.mypy_cache
+                path: /home/remi/github/file_tree_check/.mypy_cache
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.pytest_cache
+                path: /home/remi/github/file_tree_check/.pytest_cache
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/.vscode
+                path: /home/remi/github/file_tree_check/.vscode
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/build
+                path: /home/remi/github/file_tree_check/build
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs
+                path: /home/remi/github/file_tree_check/docs
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/Makefile
+                path: /home/remi/github/file_tree_check/docs/Makefile
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/Makefile
+                path: /home/remi/github/file_tree_check/docs/Makefile
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/make.bat
+                path: /home/remi/github/file_tree_check/docs/make.bat
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/make.bat
+                path: /home/remi/github/file_tree_check/docs/make.bat
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/build
+                path: /home/remi/github/file_tree_check/docs/build
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source
+                path: /home/remi/github/file_tree_check/docs/source
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/conf.py
+                path: /home/remi/github/file_tree_check/docs/source/conf.py
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/conf.py
+                path: /home/remi/github/file_tree_check/docs/source/conf.py
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/config.md
+                path: /home/remi/github/file_tree_check/docs/source/config.md
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/config.md
+                path: /home/remi/github/file_tree_check/docs/source/config.md
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/examples.md
+                path: /home/remi/github/file_tree_check/docs/source/examples.md
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/examples.md
+                path: /home/remi/github/file_tree_check/docs/source/examples.md
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/faq.md
+                path: /home/remi/github/file_tree_check/docs/source/faq.md
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/faq.md
+                path: /home/remi/github/file_tree_check/docs/source/faq.md
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/file_tree_check.rst
+                path: /home/remi/github/file_tree_check/docs/source/file_tree_check.rst
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/file_tree_check.rst
+                path: /home/remi/github/file_tree_check/docs/source/file_tree_check.rst
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/glossary.md
+                path: /home/remi/github/file_tree_check/docs/source/glossary.md
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/glossary.md
+                path: /home/remi/github/file_tree_check/docs/source/glossary.md
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/index.rst
+                path: /home/remi/github/file_tree_check/docs/source/index.rst
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/index.rst
+                path: /home/remi/github/file_tree_check/docs/source/index.rst
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/modules.rst
+                path: /home/remi/github/file_tree_check/docs/source/modules.rst
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/docs/source/modules.rst
+                path: /home/remi/github/file_tree_check/docs/source/modules.rst
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/_static
+                path: /home/remi/github/file_tree_check/docs/source/_static
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/docs/source/_templates
+                path: /home/remi/github/file_tree_check/docs/source/_templates
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/env
+                path: /home/remi/github/file_tree_check/env
+            finish pytest_ignore_collect --> True [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov
+                path: /home/remi/github/file_tree_check/htmlcov
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/.gitignore
+                path: /home/remi/github/file_tree_check/htmlcov/.gitignore
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/.gitignore
+                path: /home/remi/github/file_tree_check/htmlcov/.gitignore
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/coverage_html.js
+                path: /home/remi/github/file_tree_check/htmlcov/coverage_html.js
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/coverage_html.js
+                path: /home/remi/github/file_tree_check/htmlcov/coverage_html.js
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e___init___py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e___init___py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e___init___py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e___init___py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_fileChecker_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_fileChecker_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_fileChecker_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_fileChecker_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_identifierEngine_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_identifierEngine_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_identifierEngine_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_identifierEngine_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_main_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_main_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_main_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_main_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartDirectoryPath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartDirectoryPath_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartDirectoryPath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartDirectoryPath_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartFilePath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartFilePath_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartFilePath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartFilePath_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartPath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartPath_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartPath_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_smartPath_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_statBuilder_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_statBuilder_py.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_statBuilder_py.html
+                path: /home/remi/github/file_tree_check/htmlcov/d_f348f2ffb8112d0e_statBuilder_py.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/favicon_32.png
+                path: /home/remi/github/file_tree_check/htmlcov/favicon_32.png
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/favicon_32.png
+                path: /home/remi/github/file_tree_check/htmlcov/favicon_32.png
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/index.html
+                path: /home/remi/github/file_tree_check/htmlcov/index.html
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/index.html
+                path: /home/remi/github/file_tree_check/htmlcov/index.html
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/keybd_closed.png
+                path: /home/remi/github/file_tree_check/htmlcov/keybd_closed.png
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/keybd_closed.png
+                path: /home/remi/github/file_tree_check/htmlcov/keybd_closed.png
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/keybd_open.png
+                path: /home/remi/github/file_tree_check/htmlcov/keybd_open.png
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/keybd_open.png
+                path: /home/remi/github/file_tree_check/htmlcov/keybd_open.png
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/status.json
+                path: /home/remi/github/file_tree_check/htmlcov/status.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/status.json
+                path: /home/remi/github/file_tree_check/htmlcov/status.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/htmlcov/style.css
+                path: /home/remi/github/file_tree_check/htmlcov/style.css
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/htmlcov/style.css
+                path: /home/remi/github/file_tree_check/htmlcov/style.css
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/results
+                path: /home/remi/github/file_tree_check/results
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/results/File_Structure.txt
+                path: /home/remi/github/file_tree_check/results/File_Structure.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/results/File_Structure.txt
+                path: /home/remi/github/file_tree_check/results/File_Structure.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/results/File_Tree.
+                path: /home/remi/github/file_tree_check/results/File_Tree.
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/results/File_Tree.
+                path: /home/remi/github/file_tree_check/results/File_Tree.
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/results/log.txt
+                path: /home/remi/github/file_tree_check/results/log.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/results/log.txt
+                path: /home/remi/github/file_tree_check/results/log.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/results/plots.png
+                path: /home/remi/github/file_tree_check/results/plots.png
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/results/plots.png
+                path: /home/remi/github/file_tree_check/results/plots.png
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src
+                path: /home/remi/github/file_tree_check/src
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check
+                path: /home/remi/github/file_tree_check/src/file_tree_check
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+                path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+                path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+              pytest_pycollect_makemodule [hook]
+                  parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                  module_path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+                  path: /home/remi/github/file_tree_check/src/file_tree_check/__init__.py
+              finish pytest_pycollect_makemodule --> <Package file_tree_check> [hook]
+            finish pytest_collect_file --> [<Package file_tree_check>] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/PKG-INFO
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/PKG-INFO
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/PKG-INFO
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/PKG-INFO
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/SOURCES.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/SOURCES.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/SOURCES.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/SOURCES.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/dependency_links.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/dependency_links.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/dependency_links.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/dependency_links.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/top_level.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/top_level.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/top_level.txt
+                path: /home/remi/github/file_tree_check/src/file_tree_check.egg-info/top_level.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests
+                path: /home/remi/github/file_tree_check/tests
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+                path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+                path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+              pytest_pycollect_makemodule [hook]
+                  parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                  module_path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+                  path: /home/remi/github/file_tree_check/tests/test_identifierEngine.py
+              finish pytest_pycollect_makemodule --> <Module tests/test_identifierEngine.py> [hook]
+            finish pytest_collect_file --> [<Module tests/test_identifierEngine.py>] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+                path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+                path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+              pytest_pycollect_makemodule [hook]
+                  parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                  module_path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+                  path: /home/remi/github/file_tree_check/tests/test_smart_path.py
+              finish pytest_pycollect_makemodule --> <Module tests/test_smart_path.py> [hook]
+            finish pytest_collect_file --> [<Module tests/test_smart_path.py>] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data
+                path: /home/remi/github/file_tree_check/tests/test_data
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/filetree.tree
+                path: /home/remi/github/file_tree_check/tests/test_data/filetree.tree
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/filetree.tree
+                path: /home/remi/github/file_tree_check/tests/test_data/filetree.tree
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/participants.tsv
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/participants.tsv
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/participants.tsv
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/participants.tsv
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat/sub-01_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat/sub-01_T1w.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat/sub-01_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/anat/sub-01_T1w.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bval
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bval
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bvec
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.bvec
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/dwi/sub-01_dwi.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-01/func/sub-01_task-rest_bold.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat/sub-02_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat/sub-02_T1w.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat/sub-02_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/anat/sub-02_T1w.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bval
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bval
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bvec
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.bvec
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/dwi/sub-02_dwi.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-02/func/sub-02_task-rest_bold.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/unexpected_file.txt
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/unexpected_file.txt
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/unexpected_file.txt
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/unexpected_file.txt
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat/sub-03_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat/sub-03_T1w.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat/sub-03_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/anat/sub-03_T1w.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bval
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bval
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bvec
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-03/dwi/sub-03_dwi.bvec
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat/sub-04_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat/sub-04_T1w.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat/sub-04_T1w.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/anat/sub-04_T1w.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bval
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bval
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bval
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bvec
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bvec
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.bvec
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/sub-04_dwi.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/wrong_name.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/wrong_name.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/wrong_name.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/dwi/wrong_name.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.json
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.json
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.json
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/dataset1/sub-04/wrong_dir_name/sub-04_task-rest_bold.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/filetree.tree
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/filetree.tree
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/filetree.tree
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/filetree.tree
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1reverseb.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/pipeline1/image1reverseb.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre/mask.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-01/ses-pre/mask.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1reverseb.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/pipeline1/image1reverseb.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre/mask.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-02/ses-pre/mask.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1reverseb.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1reverseb.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/pipeline1/image1reverseb.nii.gz
+            finish pytest_collect_file --> [] [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre
+            finish pytest_ignore_collect --> None [hook]
+            pytest_ignore_collect [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                collection_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre/mask.nii.gz
+            finish pytest_ignore_collect --> None [hook]
+            pytest_collect_file [hook]
+                parent: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+                file_path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre/mask.nii.gz
+                path: /home/remi/github/file_tree_check/tests/test_data/derivatives1/sub-03/ses-pre/mask.nii.gz
+            finish pytest_collect_file --> [] [hook]
+        finish pytest_make_collect_report --> <CollectReport '' lenresult=3 outcome='passed'> [hook]
+        pytest_collectreport [hook]
+            report: <CollectReport '' lenresult=3 outcome='passed'>
+        finish pytest_collectreport --> [] [hook]
+    genitems <Package file_tree_check> [collection]
+      pytest_collectstart [hook]
+          collector: <Package file_tree_check>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package file_tree_check>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/config.ini
+            path: /home/remi/github/file_tree_check/src/file_tree_check/config.ini
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/config.ini
+            path: /home/remi/github/file_tree_check/src/file_tree_check/config.ini
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/fileChecker.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/fileChecker.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/fileChecker.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/fileChecker.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/identifierEngine.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/identifierEngine.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/identifierEngine.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/identifierEngine.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/main.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/main.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/main.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/main.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/smartDirectoryPath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartDirectoryPath.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/smartDirectoryPath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartDirectoryPath.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/smartFilePath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartFilePath.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/smartFilePath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartFilePath.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/smartPath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartPath.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/smartPath.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/smartPath.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            collection_path: /home/remi/github/file_tree_check/src/file_tree_check/statBuilder.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/statBuilder.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package file_tree_check>
+            file_path: /home/remi/github/file_tree_check/src/file_tree_check/statBuilder.py
+            path: /home/remi/github/file_tree_check/src/file_tree_check/statBuilder.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'src/file_tree_check/__init__.py' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'src/file_tree_check/__init__.py' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module tests/test_identifierEngine.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module tests/test_identifierEngine.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module tests/test_identifierEngine.py>
+      find_module called for: test_identifierEngine [assertion]
+      matched test file '/home/remi/github/file_tree_check/tests/test_identifierEngine.py' [assertion]
+      found cached rewritten pyc for /home/remi/github/file_tree_check/tests/test_identifierEngine.py [assertion]
+      find_module called for: file_tree_check [assertion]
+      early skip of rewriting module: file_tree_check.identifierEngine [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: annotations
+            obj: _Feature((3, 7, 0, 'beta', 1), None, 16777216)
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: Path
+            obj: <class 'pathlib.Path'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: pytest
+            obj: <module 'pytest' from '/home/remi/miniconda3/lib/python3.11/site-packages/pytest/__init__.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: IdentifierEngine
+            obj: <class 'file_tree_check.identifierEngine.IdentifierEngine'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: test_path
+            obj: <function test_path at 0x7f5842ac4e00>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: test_identifierEngine
+            obj: <function test_identifierEngine at 0x7f5842ac4f40>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x7f5843cef110>
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: False
+                argname: prefix_file_with_parent_directory
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: _T1w.nii.gz
+                argname: expected
+            finish pytest_make_parametrize_id --> None [hook]
+          early skip of rewriting module: encodings.unicode_escape [assertion]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: True
+                argname: prefix_file_with_parent_directory
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: anat/_T1w.nii.gz
+                argname: expected
+            finish pytest_make_parametrize_id --> None [hook]
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_identifierEngine[False-_T1w.nii.gz]>, <Function test_identifierEngine[True-anat/_T1w.nii.gz]>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: test_identifierEngine_unmatchable_regex
+            obj: <function test_identifierEngine_unmatchable_regex at 0x7f5842ac51c0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x7f5842aec190>
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: False
+                argname: prefix_file_with_parent_directory
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: sub-01_T1w.nii.gz
+                argname: expected
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: True
+                argname: prefix_file_with_parent_directory
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x7f5842f9af90>
+                val: anat/sub-01_T1w.nii.gz
+                argname: expected
+            finish pytest_make_parametrize_id --> None [hook]
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>, <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_identifierEngine.py>
+            name: test_identifierEngine_error
+            obj: <function test_identifierEngine_error at 0x7f5842ac5260>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x7f5842aed150>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_identifierEngine_error>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_identifierEngine.py' lenresult=5 outcome='passed'> [hook]
+    genitems <Function test_identifierEngine[False-_T1w.nii.gz]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_identifierEngine[True-anat/_T1w.nii.gz]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_identifierEngine_error> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_identifierEngine_error>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_identifierEngine.py' lenresult=5 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module tests/test_smart_path.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module tests/test_smart_path.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module tests/test_smart_path.py>
+      find_module called for: test_smart_path [assertion]
+      matched test file '/home/remi/github/file_tree_check/tests/test_smart_path.py' [assertion]
+      found cached rewritten pyc for /home/remi/github/file_tree_check/tests/test_smart_path.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_smart_path.py>
+            name: annotations
+            obj: _Feature((3, 7, 0, 'beta', 1), None, 16777216)
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_smart_path.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_smart_path.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/home/remi/miniconda3/lib/python3.11/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module tests/test_smart_path.py>
+            name: test_system
+            obj: <function test_system at 0x7f5842ac6160>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x7f5842aedc50>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_system>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_smart_path.py' lenresult=1 outcome='passed'> [hook]
+    genitems <Function test_system> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_system>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_smart_path.py' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collection_modifyitems [hook]
+          session: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          config: <_pytest.config.Config object at 0x7f5842f9af90>
+          items: [<Function test_identifierEngine[False-_T1w.nii.gz]>, <Function test_identifierEngine[True-anat/_T1w.nii.gz]>, <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>, <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>, <Function test_identifierEngine_error>, <Function test_system>]
+      finish pytest_collection_modifyitems --> [] [hook]
+      pytest_collection_finish [hook]
+          session: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        pytest_report_collectionfinish [hook]
+            config: <_pytest.config.Config object at 0x7f5842f9af90>
+            items: [<Function test_identifierEngine[False-_T1w.nii.gz]>, <Function test_identifierEngine[True-anat/_T1w.nii.gz]>, <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>, <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>, <Function test_identifierEngine_error>, <Function test_system>]
+            start_path: /home/remi/github/file_tree_check
+            startdir: /home/remi/github/file_tree_check
+        finish pytest_report_collectionfinish --> [] [hook]
+      finish pytest_collection_finish --> [] [hook]
+    finish pytest_collection --> None [hook]
+    pytest_runtestloop [hook]
+        session: <Session file_tree_check exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=6>
+      pytest_runtest_protocol [hook]
+          item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+          nextitem: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 13, 'test_identifierEngine[False-_T1w.nii.gz]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> /home/remi/github/file_tree_check/tests/test_data [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> False [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> _T1w.nii.gz [hook]
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_identifierEngine[False-_T1w.nii.gz]>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+            nextitem: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine[False-_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[False-_T1w.nii.gz]>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine[False-_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 13, 'test_identifierEngine[False-_T1w.nii.gz]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+          nextitem: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 13, 'test_identifierEngine[True-anat/_T1w.nii.gz]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> /home/remi/github/file_tree_check/tests/test_data [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> True [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> anat/_T1w.nii.gz [hook]
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+            nextitem: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine[True-anat/_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine[True-anat/_T1w.nii.gz]>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine[True-anat/_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 13, 'test_identifierEngine[True-anat/_T1w.nii.gz]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+          nextitem: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 32, 'test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> /home/remi/github/file_tree_check/tests/test_data [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> False [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> sub-01_T1w.nii.gz [hook]
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+            nextitem: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 32, 'test_identifierEngine_unmatchable_regex[False-sub-01_T1w.nii.gz]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+          nextitem: <Function test_identifierEngine_error>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 32, 'test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> /home/remi/github/file_tree_check/tests/test_data [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> True [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_setup --> anat/sub-01_T1w.nii.gz [hook]
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+            nextitem: <Function test_identifierEngine_error>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='expected' scope='function' baseid=''>
+              request: <SubRequest 'expected' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='prefix_file_with_parent_directory' scope='function' baseid=''>
+              request: <SubRequest 'prefix_file_with_parent_directory' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]
+            location: ('tests/test_identifierEngine.py', 32, 'test_identifierEngine_unmatchable_regex[True-anat/sub-01_T1w.nii.gz]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_identifierEngine_error>
+          nextitem: <Function test_system>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_error
+            location: ('tests/test_identifierEngine.py', 52, 'test_identifierEngine_error')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_identifierEngine_error>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_error>>
+          finish pytest_fixture_setup --> /home/remi/github/file_tree_check/tests/test_data [hook]
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_error>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_identifierEngine_error>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_identifierEngine_error>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_error>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_identifierEngine_error>
+            nextitem: <Function test_system>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='test_path' scope='function' baseid='tests/test_identifierEngine.py'>
+              request: <SubRequest 'test_path' for <Function test_identifierEngine_error>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_identifierEngine_error>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_identifierEngine.py::test_identifierEngine_error' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_identifierEngine.py::test_identifierEngine_error
+            location: ('tests/test_identifierEngine.py', 52, 'test_identifierEngine_error')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_system>
+          nextitem: None
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_smart_path.py::test_system
+            location: ('tests/test_smart_path.py', 3, 'test_system')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_system>
+        finish pytest_runtest_setup --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_system>
+            call: <CallInfo when='setup' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_smart_path.py::test_system' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_smart_path.py::test_system' when='setup' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_smart_path.py::test_system' when='setup' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_system>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_system>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_system>
+            call: <CallInfo when='call' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_smart_path.py::test_system' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_smart_path.py::test_system' when='call' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_smart_path.py::test_system' when='call' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('passed', '.', 'PASSED') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_system>
+            nextitem: None
+        finish pytest_runtest_teardown --> [] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_system>
+            call: <CallInfo when='teardown' result: []>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_smart_path.py::test_system' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_smart_path.py::test_system' when='teardown' outcome='passed'>
+          pytest_report_teststatus [hook]
+              report: <TestReport 'tests/test_smart_path.py::test_system' when='teardown' outcome='passed'>
+              config: <_pytest.config.Config object at 0x7f5842f9af90>
+          finish pytest_report_teststatus --> ('', '', '') [hook]
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_smart_path.py::test_system
+            location: ('tests/test_smart_path.py', 3, 'test_system')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+    finish pytest_runtestloop --> True [hook]
+    pytest_sessionfinish [hook]
+        session: <Session file_tree_check exitstatus=0 testsfailed=0 testscollected=6>
+        exitstatus: 0
+      pytest_terminal_summary [hook]
+          terminalreporter: <_pytest.terminal.TerminalReporter object at 0x7f5842a62690>
+          exitstatus: 0
+          config: <_pytest.config.Config object at 0x7f5842f9af90>
+      finish pytest_terminal_summary --> [] [hook]
+    finish pytest_sessionfinish --> [] [hook]
+    pytest_unconfigure [hook]
+        config: <_pytest.config.Config object at 0x7f5842f9af90>
+    finish pytest_unconfigure --> [] [hook]
