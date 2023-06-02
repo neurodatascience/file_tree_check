@@ -21,4 +21,3 @@
 06-02 15:32 file_tree_check.statBuilder DEBUG    Iterating through every file/directory type to populate the CSV.
 06-02 15:32 file_tree_check.statBuilder INFO     CSV file closed. Contains 25512 bytes of data
 06-02 15:32 file_tree_check INFO     Script executed successfully.
-

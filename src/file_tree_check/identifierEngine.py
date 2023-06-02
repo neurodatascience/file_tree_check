@@ -35,10 +35,9 @@ class IdentifierEngine:
     """
 
     def __init__(self, file_expression: str, directory_expression: str, check_file: bool):
-
         self.file_expression = file_expression
         self.directory_expression = directory_expression
-        self.logger = logging.getLogger("file_tree_check.{}".format(__name__))
+        self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of IdentifierEngine")
         self.check_file = check_file
 
@@ -102,7 +101,6 @@ class IdentifierEngine:
         elif not self.check_file:
             match = re.search(self.file_expression, path.name)
         else:
-
             raise TypeError(f"Path is not a file nor a directory: {path}")
 
         # When the entire name is filtered out, we prefer using a identifier
