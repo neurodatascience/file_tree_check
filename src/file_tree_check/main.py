@@ -24,7 +24,7 @@ LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
 FILENAME_MAX_LENGTH = 60
 
 
-def _arg_parser(config=None):
+def _arg_parser():
     """Extract the arguments given to the script.
 
     Arguments are the part given after the main.py call in the command line.
@@ -47,8 +47,8 @@ def _arg_parser(config=None):
         A parser object to be used in main() containing the argument data.
     """
     pars = argparse.ArgumentParser(description="Insert doc here")
-    if config is None or (config is not None and not config["Root"].getboolean("root_config")):
-        pars.add_argument("start_location", type=str, help="Directory to explore")
+    pars.add_argument("--start_location", type=str, help="Directory to explore")
+    pars.add_argument("--config", type=str, help="Config file to use")
     console_log = pars.add_mutually_exclusive_group()
     console_log.add_argument(
         "-v",
@@ -521,12 +521,14 @@ def main():
     """Execute sequence of the script."""
     # Parsing the config file
     config = configparser.ConfigParser()
-    config.read(Path(CONFIG_PATH))
 
     # Parsing arguments
-    parser = _arg_parser(config)
+    parser = _arg_parser()
     args = parser.parse_args()
-
+    if args.config is not None:
+        config.read(Path(args.config))
+    else:
+        config.read(Path(CONFIG_PATH))
     if not Path(config["Logging"]["file_log_path"]).exists():
         Path(config["Logging"]["file_log_path"]).parent.mkdir(parents=True, exist_ok=True)
         Path(config["Logging"]["file_log_path"]).touch()
@@ -541,10 +543,10 @@ def main():
 
     logger.debug("Initializing variables from arguments")
 
-    if config["Root"].getboolean("root_config"):
-        root = Path(config["Root"]["root_path"])
-    else:
+    if args.start_location is not None:
         root = Path(args.start_location)
+    else:
+        root = Path(config["Root"]["root_path"])
     logger.info(f"Target directory is : {root}")
 
     logger.debug("Initializing variables from config file")
