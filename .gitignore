@@ -1,3 +1,15 @@
+
+/image1.bmp
+/text1.txt
+/text2.txt
+/File_Structure.txt
+/venv/
+/__py*
+/log.txt
+/graph_image.png
+/results/*
+__pycache__
+
 results
 
 # Byte-compiled / optimized / DLL files

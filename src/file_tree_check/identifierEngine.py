@@ -34,11 +34,12 @@ class IdentifierEngine:
         the logger configuration in main.py.
     """
 
-    def __init__(self, file_expression: str, directory_expression: str):
+    def __init__(self, file_expression: str, directory_expression: str, check_file: bool):
         self.file_expression = file_expression
         self.directory_expression = directory_expression
         self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of IdentifierEngine")
+        self.check_file = check_file
 
     def get_identifier(
         self, path: str | Path, prefix_file_with_parent_directory: bool = False
@@ -89,7 +90,7 @@ class IdentifierEngine:
         """
         path = Path(path)
         if prefix_file_with_parent_directory and path.is_file():
-            identifier = f"{self.get_identifier(path.parent)}/"
+            identifier = self.get_identifier(path.parent) + "/"
         else:
             identifier = ""
 
@@ -97,6 +98,8 @@ class IdentifierEngine:
             match = re.search(self.file_expression, path.name)
         elif path.is_dir():
             match = re.search(self.directory_expression, path.name)
+        elif not self.check_file:
+            match = re.search(self.file_expression, path.name)
         else:
             raise TypeError(f"Path is not a file nor a directory: {path}")
 

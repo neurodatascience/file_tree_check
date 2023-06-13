@@ -1,24 +1,23 @@
-05-17 18:37 file_tree_check DEBUG    Initializing variables from arguments
-05-17 18:37 file_tree_check INFO     Target directory is: tests/test_data/derivatives1
-05-17 18:37 file_tree_check DEBUG    Initializing variables from config file
-05-17 18:37 file_tree_check.file_tree_check.identifierEngine INFO     Created an instance of IdentifierEngine
-05-17 18:37 file_tree_check INFO     Output file paths: Summary:'/home/remi/github/file_tree_check/results/Summary.txt', Tree:'/home/remi/github/file_tree_check/results/File_Tree.', CSV:'/home/remi/github/file_tree_check/results/Data.csv'
-05-17 18:37 file_tree_check DEBUG    Launching exploration of the target directory
-05-17 18:37 file_tree_check INFO     Retrieved 3 measures for 8 different directory name
-05-17 18:37 file_tree_check DEBUG    Creating instance of StatBuilder with the measures
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Created an instance of StatBuilder
-05-17 18:37 file_tree_check DEBUG    Launching summary text output generation.
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Initializing summary output
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure file_count
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Found 8 directories/files for measure file_count
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure file_size
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Found 8 directories/files for measure file_size
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure modified_time
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Found 8 directories/files for measure modified_time
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Summary created with 3 measures, file is 2301 characters long.
-05-17 18:37 file_tree_check DEBUG    Launching CSV output generation.
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Opening csv file for writing at: /home/remi/github/file_tree_check/results/Data.csv
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     Storing in CSV file with header: ['Path', 'Identifier', 'file_count', 'file_size', 'modified_time']
-05-17 18:37 file_tree_check.file_tree_check.statBuilder DEBUG    Iterating through every file/directory type to populate the CSV.
-05-17 18:37 file_tree_check.file_tree_check.statBuilder INFO     CSV file closed. Contains 1649 bytes of data
-05-17 18:37 file_tree_check INFO     Script executed successfully.
+
+06-02 15:32 file_tree_check DEBUG    Initializing variables from arguments
+06-02 15:32 file_tree_check INFO     Target directory is : C:\Users\James\Downloads\file_tree_check-master\Sample-Database
+06-02 15:32 file_tree_check DEBUG    Initializing variables from config file
+06-02 15:32 file_tree_check.identifierEngine INFO     Created an instance of IdentifierEngine
+06-02 15:32 file_tree_check INFO     Output file paths : Summary:'C:\Users\James\Github\file-tree-check\file_tree_check\results\Summary.txt', Tree:'C:\Users\James\Github\file-tree-check\file_tree_check\results\File_Tree', CSV:'C:\Users\James\Github\file-tree-check\file_tree_check\results\Data.csv'
+06-02 15:32 file_tree_check DEBUG    Launching exploration of the target directory
+06-02 15:32 file_tree_check INFO     Retrieved 2 measures for 18 different directory name
+06-02 15:32 file_tree_check DEBUG    Creating instance of StatBuilder with the measures
+06-02 15:32 file_tree_check.statBuilder INFO     Created an instance of StatBuilder
+06-02 15:32 file_tree_check DEBUG    Launching summary text output generation.
+06-02 15:32 file_tree_check.statBuilder DEBUG    Initializing summary output
+06-02 15:32 file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure file_count
+06-02 15:32 file_tree_check.statBuilder INFO     Found 18 directories/files for measure file_count
+06-02 15:32 file_tree_check.statBuilder DEBUG    Calculating most common occurrences for measure dir_count
+06-02 15:32 file_tree_check.statBuilder INFO     Found 18 directories/files for measure dir_count
+06-02 15:32 file_tree_check.statBuilder INFO     Summary created with 2 measures, file is 1923 characters long.
+06-02 15:32 file_tree_check DEBUG    Launching CSV output generation.
+06-02 15:32 file_tree_check.statBuilder DEBUG    Opening csv file for writing at : C:\Users\James\Github\file-tree-check\file_tree_check\results\Data.csv
+06-02 15:32 file_tree_check.statBuilder INFO     Storing in CSV file with header : ['Path', 'Identifier', 'file_count', 'dir_count']
+06-02 15:32 file_tree_check.statBuilder DEBUG    Iterating through every file/directory type to populate the CSV.
+06-02 15:32 file_tree_check.statBuilder INFO     CSV file closed. Contains 25512 bytes of data
+06-02 15:32 file_tree_check INFO     Script executed successfully.
