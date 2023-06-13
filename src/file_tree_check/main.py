@@ -341,7 +341,7 @@ def get_data_from_paths(
     if output_path is None:
         for path in paths:
             stat_dict = path.add_stats(
-                stat_dict, identifier.get_identifier(path), measures=measures
+                stat_dict, identifier.get_identifier(path.path), measures=measures
             )
             if get_configurations:
                 configurations = add_configuration(
