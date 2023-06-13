@@ -191,7 +191,7 @@ class StatBuilder:
                         f"\n     Configuration #{i + 1} was found in "
                         f"{len(sorted_config_list[i]['paths'])} directories. "
                         "Contains the following: \n            "
-                        "{sorted_config_list[i]['structure']}"
+                        f"{sorted_config_list[i]['structure']}"
                     )
 
         for measure_name in self.measures:
@@ -265,6 +265,7 @@ class StatBuilder:
         output_path:  pahlib.Path or string
             Path to where the CSV should be saved.
         """
+        # noqa
         self.logger.debug(f"Opening csv file for writing at: {output_path}")
         with open(output_path, "w", newline="") as csv_file:
             csv_writer = csv.writer(csv_file)

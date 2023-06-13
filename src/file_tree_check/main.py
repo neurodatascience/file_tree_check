@@ -8,11 +8,11 @@ import os
 import re
 from pathlib import Path
 
-from file_tree_check.identifierEngine import IdentifierEngine
-from file_tree_check.smartDirectoryPath import SmartDirectoryPath
-from file_tree_check.smartFilePath import SmartFilePath
-from file_tree_check.smartPath import SmartPath
-from file_tree_check.statBuilder import StatBuilder
+from identifierEngine import IdentifierEngine
+from smartDirectoryPath import SmartDirectoryPath
+from smartFilePath import SmartFilePath
+from smartPath import SmartPath
+from statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
 CONFIG_PATH = (
@@ -47,7 +47,7 @@ def _arg_parser(config=None):
         A parser object to be used in main() containing the argument data.
     """
     pars = argparse.ArgumentParser(description="Insert doc here")
-    if config is None or (config is not None and not config["Root"].getboolean("use config")):
+    if config is None or (config is not None and not config["Root"].getboolean("root_config")):
         pars.add_argument("start_location", type=str, help="Directory to explore")
     console_log = pars.add_mutually_exclusive_group()
     console_log.add_argument(
@@ -131,6 +131,7 @@ def generate_tree(
     filter_dir: bool = False,
     filter_hidden: bool = False,
     ignore: list = [],
+    depth_limit: int = -1,
 ):
     """Create a SmartFilePath or SmartDirectoryPath generator object \
     for every item found within the root directory.
@@ -195,7 +196,8 @@ def generate_tree(
     # Begin by generating the root path
     smart_root = SmartDirectoryPath(root, parent, is_last)
     yield smart_root
-
+    if depth_limit >= 0 and smart_root.depth >= depth_limit:
+        return
     # Get a list of every file/directory in the root and iterate over them
     if criteria is not None:
         filtered_children = [
@@ -232,8 +234,10 @@ def generate_tree(
                             filter_dir=filter_dir,
                             filter_hidden=filter_hidden,
                             ignore=ignore,
+                            depth_limit=depth_limit,
                         )
-                # If the children is a file, generate a single instance of SmartPath associated to its path
+                # If the children is a file, generate a single instance of SmartPath
+                #  associated to its path
                 else:
                     yield SmartFilePath(path, smart_root, is_last)
                 count += 1
@@ -255,9 +259,8 @@ def get_data_from_paths(
     end_depth: int | None = None,
     pipe_file_data: bool = False,
 ) -> tuple[dict, dict]:
-    """Iterate over each file/directory in the generator to get measure and, \
-    create the file tree  if requested.
-
+    """Iterate over each file/directory in the generator to get measure and,\
+          create the file tree  if requested.
 
     Parameters
     ----------
@@ -353,7 +356,10 @@ def get_data_from_paths(
             if pipe_file_data:
                 if isinstance(path, SmartFilePath):
                     print(
-                        f"{path.path},{identifier.get_identifier(path.path)},{path.file_size},{path.modified_time}"
+                        f"{path.path}",
+                        f"{identifier.get_identifier(path.path)}",
+                        f"{path.file_size}",
+                        f"{path.modified_time}",
                     )
 
     else:
@@ -490,6 +496,27 @@ def add_configuration(
     return configurations
 
 
+class Output:
+    """Helper class for outputs."""
+
+    def __init__(self, config: configparser):
+        self.summary = (
+            Path(config["Output"]["summary_output_path"])
+            if config["Output"].getboolean("create_summary")
+            else None
+        )
+        self.tree = (
+            Path(config["Output"]["tree_output_path"])
+            if config["Output"].getboolean("create_text_tree")
+            else None
+        )
+        self.csv = (
+            Path(config["Output"]["csv_output_path"])
+            if config["Output"].getboolean("create_csv")
+            else None
+        )
+
+
 def main():
     """Execute sequence of the script."""
     # Parsing the config file
@@ -514,17 +541,17 @@ def main():
 
     logger.debug("Initializing variables from arguments")
 
-    if config["Root"].getboolean("use config"):
-        root = Path(config["Root"]["database root path"])
+    if config["Root"].getboolean("root_config"):
+        root = Path(config["Root"]["root_path"])
     else:
         root = Path(args.start_location)
     logger.info(f"Target directory is : {root}")
 
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(
-        config["Categorization"]["regular expression for file identifier"],
-        config["Categorization"]["regular expression for directory identifier"],
-        config["Hidden"].getboolean("check file"),
+        config["Categorization"]["regular_expression_file"],
+        config["Categorization"]["regular_expression_directory"],
+        config["Categorization"].getboolean("check_file"),
     )
 
     if config["Search Criteria"].getboolean("use search criteria"):
@@ -542,23 +569,14 @@ def main():
         criteria = None
         filter_files = False
         filter_dir = False
+        filter_hidden = False
 
-    if config["Output"].getboolean("create_summary"):
-        summary_output_path = Path(config["Output"]["summary_output_path"])
-    else:
-        summary_output_path = None
+    if config["Hidden"].getboolean("filter list"):
+        ignore = config["Hidden"]["ignore list"].split(",")
 
-    if config["Output"].getboolean("create_text_tree"):
-        tree_output_path = Path(config["Output"]["tree_output_path"])
-    else:
-        tree_output_path = None
+    output = Output(config)
 
-    if config["Output"].getboolean("create_csv"):
-        csv_output_path = Path(config["Output"]["csv_output_path"])
-    else:
-        csv_output_path = None
-
-    if config["Configurations"].getboolean("get_number_unique_configurations"):
+    if config["Configurations"].getboolean("get number of unique configurations"):
         get_configurations = True
         target_depth = config["Configurations"].getint("target depth")
         depth_range = config["Configurations"].getboolean("get depth range")
@@ -574,20 +592,32 @@ def main():
         depth_range = False
         start_depth = -1
         end_depth = -1
+    if config["Configurations"].getboolean("limit depth"):
+        depth_limit = config["Configurations"].getint("depth limit")
+    else:
+        depth_limit = -1
 
     logger.info(
-        f"Output file paths: Summary:'{str(summary_output_path)}', "
-        f"Tree:'{str(tree_output_path)}', CSV:'{str(csv_output_path)}'"
+        f"Output file paths: Summary:'{str(output.summary)}', "
+        f"Tree:'{str(output.tree)}', CSV:'{str(output.csv)}'"
     )
 
     logger.debug("Launching exploration of the target directory")
     measure_list = [key for key in config["Measures"] if config["Measures"].getboolean(key)]
-    paths = generate_tree(root, criteria=criteria, filter_files=filter_files, filter_dir=filter_dir)
+    paths = generate_tree(
+        root,
+        criteria=criteria,
+        filter_files=filter_files,
+        filter_dir=filter_dir,
+        depth_limit=depth_limit,
+        filter_hidden=filter_hidden,
+        ignore=ignore,
+    )
 
     stat_dict, configurations = get_data_from_paths(
         paths,
         identifier,
-        output_path=tree_output_path,
+        output_path=output.tree,
         measures=measure_list,
         get_configurations=get_configurations,
         target_depth=target_depth,
@@ -617,14 +647,14 @@ def main():
             show_plot=vis_config.getboolean("print_plots"),
         )
 
-    if summary_output_path is not None:
+    if output.summary is not None:
         logger.debug("Launching summary text output generation.")
-        with open(summary_output_path, "w", encoding="utf-8") as f:
+        with open(output.summary, "w", encoding="utf-8") as f:
             f.write(stat_builder.create_summary(root, configurations))
 
-    if csv_output_path is not None:
+    if output.csv is not None:
         logger.debug("Launching CSV output generation.")
-        stat_builder.create_csv(csv_output_path)
+        stat_builder.create_csv(output.csv)
 
     logger.info("Script executed successfully.")
 
