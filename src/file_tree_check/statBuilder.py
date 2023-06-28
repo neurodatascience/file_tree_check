@@ -44,7 +44,7 @@ class StatBuilder:
         following the logger configuration in main.py.
     """
 
-    def __init__(self, stat_dict, measures=()):
+    def __init__(self, stat_dict, measures=(), deviation: bool = False):
         """Initialize an instance associated to the given statistics dictionary.
 
         Parameters
@@ -61,6 +61,21 @@ class StatBuilder:
         self.measures = measures
         self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of StatBuilder")
+        if deviation:
+            stat_dict = self.average_file_size(stat_dict)
+
+    def average_file_size(self, stat_dict) -> dict:
+        for identifier in stat_dict["file_size"]:
+            # I want to calculate devitation from mean of file size for each file within identifier
+            file_size_list = []  # list of file sizes for each file within identifier
+            for path in stat_dict["file_size"][identifier]:
+                file_size_list.append(stat_dict["file_size"][identifier][path])
+            mean = sum(file_size_list) / len(file_size_list)
+            for path in stat_dict["file_size"][identifier]:
+                stat_dict["file_size"][identifier][path] = (
+                    stat_dict["file_size"][identifier][path] - mean
+                )
+        return stat_dict
 
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
         """Create a comparison plot for each measure given in a single figure.

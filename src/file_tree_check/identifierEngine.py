@@ -4,6 +4,8 @@ import logging
 import re
 from pathlib import Path
 
+from file_tree import FileTree
+
 
 class IdentifierEngine:
     """Class that can extract an "identifier" from a path.
@@ -90,7 +92,7 @@ class IdentifierEngine:
         """
         path = Path(path)
         if prefix_file_with_parent_directory and path.is_file():
-            identifier = self.get_identifier(path.parent) + "/"
+            identifier = f"{self.get_identifier(path.parent)}/"
         else:
             identifier = ""
 
@@ -107,3 +109,27 @@ class IdentifierEngine:
         # that is maybe too unique over an empty one
         identifier += path.name if match is None else match.group(0)
         return identifier
+
+    def get_identifier_tree(self, path: str | Path, tree: FileTree):
+        for key in tree.template_keys():
+            if key == "":
+                continue
+            template = tree.get_template(key)
+            regex = self.parse_string_to_regex(template.unique_part)
+            match = re.match(regex, path.name)
+            if match is not None and match[0] != "":
+                return key
+        return path.name
+
+    def parse_string_to_regex(self, string):
+        string = re.sub(r"\{.*?\}", ".+", string)
+        string = re.sub(r"\[(.*?)\]", r"(?:\1)?", string)
+        return string
+
+    def get_identifier_template(self, path: str | Path, templates: list[str]):
+        for template in templates:
+            regex = self.parse_string_to_regex(template[0])
+            match = re.match(regex, path.name)
+            if match is not None and match[0] != "":
+                return template[1]
+        return path.name

@@ -8,6 +8,7 @@ import os
 import re
 from pathlib import Path
 
+from file_tree import FileTree
 from identifierEngine import IdentifierEngine
 from smartDirectoryPath import SmartDirectoryPath
 from smartFilePath import SmartFilePath
@@ -130,8 +131,8 @@ def generate_tree(
     filter_files: bool = False,
     filter_dir: bool = False,
     filter_hidden: bool = False,
-    ignore: list = [],
-    depth_limit: int = -1,
+    ignore: list = None,
+    depth_limit: int = None,
 ):
     """Create a SmartFilePath or SmartDirectoryPath generator object \
     for every item found within the root directory.
@@ -196,7 +197,7 @@ def generate_tree(
     # Begin by generating the root path
     smart_root = SmartDirectoryPath(root, parent, is_last)
     yield smart_root
-    if depth_limit >= 0 and smart_root.depth >= depth_limit:
+    if depth_limit is not None and smart_root.depth >= depth_limit:
         return
     # Get a list of every file/directory in the root and iterate over them
     if criteria is not None:
@@ -218,24 +219,22 @@ def generate_tree(
             is_last = count == len(children)
             # If the children is a directory, another instance of the method is called and
             # its output is propagated up the generator
-            skip = False
-            for ignore_name in ignore:
-                if path.name == ignore_name:
-                    skip = True
+            skip = any(path.name == ignore_name for ignore_name in ignore) or (
+                path.name.startswith(".") and filter_hidden
+            )
             if not skip:
                 if path.is_dir():
-                    if not (path.name.startswith(".") and filter_hidden):
-                        yield from generate_tree(
-                            path,
-                            parent=smart_root,
-                            is_last=is_last,
-                            criteria=criteria,
-                            filter_files=filter_files,
-                            filter_dir=filter_dir,
-                            filter_hidden=filter_hidden,
-                            ignore=ignore,
-                            depth_limit=depth_limit,
-                        )
+                    yield from generate_tree(
+                        path,
+                        parent=smart_root,
+                        is_last=is_last,
+                        criteria=criteria,
+                        filter_files=filter_files,
+                        filter_dir=filter_dir,
+                        filter_hidden=filter_hidden,
+                        ignore=ignore,
+                        depth_limit=depth_limit,
+                    )
                 # If the children is a file, generate a single instance of SmartPath
                 #  associated to its path
                 else:
@@ -252,12 +251,10 @@ def get_data_from_paths(
     identifier: IdentifierEngine,
     output_path: Path | None = None,
     measures: list[str] = [],
-    get_configurations: bool = False,
-    target_depth: int | None = None,
-    depth_range: bool = False,
-    start_depth: int | None = None,
-    end_depth: int | None = None,
+    configuration: Configuration | None = None,
     pipe_file_data: bool = False,
+    tree: FileTree | None = None,
+    templates: list[str] | None = None,
 ) -> tuple[dict, dict]:
     """Iterate over each file/directory in the generator to get measure and,\
           create the file tree  if requested.
@@ -340,51 +337,70 @@ def get_data_from_paths(
     stat_dict = {measure_name: {} for measure_name in measures}
     if output_path is None:
         for path in paths:
-            stat_dict = path.add_stats(
-                stat_dict, identifier.get_identifier(path.path), measures=measures
+            stat_dict, configurations = data_from_paths_helper(
+                path=path,
+                identifier=identifier,
+                measures=measures,
+                configuration=configuration,
+                pipe_file_data=pipe_file_data,
+                stat_dict=stat_dict,
+                configurations=configurations,
+                tree=tree,
+                templates=templates,
             )
-            if get_configurations:
-                configurations = add_configuration(
-                    path,
-                    configurations,
-                    identifier,
-                    target_depth=target_depth,
-                    depth_range=depth_range,
-                    start_depth=start_depth,
-                    end_depth=end_depth,
-                )
-            if pipe_file_data:
-                if isinstance(path, SmartFilePath):
-                    print(
-                        f"{path.path}",
-                        f"{identifier.get_identifier(path.path)}",
-                        f"{path.file_size}",
-                        f"{path.modified_time}",
-                    )
-
     else:
         with open(output_path, "w", encoding="utf-8") as f:
             for path in paths:
-                stat_dict = path.add_stats(
-                    stat_dict, identifier.get_identifier(path.path), measures=measures
+                stat_dict, configurations = data_from_paths_helper(
+                    path=path,
+                    identifier=identifier,
+                    measures=measures,
+                    configuration=configuration,
+                    pipe_file_data=pipe_file_data,
+                    stat_dict=stat_dict,
+                    configurations=configurations,
+                    tree=tree,
+                    templates=templates,
                 )
-                if get_configurations:
-                    configurations = add_configuration(
-                        path,
-                        configurations,
-                        identifier,
-                        target_depth=target_depth,
-                        depth_range=depth_range,
-                        start_depth=start_depth,
-                        end_depth=end_depth,
-                    )
-
                 f.write(path.displayable(measures=measures, name_max_length=FILENAME_MAX_LENGTH))
-                if pipe_file_data and isinstance(path, SmartFilePath):
-                    print(
-                        f"{path.path},{identifier.get_identifier(path.path)},"
-                        f"{path.file_size},{path.modified_time}"
-                    )
+
+    return stat_dict, configurations
+
+
+def data_from_paths_helper(
+    path: SmartPath,
+    identifier: IdentifierEngine,
+    measures: list[str] = [],
+    configuration: Configuration | None = None,
+    pipe_file_data: bool = False,
+    stat_dict: dict = {},
+    configurations: dict = {},
+    tree: FileTree | None = None,
+    templates: list[str] | None = None,
+):
+    if templates is not None:
+        identity = identifier.get_identifier_template(path.path, templates)
+    elif tree is not None:
+        identity = identifier.get_identifier_tree(path.path, tree)
+    else:
+        identity = identifier.get_identifier(path.path)
+    stat_dict = path.add_stats(stat_dict, identity, measures=measures)
+    if configuration.get_configurations:
+        configurations = add_configuration(
+            path,
+            configurations,
+            identifier,
+            target_depth=configuration.target_depth,
+            depth_range=configuration.depth_range,
+            start_depth=configuration.start_depth,
+            end_depth=configuration.end_depth,
+            tree=tree,
+        )
+    if pipe_file_data and isinstance(path, SmartFilePath):
+        print(
+            f"{path.path},{identifier.get_identifier(path.path)},"
+            f"{path.file_size},{path.modified_time}"
+        )
     return stat_dict, configurations
 
 
@@ -396,6 +412,7 @@ def add_configuration(
     depth_range: bool = False,
     start_depth: int | None = None,
     end_depth: int | None = None,
+    tree: FileTree | None = None,
 ) -> dict:
     """For each directory look at how it's content is structured and save \
        that structure as a configuration.
@@ -446,7 +463,10 @@ def add_configuration(
     if isinstance(path, SmartFilePath) or path.depth == 0:
         return configurations
     # If a target_depth is given, we exclude directories from other depth levels
-    path_unique_identifier = identifier.get_identifier(path.path)
+    if tree is not None:
+        path_unique_identifier = identifier.get_identifier_tree(path.path, tree)
+    else:
+        path_unique_identifier = identifier.get_identifier(path.path)
 
     if depth_range and (start_depth is not None and end_depth is not None):
         if path.depth < start_depth or path.depth > end_depth:
@@ -463,9 +483,9 @@ def add_configuration(
         children_path = path.path.joinpath(children)
         # For the list of every children in the directory,
         # we don't include the parent directory prefix
-        children_list.append(
-            identifier.get_identifier(children_path, prefix_file_with_parent_directory=False)
-        )
+
+        identity = identifier.get_identifier(children_path)
+        children_list.append(identity)
         children_list.sort()
 
     # Compare that organisation with others already found
@@ -517,6 +537,28 @@ class Output:
         )
 
 
+""
+
+
+class Configuration:
+    """Helper class for configuration."""
+
+    def __init__(self, config: configparser):
+        self.get_configurations = config["Configurations"].getboolean("get_configurations")
+        self.target_depth = config["Configurations"].getint("target_depth")
+        self.depth_range = config["Configurations"].getboolean("get_depth_range")
+        if self.depth_range:
+            self.start_depth = config["Configurations"].getint("start_depth")
+            self.end_depth = config["Configurations"].getint("end_depth")
+        else:
+            self.start_depth = None
+            self.end_depth = None
+        self.limit_depth = config["Configurations"].getboolean("limit_depth")
+        self.depth_limit = (
+            config["Configurations"].getint("depth_limit") if self.limit_depth else None
+        )
+
+
 def main():
     """Execute sequence of the script."""
     # Parsing the config file
@@ -556,11 +598,10 @@ def main():
         config["Categorization"].getboolean("check_file"),
     )
 
-    if config["Search Criteria"].getboolean("use search criteria"):
-        criteria = config["Search Criteria"]["regular expression for search criteria"]
-        filter_files = config["Search Criteria"].getboolean("filter files")
-        filter_dir = config["Search Criteria"].getboolean("filter directories")
-        filter_hidden = config["Hidden"].getboolean("filter hidden")
+    if config["Search_Criteria"].getboolean("use_search_criteria"):
+        criteria = config["Search_Criteria"]["regular_expression_search_criteria"]
+        filter_files = config["Search_Criteria"].getboolean("filter_files")
+        filter_dir = config["Search_Criteria"].getboolean("filter_directories")
 
         try:
             criteria = re.compile(criteria)
@@ -571,33 +612,14 @@ def main():
         criteria = None
         filter_files = False
         filter_dir = False
-        filter_hidden = False
 
-    if config["Hidden"].getboolean("filter list"):
-        ignore = config["Hidden"]["ignore list"].split(",")
+    filter_hidden = config["Hidden"].getboolean("filter_hidden")
+
+    if config["Hidden"].getboolean("filter_list"):
+        ignore = config["Hidden"]["ignore_list"].split(",")
 
     output = Output(config)
-
-    if config["Configurations"].getboolean("get number of unique configurations"):
-        get_configurations = True
-        target_depth = config["Configurations"].getint("target depth")
-        depth_range = config["Configurations"].getboolean("get depth range")
-        if depth_range:
-            start_depth = config["Configurations"].getint("start depth")
-            end_depth = config["Configurations"].getint("end depth")
-        else:
-            start_depth = -1
-            end_depth = -1
-    else:
-        get_configurations = False
-        target_depth = -1
-        depth_range = False
-        start_depth = -1
-        end_depth = -1
-    if config["Configurations"].getboolean("limit depth"):
-        depth_limit = config["Configurations"].getint("depth limit")
-    else:
-        depth_limit = -1
+    configuration = Configuration(config)
 
     logger.info(
         f"Output file paths: Summary:'{str(output.summary)}', "
@@ -611,22 +633,25 @@ def main():
         criteria=criteria,
         filter_files=filter_files,
         filter_dir=filter_dir,
-        depth_limit=depth_limit,
+        depth_limit=configuration.depth_limit,
         filter_hidden=filter_hidden,
         ignore=ignore,
     )
 
+    tree = FileTree.read(r"C:\Users\James\Downloads\COMP360\File-Tree\file-tree-exp\bids_raw.tree")
+    templates = []
+    for key in tree.template_keys():
+        templates.append((tree.get_template(key).unique_part, key))
+    templates = sorted(templates, key=lambda x: len(x[0]), reverse=True)
     stat_dict, configurations = get_data_from_paths(
         paths,
         identifier,
         output_path=output.tree,
         measures=measure_list,
-        get_configurations=get_configurations,
-        target_depth=target_depth,
-        depth_range=depth_range,
-        start_depth=start_depth,
-        end_depth=end_depth,
+        configuration=configuration,
         pipe_file_data=config["Pipeline"].getboolean("pipe file data"),
+        tree=tree,
+        templates=templates,
     )
 
     logger.info(
@@ -634,7 +659,11 @@ def main():
         f"{len(stat_dict['file_count'])} different directory name"
     )
     logger.debug("Creating instance of StatBuilder with the measures")
-    stat_builder = StatBuilder(stat_dict, measure_list)
+
+    stat_builder = StatBuilder(
+        stat_dict,
+        measure_list,
+    )
 
     vis_config = config["Visualization"]
     if vis_config.getboolean("create_plots"):
