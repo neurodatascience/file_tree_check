@@ -638,7 +638,11 @@ def main():
         ignore=ignore,
     )
 
-    tree = FileTree.read(r"C:\Users\James\Downloads\COMP360\File-Tree\file-tree-exp\bids_raw.tree")
+    tree = (
+        FileTree.read(config["Root"]["file_tree"])
+        if config["Root"].getboolean("use_file_tree")
+        else None
+    )
     templates = []
     for key in tree.template_keys():
         templates.append((tree.get_template(key).unique_part, key))
