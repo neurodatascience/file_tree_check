@@ -645,7 +645,12 @@ def main():
     )
     templates = []
     for key in tree.template_keys():
-        templates.append((tree.get_template(key).unique_part, key))
+        if tree.get_template(key).parent is not None:
+            templates.append(
+                (tree.get_template(key).unique_part, tree.get_template(key).parent.unique_part, key)
+            )
+        else:
+            templates.append((tree.get_template(key).unique_part, None, key))
     templates = sorted(templates, key=lambda x: len(x[0]), reverse=True)
     stat_dict, configurations = get_data_from_paths(
         paths,
@@ -664,10 +669,7 @@ def main():
     )
     logger.debug("Creating instance of StatBuilder with the measures")
 
-    stat_builder = StatBuilder(
-        stat_dict,
-        measure_list,
-    )
+    stat_builder = StatBuilder(stat_dict, measure_list, deviation=True)
 
     vis_config = config["Visualization"]
     if vis_config.getboolean("create_plots"):

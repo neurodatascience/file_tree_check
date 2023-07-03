@@ -126,10 +126,27 @@ class IdentifierEngine:
         string = re.sub(r"\[(.*?)\]", r"(?:\1)?", string)
         return string
 
-    def get_identifier_template(self, path: str | Path, templates: list[str]):
+    def get_identifier_template(
+        self, path: str | Path, templates: list[str], prefix_file_with_parent_directory: bool = True
+    ):
         for template in templates:
-            regex = self.parse_string_to_regex(template[0])
-            match = re.match(regex, path.name)
+            if template[2] == "":
+                continue
+            if (
+                prefix_file_with_parent_directory
+                and Path(path).is_file()
+                and template[1] is not None
+            ):
+                identifier = f"{template[1]}/{template[0]}"
+            else:
+                identifier = f"{template[0]}"
+            regex = self.parse_string_to_regex(identifier)
+            actual = (
+                f"{path.parent.name}/{path.name}"
+                if prefix_file_with_parent_directory and path.is_file()
+                else path.name
+            )
+            match = re.match(regex, actual)
             if match is not None and match[0] != "":
-                return template[1]
+                return template[2]
         return path.name

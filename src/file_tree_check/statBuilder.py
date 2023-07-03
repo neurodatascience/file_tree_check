@@ -6,6 +6,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
+import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 
@@ -66,16 +67,14 @@ class StatBuilder:
 
     def average_file_size(self, stat_dict) -> dict:
         for identifier in stat_dict["file_size"]:
-            # I want to calculate devitation from mean of file size for each file within identifier
-            file_size_list = []  # list of file sizes for each file within identifier
-            for path in stat_dict["file_size"][identifier]:
-                file_size_list.append(stat_dict["file_size"][identifier][path])
-            mean = sum(file_size_list) / len(file_size_list)
-            for path in stat_dict["file_size"][identifier]:
-                stat_dict["file_size"][identifier][path] = (
-                    stat_dict["file_size"][identifier][path] - mean
-                )
-        return stat_dict
+            vals = list(stat_dict["file_size"][identifier].values())
+            mean = np.mean(vals)
+            std = np.std(vals)
+            for val in vals:
+                if abs(val - mean) < 2 * std:
+                    val = mean
+
+            print(f"{identifier} mean: {mean}, std: {std}")
 
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
         """Create a comparison plot for each measure given in a single figure.
@@ -236,6 +235,10 @@ class StatBuilder:
                     f"{measure_name} of {most_common_value} "
                     f"found {most_common_counter} times\n"
                 )
+                output += "          Common:\n"
+                for path, value in paths.items():
+                    if value == most_common_value:
+                        output += f"          {str(path)}  has: {value}\n"
                 if most_common_counter < len(paths):
                     output += "          Outliers:\n"
                     for path, value in paths.items():
