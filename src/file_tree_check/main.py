@@ -133,6 +133,7 @@ def generate_tree(
     filter_hidden: bool = False,
     ignore: list = None,
     depth_limit: int = None,
+    file_tree: FileTree = None,
 ):
     """Create a SmartFilePath or SmartDirectoryPath generator object \
     for every item found within the root directory.
@@ -195,7 +196,12 @@ def generate_tree(
     root = Path(str(root))
 
     # Begin by generating the root path
-    smart_root = SmartDirectoryPath(root, parent, is_last)
+    smart_root = SmartDirectoryPath(
+        root,
+        parent,
+        is_last,
+        file_tree,
+    )
     yield smart_root
     if depth_limit is not None and smart_root.depth >= depth_limit:
         return
@@ -234,11 +240,17 @@ def generate_tree(
                         filter_hidden=filter_hidden,
                         ignore=ignore,
                         depth_limit=depth_limit,
+                        file_tree=file_tree,
                     )
                 # If the children is a file, generate a single instance of SmartPath
                 #  associated to its path
                 else:
-                    yield SmartFilePath(path, smart_root, is_last)
+                    yield SmartFilePath(
+                        path,
+                        smart_root,
+                        is_last,
+                        file_tree,
+                    )
                 count += 1
 
         except FileNotFoundError as e:
@@ -377,13 +389,9 @@ def data_from_paths_helper(
     configurations: dict = {},
     tree: FileTree | None = None,
     templates: list[str] | None = None,
-):
-    if templates is not None:
-        identity = identifier.get_identifier_template(path.path, templates)
-    elif tree is not None:
-        identity = identifier.get_identifier_tree(path.path, tree)
-    else:
-        identity = identifier.get_identifier(path.path)
+) -> tuple[dict, dict]:
+    """You must be helper function."""
+    identity = path.identifier
     stat_dict = path.add_stats(stat_dict, identity, measures=measures)
     if configuration.get_configurations:
         configurations = add_configuration(
@@ -397,10 +405,7 @@ def data_from_paths_helper(
             tree=tree,
         )
     if pipe_file_data and isinstance(path, SmartFilePath):
-        print(
-            f"{path.path},{identifier.get_identifier(path.path)},"
-            f"{path.file_size},{path.modified_time}"
-        )
+        print(f"{path.path},{path.identifier}," f"{path.file_size},{path.modified_time}")
     return stat_dict, configurations
 
 
@@ -463,11 +468,11 @@ def add_configuration(
     if isinstance(path, SmartFilePath) or path.depth == 0:
         return configurations
     # If a target_depth is given, we exclude directories from other depth levels
-    if tree is not None:
+    """ if tree is not None:
         path_unique_identifier = identifier.get_identifier_tree(path.path, tree)
     else:
-        path_unique_identifier = identifier.get_identifier(path.path)
-
+        path_unique_identifier = identifier.get_identifier(path.path) """
+    path_unique_identifier = path.identifier
     if depth_range and (start_depth is not None and end_depth is not None):
         if path.depth < start_depth or path.depth > end_depth:
             return configurations
@@ -484,7 +489,7 @@ def add_configuration(
         # For the list of every children in the directory,
         # we don't include the parent directory prefix
 
-        identity = identifier.get_identifier(children_path)
+        identity = identifier.get_identifier(children_path, None, None)
         children_list.append(identity)
         children_list.sort()
 
@@ -626,6 +631,12 @@ def main():
         f"Tree:'{str(output.tree)}', CSV:'{str(output.csv)}'"
     )
 
+    tree = (
+        FileTree.read(config["Root"]["file_tree"])
+        if config["Root"].getboolean("use_file_tree")
+        else None
+    )
+
     logger.debug("Launching exploration of the target directory")
     measure_list = [key for key in config["Measures"] if config["Measures"].getboolean(key)]
     paths = generate_tree(
@@ -636,13 +647,9 @@ def main():
         depth_limit=configuration.depth_limit,
         filter_hidden=filter_hidden,
         ignore=ignore,
+        file_tree=tree,
     )
 
-    tree = (
-        FileTree.read(config["Root"]["file_tree"])
-        if config["Root"].getboolean("use_file_tree")
-        else None
-    )
     templates = []
     for key in tree.template_keys():
         if tree.get_template(key).parent is not None:
@@ -651,7 +658,7 @@ def main():
             )
         else:
             templates.append((tree.get_template(key).unique_part, None, key))
-    templates = sorted(templates, key=lambda x: len(x[0]), reverse=True)
+    #    templates = sorted(templates, key=lambda x: len(x[0]), reverse=True)
     stat_dict, configurations = get_data_from_paths(
         paths,
         identifier,
