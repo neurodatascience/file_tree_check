@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import logging
+import os
 import time
 from collections import Counter
 from pathlib import Path
@@ -45,7 +46,9 @@ class StatBuilder:
         following the logger configuration in main.py.
     """
 
-    def __init__(self, stat_dict, measures=(), deviation: bool = False):
+    def __init__(
+        self, stat_dict, measures=(), size_averaging: float = 0.0, time_averaging: int = 0
+    ):
         """Initialize an instance associated to the given statistics dictionary.
 
         Parameters
@@ -62,19 +65,32 @@ class StatBuilder:
         self.measures = measures
         self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         self.logger.info("Created an instance of StatBuilder")
-        if deviation:
-            stat_dict = self.average_file_size(stat_dict)
+        if "file_size" in measures:
+            stat_dict = self.average_file_size(stat_dict, size_averaging)
+        if "modified_time" in measures:
+            stat_dict = self.average_modified_time(stat_dict, time_averaging)
 
-    def average_file_size(self, stat_dict) -> dict:
+    def average_file_size(self, stat_dict, size_averaging) -> dict:
+        if size_averaging == 0.0:
+            return stat_dict
         for identifier in stat_dict["file_size"]:
             vals = list(stat_dict["file_size"][identifier].values())
             mean = np.mean(vals)
-            std = np.std(vals)
-            for val in vals:
-                if abs(val - mean) < 2 * std:
-                    val = mean
+            for item in stat_dict["file_size"][identifier].items():
+                if abs(item[1] - mean) < mean * size_averaging:
+                    stat_dict["file_size"][identifier][item[0]] = mean
+        return stat_dict
 
-            print(f"{identifier} mean: {mean}, std: {std}")
+    def average_modified_time(self, stat_dict, time_averaging) -> dict:
+        if time_averaging == 0.0:
+            return stat_dict
+        for identifier in stat_dict["modified_time"]:
+            vals = list(stat_dict["modified_time"][identifier].values())
+            mean = np.mean(vals)
+            for item in stat_dict["modified_time"][identifier].items():
+                if abs(item[1] - mean) < time_averaging:
+                    stat_dict["modified_time"][identifier][item[0]] = mean
+        return stat_dict
 
     def create_plots(self, save_path=None, show_plot=True, plots_per_measure=8):
         """Create a comparison plot for each measure given in a single figure.
@@ -238,12 +254,14 @@ class StatBuilder:
                 output += "          Common:\n"
                 for path, value in paths.items():
                     if value == most_common_value:
-                        output += f"          {str(path)}  has: {value}\n"
+                        output += f"          {str(os.path.relpath(path,root))}  has: {value}\n"
                 if most_common_counter < len(paths):
                     output += "          Outliers:\n"
                     for path, value in paths.items():
                         if value != most_common_value:
-                            output += f"            {str(path)}  has: {value}\n"
+                            output += (
+                                f"            {str(os.path.relpath(path,root))}  has: {value}\n"
+                            )
             self.logger.info(
                 f"Found {len(sorted_folders)} directories/files for measure {measure_name}"
             )

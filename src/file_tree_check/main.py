@@ -50,6 +50,8 @@ def _arg_parser():
     pars = argparse.ArgumentParser(description="Insert doc here")
     pars.add_argument("--start_location", type=str, help="Directory to explore")
     pars.add_argument("--config", type=str, help="Config file to use")
+    pars.add_argument("--output", type=str, help="Output directory to use")
+    pars.add_argument("--file_tree", type=str, help="File tree to use")
     console_log = pars.add_mutually_exclusive_group()
     console_log.add_argument(
         "-v",
@@ -67,6 +69,59 @@ def _arg_parser():
         default=False,
         help="Print debug level logging to the console",
     )
+    pars.add_argument("--use_search_criteria", type=str, default="yes", help="Use search criteria")
+    pars.add_argument(
+        "--regular_expression_search_criteria",
+        type=str,
+        default=".*json",
+        help="Regular expression search criteria",
+    )
+    pars.add_argument("-ff", "--filter_files", type=str, default="no", help="Filter files")
+    pars.add_argument(
+        "-fd", "--filter_directories", type=str, default="no", help="Filter directories"
+    )
+    pars.add_argument("--filter_hidden", type=str, default="yes", help="Filter hidden")
+    pars.add_argument("--filter_list", type=str, default="yes", help="Filter list")
+    pars.add_argument(
+        "--ignore_list",
+        type=str,
+        default="code,logs,sourcedata,bids_dataset",
+        help="List of files/directories to ignore. Separate names with commas.",
+    )
+    pars.add_argument("--file_count", type=str, default="yes", help="File count")
+    pars.add_argument("--dir_count", type=str, default="no", help="Directory count")
+    pars.add_argument("--file_size", type=str, default="yes", help="File size")
+    pars.add_argument("--modified_time", type=str, default="no", help="Modified time")
+    pars.add_argument("--create_plots", type=str, default="no", help="Create plots")
+    pars.add_argument(
+        "--number_of_plot_per_measure", type=int, default=6, help="Number of plot per measure"
+    )
+    pars.add_argument("--print_plots", type=str, default="yes", help="Print plots")
+    pars.add_argument("--save_plots", type=str, default="yes", help="Save plots")
+    pars.add_argument("--image_path", type=str, default="./results/plots.png", help="Image path")
+    pars.add_argument("--create_summary", type=str, default="yes", help="Create summary")
+    pars.add_argument(
+        "--summary_output_path",
+        type=str,
+        default="./results/Summary.txt",
+        help="Summary output path",
+    )
+    pars.add_argument("--create_text_tree", type=str, default="yes", help="Create text tree")
+    pars.add_argument(
+        "--tree_output_path", type=str, default="./results/File_Tree.txt", help="Tree output path"
+    )
+    pars.add_argument("--create_csv", type=str, default="yes", help="Create csv")
+    pars.add_argument(
+        "--csv_output_path", type=str, default="./results/Data.csv", help="CSV output path"
+    )
+    pars.add_argument("--get_configurations", type=str, default="yes", help="Get configurations")
+    pars.add_argument("--target_depth ", type=int, default=4, help="Target depth")
+    pars.add_argument("--get_depth_range ", type=str, default="yes", help="Get depth range")
+    pars.add_argument("--start_depth ", type=int, default=1, help="Start depth")
+    pars.add_argument("--end_depth ", type=int, default=5, help="End depth")
+    pars.add_argument("--limit_depth ", type=str, default="no", help="Limit depth")
+    pars.add_argument("--depth_limit ", type=int, default=4, help="Depth limit")
+    pars.add_argument("--file_size_deviation ", type=str, default="yes", help="File size deviation")
     return pars
 
 
@@ -596,6 +651,15 @@ def main():
         root = Path(config["Root"]["root_path"])
     logger.info(f"Target directory is : {root}")
 
+    if args.file_tree is not None:
+        tree = FileTree.read(args.file_tree)
+    else:
+        tree = (
+            FileTree.read(config["Root"]["file_tree"])
+            if config["Root"].getboolean("use_file_tree")
+            else None
+        )
+
     logger.debug("Initializing variables from config file")
     identifier = IdentifierEngine(
         config["Categorization"]["regular_expression_file"],
@@ -629,12 +693,6 @@ def main():
     logger.info(
         f"Output file paths: Summary:'{str(output.summary)}', "
         f"Tree:'{str(output.tree)}', CSV:'{str(output.csv)}'"
-    )
-
-    tree = (
-        FileTree.read(config["Root"]["file_tree"])
-        if config["Root"].getboolean("use_file_tree")
-        else None
     )
 
     logger.debug("Launching exploration of the target directory")
@@ -672,11 +730,14 @@ def main():
 
     logger.info(
         f"Retrieved {len(stat_dict)} measures for "
-        f"{len(stat_dict['file_count'])} different directory name"
+        f"{len(list(stat_dict.values())[0])} different directory name"
     )
     logger.debug("Creating instance of StatBuilder with the measures")
-
-    stat_builder = StatBuilder(stat_dict, measure_list, deviation=True)
+    size_average = config["Measures_Averaging"].getfloat("size_rounding_percentage")
+    time_average = config["Measures_Averaging"].getfloat("time_rounding_seconds")
+    stat_builder = StatBuilder(
+        stat_dict, measure_list, size_averaging=size_average, time_averaging=time_average
+    )
 
     vis_config = config["Visualization"]
     if vis_config.getboolean("create_plots"):

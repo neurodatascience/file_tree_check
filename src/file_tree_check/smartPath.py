@@ -7,6 +7,7 @@ from pathlib import Path
 
 from file_tree import FileTree
 from file_tree import Template
+from file_tree.template import Literal
 
 
 class SmartPath(ABC):
@@ -89,16 +90,29 @@ class SmartPath(ABC):
                 templates = tree._templates.items()
         else:
             templates = tree._templates.items()
-
+        span = 0
+        temp_late = None
         for template in templates:
             if template[1].unique_part == "." or template[1].unique_part is None:
                 continue
             regex = self.parse_string_to_regex(template[1].unique_part)
             match = re.match(regex, path.name)
             if match is not None and match[0] != "":
-                return template[0]
+                if match.span()[1] > span:
+                    span = match.span()[1]
+                    temp_late = template
+                if "/" in template[1].unique_part:
+                    self.unique_config(tree, template[1])
+        return temp_late[0] if temp_late is not None else path.name
 
-        return path.name
+    def unique_config(
+        self, tree: FileTree | None, template: Template | None, path: str | Path
+    ) -> dict:
+        if template is not None:
+            for part in template._parts.parts:
+                if part is Literal:
+                    continue
+        return None
 
     def my_children(self, tree: FileTree | None, parent_template: Template | None) -> dict:
         children = {}
