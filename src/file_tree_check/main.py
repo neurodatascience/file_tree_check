@@ -16,9 +16,7 @@ from smartPath import SmartPath
 from statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
-CONFIG_PATH = (
-    r"C:\Users\James\Github\file-tree-check\file_tree_check\src\file_tree_check\config.ini"
-)
+CONFIG_PATH = Path(__file__).parent / "config.ini"
 LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
@@ -654,8 +652,9 @@ def main():
     if args.file_tree is not None:
         tree = FileTree.read(args.file_tree)
     else:
+        cwd = Path.cwd()
         tree = (
-            FileTree.read(config["Root"]["file_tree"])
+            FileTree.read(cwd / config["Root"]["file_tree"])
             if config["Root"].getboolean("use_file_tree")
             else None
         )
