@@ -8,6 +8,7 @@ import os
 import re
 from pathlib import Path
 
+from _parser import Parser
 from file_tree import FileTree
 from identifierEngine import IdentifierEngine
 from smartDirectoryPath import SmartDirectoryPath
@@ -579,23 +580,40 @@ class Output:
 
     def __init__(self, config: configparser):
         self.summary = (
-            Path(config["Output"]["summary_output_path"])
+            Path(config["Output"]["summary_path"])
             if config["Output"].getboolean("create_summary")
             else None
         )
         self.tree = (
-            Path(config["Output"]["tree_output_path"])
+            Path(config["Output"]["text_tree_path"])
             if config["Output"].getboolean("create_text_tree")
             else None
         )
         self.csv = (
-            Path(config["Output"]["csv_output_path"])
+            Path(config["Output"]["csv_path"])
             if config["Output"].getboolean("create_csv")
             else None
         )
 
 
 ""
+
+
+class Configuration2:
+    """Helper class for configuration."""
+
+    def __init__(self, pars: Parser):
+        self.get_configurations = pars.get_configurations
+        self.target_depth = pars.target_depth
+        self.depth_range = pars.use_depth_range
+        if self.depth_range:
+            self.start_depth = pars.range_start
+            self.end_depth = pars.range_end
+        else:
+            self.start_depth = None
+            self.end_depth = None
+        self.limit_depth = pars.limit_depth
+        self.depth_limit = pars.depth_limit if self.limit_depth else None
 
 
 class Configuration:
@@ -617,6 +635,104 @@ class Configuration:
         )
 
 
+def main2():
+    pars = Parser()
+    pars = pars.make_parser(Path(CONFIG_PATH))
+
+    if not Path(pars.log_path).exists():
+        Path(pars.log_path).parent.mkdir(parents=True, exist_ok=True)
+        Path(pars.log_path).touch()
+
+    logger = _create_logger(
+        pars.log_path, pars.log_level, is_verbose=pars.verbose, is_debug=pars.debug
+    )
+    logger.debug("Initializing variables from arguments")
+
+    logger.debug(f"Target directory is : {pars.root_path}")
+    # TO_DO make this more rigorously validated
+    try:
+        tree = FileTree.read(pars.file_tree_path)
+    except TypeError:
+        print("got here")
+        logger.warning(
+            f"File tree {pars.file_tree_path} not found, please enter valid path to tree."
+        )
+        exit(1)
+    logger.debug(f"File tree is : {pars.file_tree_path}")
+
+    identifier = IdentifierEngine(pars.regex_file, pars.regex_directory, pars.check_file)
+
+    if pars.use_search:
+        try:
+            pars.search_expression = re.compile(pars.search_expression)
+        except TypeError as e:
+            logger.warning(
+                f"Search Criteria {pars.search_expression} \
+                is invalid, resuming without criteria: {e}"
+            )
+            pars.search_expression = None
+
+    configuration = Configuration2(pars)
+
+    logger.info(
+        f"Output file paths: Summary: {pars.summary_path},\
+          Tree: {pars.tree_path},\
+            CSV: {pars.csv_path}"
+    )
+    logger.debug("Launching exploration of target directory.")
+
+    paths = generate_tree(
+        pars.root_path,
+        criteria=pars.search_expression,
+        filter_files=pars.filter_files,
+        filter_dir=pars.filter_directories,
+        depth_limit=pars.depth_limit,
+        filter_hidden=pars.filter_hidden,
+        ignore=pars.filter_custom_list,
+        file_tree=tree,
+    )
+
+    stat_dict, configurations = get_data_from_paths(
+        paths,
+        identifier,
+        output_path=pars.tree_path,
+        measures=pars.measures,
+        configuration=configuration,
+        pipe_file_data=pars.pipe_data,
+        tree=tree,
+    )
+    logger.info(
+        f"Retrieved {len(stat_dict)} measures for "
+        f"{len(list(stat_dict.values())[0])} different directory name"
+    )
+    logger.debug("Creating instance of StatBuilder with the measures")
+    stat_builder = StatBuilder(
+        stat_dict,
+        pars.measures,
+        pars.file_size_rounding_percentage,
+        pars.modified_time_rounding_margin,
+    )
+
+    if pars.create_plots:
+        logger.debug("Giving the data to the graphic creator")
+        image_path = Path(pars.image_path) if pars.save_plots else None
+
+        stat_builder.create_plots(
+            plots_per_measure=pars.num_plots,
+            save_path=image_path,
+            show_plot=pars.print_plots,
+        )
+    if pars.summary_path is not None:
+        logger.debug("Creating summary")
+        with open(pars.summary_path, "w") as f:
+            f.write(stat_builder.create_summary(Path(pars.root_path), configurations))
+    if pars.csv_path is not None:
+        logger.debug("Creating CSV")
+        stat_builder.create_csv(pars.csv_path)
+
+    logger.info("Script executed successfully.")
+
+
 def main():
     """Execute sequence of the script."""
     # Parsing the config file
@@ -629,14 +745,14 @@ def main():
         config.read(Path(args.config))
     else:
         config.read(Path(CONFIG_PATH))
-    if not Path(config["Logging"]["file_log_path"]).exists():
-        Path(config["Logging"]["file_log_path"]).parent.mkdir(parents=True, exist_ok=True)
-        Path(config["Logging"]["file_log_path"]).touch()
+    if not Path(config["Logging"]["log_path"]).exists():
+        Path(config["Logging"]["log_path"]).parent.mkdir(parents=True, exist_ok=True)
+        Path(config["Logging"]["log_path"]).touch()
 
     # Initializing logger
     logger = _create_logger(
-        config["Logging"]["file_log_path"],
-        config["Logging"]["file_log_level"],
+        config["Logging"]["log_path"],
+        config["Logging"]["log_level"],
         is_verbose=args.verbose,
         is_debug=args.debug,
     )
@@ -646,7 +762,7 @@ def main():
     if args.start_location is not None:
         root = Path(args.start_location)
     else:
-        root = Path(config["Root"]["root_path"])
+        root = Path(config["Input"]["root_path"])
     logger.info(f"Target directory is : {root}")
 
     if args.file_tree is not None:
@@ -654,8 +770,8 @@ def main():
     else:
         cwd = Path.cwd()
         tree = (
-            FileTree.read(cwd / config["Root"]["file_tree"])
-            if config["Root"].getboolean("use_file_tree")
+            FileTree.read(cwd / config["Input"]["file_tree_path"])
+            if config["Input"].getboolean("use_file_tree")
             else None
         )
 
@@ -668,8 +784,8 @@ def main():
 
     if config["Search_Criteria"].getboolean("use_search_criteria"):
         criteria = config["Search_Criteria"]["regular_expression_search_criteria"]
-        filter_files = config["Search_Criteria"].getboolean("filter_files")
-        filter_dir = config["Search_Criteria"].getboolean("filter_directories")
+        filter_files = config["Filter"].getboolean("filter_files")
+        filter_dir = config["Filter"].getboolean("filter_directories")
 
         try:
             criteria = re.compile(criteria)
@@ -681,11 +797,12 @@ def main():
         filter_files = False
         filter_dir = False
 
-    filter_hidden = config["Hidden"].getboolean("filter_hidden")
+    filter_hidden = config["Filter"].getboolean("filter_hidden")
 
-    if config["Hidden"].getboolean("filter_list"):
-        ignore = config["Hidden"]["ignore_list"].split(",")
-
+    if config["Filter"].getboolean("filter_list"):
+        ignore = config["Filter"]["ignore_list"].split(",")
+    else:
+        ignore = []
     output = Output(config)
     configuration = Configuration(config)
 
@@ -722,7 +839,7 @@ def main():
         output_path=output.tree,
         measures=measure_list,
         configuration=configuration,
-        pipe_file_data=config["Pipeline"].getboolean("pipe file data"),
+        pipe_file_data=config["Output.Piping"].getboolean("pipe_data"),
         tree=tree,
         templates=templates,
     )
@@ -738,7 +855,7 @@ def main():
         stat_dict, measure_list, size_averaging=size_average, time_averaging=time_average
     )
 
-    vis_config = config["Visualization"]
+    vis_config = config["Output.Visualization"]
     if vis_config.getboolean("create_plots"):
         logger.debug("Giving the data to the graphic creator")
         if vis_config.getboolean("save_plots"):
@@ -764,4 +881,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main2()
