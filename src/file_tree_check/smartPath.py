@@ -102,7 +102,8 @@ class SmartPath(ABC):
                     span = match.span()[1]
                     temp_late = template
                 if "/" in template[1].unique_part:
-                    self.unique_config(tree, template[1])
+                    continue
+        #             self.unique_config(tree, template[1])
         return temp_late[0] if temp_late is not None else path.name
 
     def unique_config(

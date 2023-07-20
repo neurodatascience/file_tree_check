@@ -1,0 +1,25 @@
+ext=.nii.gz
+dataset_description.json
+participants.tsv
+README (readme)
+CHANGES (changes)
+LICENSE (license)
+logs
+sub-{participant}.html (report)
+sub-{participant} (folder)
+    [ses-{session}]
+        figures
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}]_desc-summary_{suffix}.svg
+        log
+        anat (anat_dir)
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_{suffix}{ext}
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_T1w{ext}
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_mask{ext}
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_dseg{ext}
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_probseg{ext}
+            sub-{participant}[_ses-{session}][_acq-{acq}][_ce-{ce}][_rec-{rec}][_run-{run_index}]_from-{from}_to-{to}_mode-{mode}_xfm{ext}
+        func (func_dir)
+            sub-{participant}[_ses-{session}]_task-{task}[_acq-{acq}][_ce-{ce}][_dir-{dir}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_{suffix}{ext}
+            sub-{participant}[_ses-{session}]_task-{task}[_acq-{acq}][_ce-{ce}][_dir-{dir}][_rec-{rec}][_run-{run_index}][_desc-{desc}]_timeseries{ext}
+            sub-{participant}[_ses-{session}]_task-{task}[_acq-{acq}][_ce-{ce}][_dir-{dir}][_rec-{rec}][_run-{run_index}][_space-{space}][_res-{res}][_den-{label}][_desc-{desc}]_mask{ext}
+            sub-{participant}[_ses-{session}]_task-{task}[_acq-{acq}][_ce-{ce}][_dir-{dir}][_rec-{rec}][_run-{run_index}]_from-{from}_to-{to}_mode-{mode}_xfm{ext}

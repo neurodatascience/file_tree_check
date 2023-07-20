@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import argparse
 import configparser
+import logging
+import os
 from pathlib import Path
 
 
 class Parser:
     """Class to parse command line arguments and configuration file."""
 
-    DEFAULT_CONFIG_PATH = Path(__file__).parent / "config.ini"
+    DEFAULT_CONFIG_PATH = os.path.join(Path(__file__).parent, "config.ini")
 
     def __init__(self) -> None:
+        self.logger = logging.getLogger(f"file_tree_check.{__name__}")
         # Search Criteria
         self.use_search = False
         self.search_expression = ""
@@ -41,6 +44,7 @@ class Parser:
         self.print_plots = False
         self.save_plots = False
         self.pipe_data = False
+        self.output_dir = None
         # Configurations
         self.get_configurations = False
         self.target_depth = -1
@@ -51,12 +55,12 @@ class Parser:
         self.depth_limit = -1
         # Logging
         self.log_level = 0
-        self.log_path = ""
+        self.log_path = None
         self.verbose = False
         self.debug = False
         # Input
-        self.root_path = ""
-        self.file_tree_path = ""
+        self.root_path = None
+        self.file_tree_path = None
         # To Be Deprecated
         self.regex_file = ""
         self.regex_directory = ""
@@ -76,9 +80,11 @@ class Parser:
         self,
     ) -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser()
-        parser.add_argument("-c", "--config", type=str, help="Path to configuration file.")
-        parser.add_argument("-r", "--root", type=str, help="Path to root directory to be explored.")
-        parser.add_argument("-f", "--file_tree", type=str, help="Path to file tree to be used.")
+        parser.add_argument("-c", "--config", type=Path, help="Path to configuration file.")
+        parser.add_argument(
+            "-r", "--root", type=Path, help="Path to root directory to be explored."
+        )
+        parser.add_argument("-f", "--file_tree", type=Path, help="Path to file tree to be used.")
         # Only ask for search criteria if none given assume option is off,
         #  as search does not work, won't add for now
         # parser.add_argument("-s", "--search", type=str,
@@ -139,7 +145,7 @@ class Parser:
         parser.add_argument(
             "-o",
             "--output",
-            type=str,
+            type=Path,
             help="Path to output directory. Relevant output files will be overwritten/created.",
         )
         parser.add_argument(
@@ -188,7 +194,7 @@ class Parser:
             "-dl", "--depth_limit", type=int, help="Specify depth limit for directory exploration."
         )
         # Logging
-        parser.add_argument("-l", "--log", type=str, help="Path to log file.")
+        parser.add_argument("-l", "--log", type=Path, help="Path to log file.")
         parser.add_argument("-ll", "--log_level", type=int, help="Specify log level.")
         parser.add_argument(
             "-v", "--verbose", help="If toggled then verbose mode will be on.", action="store_true"
@@ -249,7 +255,9 @@ class Parser:
         self.range_start = config["Configurations"].getint("range_start")
         self.range_end = config["Configurations"].getint("range_end")
         self.limit_depth = config["Configurations"].getboolean("limit_depth")
-        self.depth_limit = config["Configurations"].getint("depth_limit")
+        self.depth_limit = (
+            config["Configurations"].getint("depth_limit") if self.limit_depth else None
+        )
         # Logging
         self.log_level = config["Logging"]["log_level"]
         self.log_path = config["Logging"]["log_path"]
@@ -260,6 +268,36 @@ class Parser:
         self.regex_file = config["Categorization"]["regular_expression_file"]
         self.regex_directory = config["Categorization"]["regular_expression_directory"]
         self.check_file = config["Categorization"].getboolean("check_file")
+
+    def output_handler(
+        self,
+        output_dir: str,
+    ):
+        if not Path(output_dir).exists():
+            Path(output_dir).mkdir(parents=True, exist_ok=True)
+            Path(output_dir).touch()
+        if self.summary_path is not None and self.create_summary:
+            self.summary_path = os.path.join(output_dir, Path(self.summary_path).name)
+        if self.tree_path is not None and self.create_tree:
+            self.tree_path = os.path.join(output_dir, Path(self.tree_path).name)
+        if self.csv_path is not None and self.create_csv:
+            self.csv_path = os.path.join(output_dir, Path(self.csv_path).name)
+        if self.log_path is not None:
+            self.log_path = os.path.join(output_dir, Path(self.log_path).name)
+
+    def file_tree_handler(
+        self,
+        tree: str,
+    ):
+        if ".tree" not in tree.name:
+            search_dir = os.path.join(Path(__file__).parent, "trees")
+            for child in os.listdir(search_dir):
+                if tree.name == child.split(".")[0]:
+                    self.file_tree_path = os.path.join(search_dir, child)
+                    return
+        else:
+            self.file_tree_path = tree
+            self.logger.info("No default file_tree match found, input file_tree is considered path")
 
     def resolve_pars(self, args: argparse.Namespace):  # noqa: C901
         if args.filter_files:
@@ -289,7 +327,6 @@ class Parser:
             self.measures.append("modified_time")
             if args.time_round is not None:
                 self.modified_time_rounding_margin = args.time_round
-        # to do outputs
         if args.summary:
             self.create_summary = True
         if args.tree:
@@ -311,6 +348,8 @@ class Parser:
             self.depth_limit = args.depth_limit
         if args.log is not None:
             self.log_path = args.log
+        if args.output is not None:
+            self.output_handler(args.output)
         if args.log_level is not None:
             self.log_level = args.log_level
         if args.verbose is not None:
@@ -320,7 +359,7 @@ class Parser:
         if args.root is not None:
             self.root_path = args.root
         if args.file_tree is not None:
-            self.file_tree_path = args.file_tree
+            self.file_tree_handler(args.file_tree)
         else:
             cwd = Path.cwd()
             self.file_tree_path = cwd / self.file_tree_path
