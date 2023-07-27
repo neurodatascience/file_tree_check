@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from file_tree_check.smartDirectoryPath import SmartDirectoryPath
 from file_tree_check.smartFilePath import SmartFilePath
 
