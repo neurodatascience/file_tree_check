@@ -2,5 +2,5 @@
 # don't change, don't track in version control
 from __future__ import annotations
 
-__version__ = version = "0.1.dev91+g5838b20.d20230727"
-__version_tuple__ = version_tuple = (0, 1, "dev91", "g5838b20.d20230727")
+__version__ = version = "0.1.dev94+g912b665.d20230727"
+__version_tuple__ = version_tuple = (0, 1, "dev94", "g912b665.d20230727")
