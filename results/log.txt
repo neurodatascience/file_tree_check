@@ -1,3 +1,0 @@
-07-27 18:27 file_tree_check DEBUG    Initializing variables from arguments
-07-27 18:27 file_tree_check DEBUG    Target directory is : tests/test_data/dataset1
-07-27 18:27 file_tree_check WARNING  File tree /home/remi/github/file_tree_check/C:\Users\James\Github\file-tree-check\file_tree_check\src\file_tree_check\trees\bids_raw.tree not found, please enter valid path to tree.
