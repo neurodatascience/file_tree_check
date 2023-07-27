@@ -42,7 +42,9 @@ identifier. (deprecated)
 The regular expression to filter the identifier from the name of directories.
 (deprecated)
 
+
 #### Search Criteria (search criteria use is not recommended at this time)
+
 
 ##### use_search_criteria = bool
 
@@ -198,7 +200,7 @@ is in seconds (epoch time).
 ##### get_configurations = bool
 
 Whether or not to compare the configuration of the folders in the repeating
-structure. Will display in summary the different configurations for a
+structure. Will display in summary the different configurations for a 
 directory type. The configuration is a list of the directories and files
 within the directory.
 
@@ -211,6 +213,7 @@ directly under the target folder given to the script, depth=1)
 ##### use_depth_range = bool
 
 Whether or not to specify a range of depths to compare configurations.
+
 Must be used in conjunction with range_start and range_end.
 
 ##### range_start = int
@@ -226,9 +229,6 @@ The end of range to compare configurations. This is inclusive as well.
 
 Whether or not to limit depth of tree discovery. This could be useful when dealing
 with very large trees and not looking at contents beyond a certain depth.
-
-##### depth_limit = int
-
 The specified depth limit. This is inclusive so if depth limit = 1 then
 children of root directory will be found but nothing deeper than that.
 
@@ -268,3 +268,4 @@ on file_tree usage.
 ##### file_tree_path = Path
 
 Path to file_tree to be used.
+
