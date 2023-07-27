@@ -27,7 +27,7 @@ tests = ["file_tree_check[test]"]
 dev = ["file_tree_check[doc,test]"]
 
 [project.scripts]
-file_tree_check = "file_tree_check.main:main"
+tree_check = "file_tree_check.main:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["file_tree_check"]

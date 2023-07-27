@@ -139,6 +139,7 @@ def generate_tree(
     file_tree: FileTree
         The FileTree object that will be used to template the file structure and assign
         identities to each file and directory.
+
     Yields
     ------
     generator object
@@ -278,6 +279,7 @@ def get_data_from_paths(
 
     configuration: Configuration
         configuration object that contains the following attributes:
+
         - target_depth: int passed to add_configuration() to specify which depth of folder.
         - get_configurations: bool passed to add_configuration() to specify whether to get
           the configuration.
@@ -300,6 +302,7 @@ def get_data_from_paths(
 
     tree: FileTree
         The FileTree object used for templating not used currently.
+
     Returns
     -------
     stat_dict: dict
