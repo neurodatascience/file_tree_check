@@ -200,7 +200,7 @@ is in seconds (epoch time).
 ##### get_configurations = bool
 
 Whether or not to compare the configuration of the folders in the repeating
-structure. Will display in summary the different configurations for a 
+structure. Will display in summary the different configurations for a
 directory type. The configuration is a list of the directories and files
 within the directory.
 
@@ -268,4 +268,3 @@ on file_tree usage.
 ##### file_tree_path = Path
 
 Path to file_tree to be used.
-

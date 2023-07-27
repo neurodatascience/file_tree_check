@@ -340,7 +340,6 @@ def get_data_from_paths(
     stat_dict = {measure_name: {} for measure_name in measures}
     if output_path is None:
         for path in paths:
-
             stat_dict, configurations = data_from_paths_helper(
                 path=path,
                 measures=measures,
