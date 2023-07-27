@@ -7,30 +7,21 @@ name = "file_tree_check"
 description = "File checking script in a repeating folder organization e.g. BIDS."
 readme = "README.md"
 requires-python = ">=3.8"
-license = { file="LICENSE.txt" }
-authors = [
-  { name = "Bertrand Toutée", email = "bertrand.toutee@gmail.com"},
-]
+license = { file = "LICENSE.txt" }
+authors = [{ name = "Bertrand Toutée", email = "bertrand.toutee@gmail.com" }]
 dynamic = ["version"]
-dependencies = [
-  "seaborn",
-  "matplotlib",
-  "file_tree"
-]
+dependencies = ["seaborn", "matplotlib", "file_tree"]
 
 [project.optional-dependencies]
 doc = [
   "sphinx",
+  "sphinx-argparse",
+  "sphinx-copybutton",
   "sphinx_rtd_theme",
   "myst-parser",
-  "sphinx-copybutton",
   "rstcheck",
-  "sphinx-argparse",
 ]
-test = [
-  "pytest",
-  "coverage[toml]",
-]
+test = ["pytest", "coverage[toml]"]
 docs = ["file_tree_check[doc]"]
 tests = ["file_tree_check[test]"]
 dev = ["file_tree_check[doc,test]"]
@@ -39,20 +30,20 @@ dev = ["file_tree_check[doc,test]"]
 file_tree_check = "file_tree_check.main:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src.file_tree_check"]
+packages = ["file_tree_check"]
 
 [tool.hatch.version]
 source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "src/file_tree_check/_version.py"
+version-file = "file_tree_check/_version.py"
 
 [tool.pytest.ini_options]
 addopts = "-ra -vv"
 
 [tool.coverage.run]
 branch = true
-source = ["src/file_tree_check/"]
+source = ["file_tree_check/"]
 
 
 [tool.codespell]

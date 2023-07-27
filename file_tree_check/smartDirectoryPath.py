@@ -4,7 +4,8 @@ import os
 from pathlib import Path
 
 from file_tree import FileTree
-from smartPath import SmartPath
+
+from .smartPath import SmartPath
 
 
 class SmartDirectoryPath(SmartPath):
