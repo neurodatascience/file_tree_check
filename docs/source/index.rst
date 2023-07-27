@@ -5,11 +5,14 @@ Welcome to file_tree_check's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   config
+   usage
    examples
+   config
    faq
    glossary
+   file_tree_check
    modules
+   usage_notes
 
 
 Indices and tables

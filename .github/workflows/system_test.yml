@@ -32,4 +32,4 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[dev]
     - name: System test
-      run: python src/file_tree_check/main.py tests/test_data/derivatives1
+      run: tree_check -r tests/test_data/dataset1

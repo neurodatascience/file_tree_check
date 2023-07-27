@@ -5,12 +5,13 @@ import logging
 import re
 from pathlib import Path
 
-from _parser import Parser
 from file_tree import FileTree
-from smartDirectoryPath import SmartDirectoryPath
-from smartFilePath import SmartFilePath
-from smartPath import SmartPath
-from statBuilder import StatBuilder
+
+from ._parser import Parser
+from .smartDirectoryPath import SmartDirectoryPath
+from .smartFilePath import SmartFilePath
+from .smartPath import SmartPath
+from .statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
 CONFIG_PATH = Path(__file__).parent / "config.ini"
@@ -138,6 +139,7 @@ def generate_tree(
     file_tree: FileTree
         The FileTree object that will be used to template the file structure and assign
         identities to each file and directory.
+
     Yields
     ------
     generator object
@@ -277,6 +279,7 @@ def get_data_from_paths(
 
     configuration: Configuration
         configuration object that contains the following attributes:
+
         - target_depth: int passed to add_configuration() to specify which depth of folder.
         - get_configurations: bool passed to add_configuration() to specify whether to get
           the configuration.
@@ -299,6 +302,7 @@ def get_data_from_paths(
 
     tree: FileTree
         The FileTree object used for templating not used currently.
+
     Returns
     -------
     stat_dict: dict
