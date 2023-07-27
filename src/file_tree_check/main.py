@@ -1,15 +1,12 @@
 """Explore a file structure and build of distribution of file numbers and file size."""
 from __future__ import annotations
 
-import argparse
-import configparser
 import logging
 import re
 from pathlib import Path
 
 from _parser import Parser
 from file_tree import FileTree
-from identifierEngine import IdentifierEngine
 from smartDirectoryPath import SmartDirectoryPath
 from smartFilePath import SmartFilePath
 from smartPath import SmartPath
@@ -21,106 +18,6 @@ LOGGER_NAME = "file_tree_check"
 LOGGER_FILE_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 LOGGER_CONSOLE_FORMAT = "%(name)-12s %(levelname)-8s %(message)s"
 FILENAME_MAX_LENGTH = 60
-
-
-def _arg_parser():
-    """Extract the arguments given to the script.
-
-    Arguments are the part given after the main.py call in the command line.
-
-    Only 1 required argument:
-    the path to the folder to be used as the root for the analysis.
-    2 optional and mutually exclusive arguments:
-    "verbose" and "debug" to print logs of various levels to the console.
-
-    If neither "verbose" nor "debug" is given, logs will not be output
-    to the console (or other standard output)
-    although they could be saved in a file via an option in the config files.
-    "debug" will show more detailed information to the console compared to "verbose".
-    Activating the log to console with either "verbose" or "debug"
-    is independent and not mutually exclusive to the logs to file.
-
-    Returns
-    -------
-    argparse.ArgumentParser
-        A parser object to be used in main() containing the argument data.
-    """
-    pars = argparse.ArgumentParser(description="Insert doc here")
-    pars.add_argument("--start_location", type=str, help="Directory to explore")
-    pars.add_argument("--config", type=str, help="Config file to use")
-    pars.add_argument("--output", type=str, help="Output directory to use")
-    pars.add_argument("--file_tree", type=str, help="File tree to use")
-    console_log = pars.add_mutually_exclusive_group()
-    console_log.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbose",
-        action="store_true",
-        default=False,
-        help="Print info level logging to the console",
-    )
-    console_log.add_argument(
-        "-d",
-        "--debug",
-        dest="debug",
-        action="store_true",
-        default=False,
-        help="Print debug level logging to the console",
-    )
-    pars.add_argument("--use_search_criteria", type=str, default="yes", help="Use search criteria")
-    pars.add_argument(
-        "--regular_expression_search_criteria",
-        type=str,
-        default=".*json",
-        help="Regular expression search criteria",
-    )
-    pars.add_argument("-ff", "--filter_files", type=str, default="no", help="Filter files")
-    pars.add_argument(
-        "-fd", "--filter_directories", type=str, default="no", help="Filter directories"
-    )
-    pars.add_argument("--filter_hidden", type=str, default="yes", help="Filter hidden")
-    pars.add_argument("--filter_list", type=str, default="yes", help="Filter list")
-    pars.add_argument(
-        "--ignore_list",
-        type=str,
-        default="code,logs,sourcedata,bids_dataset",
-        help="List of files/directories to ignore. Separate names with commas.",
-    )
-    pars.add_argument("--file_count", type=str, default="yes", help="File count")
-    pars.add_argument("--dir_count", type=str, default="no", help="Directory count")
-    pars.add_argument("--file_size", type=str, default="yes", help="File size")
-    pars.add_argument("--modified_time", type=str, default="no", help="Modified time")
-    pars.add_argument("--create_plots", type=str, default="no", help="Create plots")
-    pars.add_argument(
-        "--number_of_plot_per_measure", type=int, default=6, help="Number of plot per measure"
-    )
-    pars.add_argument("--print_plots", type=str, default="yes", help="Print plots")
-    pars.add_argument("--save_plots", type=str, default="yes", help="Save plots")
-    pars.add_argument("--image_path", type=str, default="./results/plots.png", help="Image path")
-    pars.add_argument("--create_summary", type=str, default="yes", help="Create summary")
-    pars.add_argument(
-        "--summary_output_path",
-        type=str,
-        default="./results/Summary.txt",
-        help="Summary output path",
-    )
-    pars.add_argument("--create_text_tree", type=str, default="yes", help="Create text tree")
-    pars.add_argument(
-        "--tree_output_path", type=str, default="./results/File_Tree.txt", help="Tree output path"
-    )
-    pars.add_argument("--create_csv", type=str, default="yes", help="Create csv")
-    pars.add_argument(
-        "--csv_output_path", type=str, default="./results/Data.csv", help="CSV output path"
-    )
-    pars.add_argument("--get_configurations", type=str, default="yes", help="Get configurations")
-    pars.add_argument("--target_depth ", type=int, default=4, help="Target depth")
-    pars.add_argument("--get_depth_range ", type=str, default="yes", help="Get depth range")
-    pars.add_argument("--start_depth ", type=int, default=1, help="Start depth")
-    pars.add_argument("--end_depth ", type=int, default=5, help="End depth")
-    pars.add_argument("--limit_depth ", type=str, default="no", help="Limit depth")
-    pars.add_argument("--depth_limit ", type=int, default=4, help="Depth limit")
-    pars.add_argument("--file_size_deviation ", type=str, default="yes", help="File size deviation")
-    return pars
 
 
 def _create_logger(
@@ -178,14 +75,12 @@ def _create_logger(
 
 def generate_tree(
     root: str | Path,
-    parent: SmartPath | None = None,
-    is_last: bool = False,
     criteria: re.Pattern | None = None,
     filter_files: bool = False,
     filter_dir: bool = False,
     filter_hidden: bool = False,
-    ignore: list = None,
     depth_limit: int = None,
+    ignore: list = None,
     file_tree: FileTree = None,
 ):  # noqa
     """Create a SmartFilePath or SmartDirectoryPath generator object. # noqa: D410 D411 D400
@@ -257,91 +152,14 @@ def generate_tree(
         on a SmartPath instance of every file and
         directory after only having to call ourself generate_tree() once on the target folder.
     """
-    logger = logging.getLogger(LOGGER_NAME)
-    root = Path(str(root))
-
-    # Begin by generating the root path
-    smart_root = SmartDirectoryPath(
-        root,
-        parent,
-        is_last,
-        file_tree,
-    )
-    yield smart_root
-    if depth_limit is not None and smart_root.depth >= depth_limit:
-        return
-    # Get a list of every file/directory in the root and iterate over them
-    if criteria is not None:
-        filtered_children = [
-            path
-            for path in root.iterdir()
-            if criteria.match(str(path.name)) is not None
-            or (path.is_dir() and not filter_dir)
-            or (path.is_file() and not filter_files)
-        ]
-        children = sorted(filtered_children, key=lambda s: str(s).lower())
-    else:
-        children = sorted(list(root.iterdir()), key=lambda s: str(s).lower())
-
-    count = 1
-    for path in children:
-        try:
-            # Check if this path is the last children in its parent's directory
-            is_last = count == len(children)
-            # If the children is a directory, another instance of the method is called and
-            # its output is propagated up the generator
-            skip = any(path.name == ignore_name for ignore_name in ignore) or (
-                path.name.startswith(".") and filter_hidden
-            )
-            if not skip:
-                if path.is_dir():
-                    yield from generate_tree(
-                        path,
-                        parent=smart_root,
-                        is_last=is_last,
-                        criteria=criteria,
-                        filter_files=filter_files,
-                        filter_dir=filter_dir,
-                        filter_hidden=filter_hidden,
-                        ignore=ignore,
-                        depth_limit=depth_limit,
-                        file_tree=file_tree,
-                    )
-                # If the children is a file, generate a single instance of SmartPath
-                #  associated to its path
-                else:
-                    yield SmartFilePath(
-                        path,
-                        smart_root,
-                        is_last,
-                        file_tree,
-                    )
-                count += 1
-
-        except FileNotFoundError as e:
-            logger.warning("FileNotFoundError", e)
-            continue
-
-
-def generate_tree2(
-    root: str | Path,
-    criteria: re.Pattern | None = None,
-    filter_files: bool = False,
-    filter_dir: bool = False,
-    filter_hidden: bool = False,
-    depth_limit: int = None,
-    ignore: list = None,
-    file_tree: FileTree = None,
-):
     smart_root = SmartDirectoryPath(
         root,
         parent_smart_path=None,
         is_last=False,
         file_tree=file_tree,
     )
-    yield from generate_tree2_helper(
+    yield from generate_tree_actual(
         smart_root,
-        smart_root.parent,
         smart_root.is_last,
         criteria,
         filter_files,
@@ -353,9 +171,8 @@ def generate_tree2(
     )
 
 
-def generate_tree2_helper(
+def generate_tree_actual(
     smart_root: SmartDirectoryPath,
-    parent: SmartPath | None = None,
     is_last: bool = False,
     criteria: re.Pattern | None = None,
     filter_files: bool = False,
@@ -409,9 +226,8 @@ def generate_tree2_helper(
         try:
             path = child.path
             if path.is_dir():
-                yield from generate_tree2_helper(
+                yield from generate_tree_actual(
                     child,
-                    parent=smart_root,
                     is_last=is_last,
                     criteria=criteria,
                     filter_files=filter_files,
@@ -430,7 +246,6 @@ def generate_tree2_helper(
 
 def get_data_from_paths(
     paths,
-    identifier: IdentifierEngine,
     output_path: Path | None = None,
     measures: list[str] = [],
     configuration: Configuration | None = None,
@@ -527,7 +342,6 @@ def get_data_from_paths(
         for path in paths:
             stat_dict, configurations = data_from_paths_helper(
                 path=path,
-                identifier=identifier,
                 measures=measures,
                 configuration=configuration,
                 pipe_file_data=pipe_file_data,
@@ -540,7 +354,6 @@ def get_data_from_paths(
             for path in paths:
                 stat_dict, configurations = data_from_paths_helper(
                     path=path,
-                    identifier=identifier,
                     measures=measures,
                     configuration=configuration,
                     pipe_file_data=pipe_file_data,
@@ -555,7 +368,6 @@ def get_data_from_paths(
 
 def data_from_paths_helper(
     path: SmartPath,
-    identifier: IdentifierEngine,
     measures: list[str] = [],
     configuration: Configuration | None = None,
     pipe_file_data: bool = False,
@@ -574,7 +386,6 @@ def data_from_paths_helper(
         configurations = add_configuration(
             path,
             configurations,
-            identifier,
             target_depth=configuration.target_depth,
             depth_range=configuration.depth_range,
             start_depth=configuration.start_depth,
@@ -589,7 +400,6 @@ def data_from_paths_helper(
 def add_configuration(
     path: SmartPath,
     configurations: dict,
-    identifier: IdentifierEngine,
     target_depth: int | None = None,
     depth_range: bool = False,
     start_depth: int | None = None,
@@ -700,31 +510,7 @@ def add_configuration(
     return configurations
 
 
-class Output:
-    """Helper class for outputs."""
-
-    def __init__(self, config: configparser):
-        self.summary = (
-            Path(config["Output"]["summary_path"])
-            if config["Output"].getboolean("create_summary")
-            else None
-        )
-        self.tree = (
-            Path(config["Output"]["text_tree_path"])
-            if config["Output"].getboolean("create_text_tree")
-            else None
-        )
-        self.csv = (
-            Path(config["Output"]["csv_path"])
-            if config["Output"].getboolean("create_csv")
-            else None
-        )
-
-
-""
-
-
-class Configuration2:
+class Configuration:
     """Helper class for configuration.
 
     Stores configuration parameters for easier passing to get_data functions.
@@ -744,26 +530,7 @@ class Configuration2:
         self.depth_limit = pars.depth_limit if self.limit_depth else None
 
 
-class Configuration:
-    """Helper class for configuration."""
-
-    def __init__(self, config: configparser):
-        self.get_configurations = config["Configurations"].getboolean("get_configurations")
-        self.target_depth = config["Configurations"].getint("target_depth")
-        self.depth_range = config["Configurations"].getboolean("get_depth_range")
-        if self.depth_range:
-            self.start_depth = config["Configurations"].getint("start_depth")
-            self.end_depth = config["Configurations"].getint("end_depth")
-        else:
-            self.start_depth = None
-            self.end_depth = None
-        self.limit_depth = config["Configurations"].getboolean("limit_depth")
-        self.depth_limit = (
-            config["Configurations"].getint("depth_limit") if self.limit_depth else None
-        )
-
-
-def main2():
+def main():
     pars = Parser()
     pars = pars.make_parser(Path(CONFIG_PATH))
 
@@ -788,8 +555,6 @@ def main2():
         exit(1)
     logger.debug(f"File tree is : {pars.file_tree_path}")
 
-    identifier = IdentifierEngine(pars.regex_file, pars.regex_directory, pars.check_file)
-
     if pars.use_search:
         try:
             pars.search_expression = re.compile(pars.search_expression)
@@ -800,7 +565,7 @@ def main2():
             )
             pars.search_expression = None
 
-    configuration = Configuration2(pars)
+    configuration = Configuration(pars)
 
     logger.info(
         f"Output file paths: Summary: {pars.summary_path},\
@@ -809,7 +574,7 @@ def main2():
     )
     logger.debug("Launching exploration of target directory.")
 
-    paths = generate_tree2(
+    paths = generate_tree(
         pars.root_path,
         criteria=pars.search_expression,
         filter_files=pars.filter_files,
@@ -822,7 +587,6 @@ def main2():
 
     stat_dict, configurations = get_data_from_paths(
         paths,
-        identifier,
         output_path=pars.tree_path,
         measures=pars.measures,
         configuration=configuration,
@@ -861,152 +625,5 @@ def main2():
     logger.info("Script executed successfully.")
 
 
-def main():
-    """Execute sequence of the script."""
-    # Parsing the config file
-    config = configparser.ConfigParser()
-
-    # Parsing arguments
-    parser = _arg_parser()
-    args = parser.parse_args()
-    if args.config is not None:
-        config.read(Path(args.config))
-    else:
-        config.read(Path(CONFIG_PATH))
-    if not Path(config["Logging"]["log_path"]).exists():
-        Path(config["Logging"]["log_path"]).parent.mkdir(parents=True, exist_ok=True)
-        Path(config["Logging"]["log_path"]).touch()
-
-    # Initializing logger
-    logger = _create_logger(
-        config["Logging"]["log_path"],
-        config["Logging"]["log_level"],
-        is_verbose=args.verbose,
-        is_debug=args.debug,
-    )
-
-    logger.debug("Initializing variables from arguments")
-
-    if args.start_location is not None:
-        root = Path(args.start_location)
-    else:
-        root = Path(config["Input"]["root_path"])
-    logger.info(f"Target directory is : {root}")
-
-    if args.file_tree is not None:
-        tree = FileTree.read(args.file_tree)
-    else:
-        cwd = Path.cwd()
-        tree = (
-            FileTree.read(cwd / config["Input"]["file_tree_path"])
-            if config["Input"].getboolean("use_file_tree")
-            else None
-        )
-
-    logger.debug("Initializing variables from config file")
-    identifier = IdentifierEngine(
-        config["Categorization"]["regular_expression_file"],
-        config["Categorization"]["regular_expression_directory"],
-        config["Categorization"].getboolean("check_file"),
-    )
-
-    if config["Search_Criteria"].getboolean("use_search_criteria"):
-        criteria = config["Search_Criteria"]["regular_expression_search_criteria"]
-        filter_files = config["Filter"].getboolean("filter_files")
-        filter_dir = config["Filter"].getboolean("filter_directories")
-
-        try:
-            criteria = re.compile(criteria)
-        except TypeError as e:
-            logger.warning(f"Search Criteria {criteria} is invalid, resuming without criteria: {e}")
-            criteria = None
-    else:
-        criteria = None
-        filter_files = False
-        filter_dir = False
-
-    filter_hidden = config["Filter"].getboolean("filter_hidden")
-
-    if config["Filter"].getboolean("filter_list"):
-        ignore = config["Filter"]["ignore_list"].split(",")
-    else:
-        ignore = []
-    output = Output(config)
-    configuration = Configuration(config)
-
-    logger.info(
-        f"Output file paths: Summary:'{str(output.summary)}', "
-        f"Tree:'{str(output.tree)}', CSV:'{str(output.csv)}'"
-    )
-
-    logger.debug("Launching exploration of the target directory")
-    measure_list = [key for key in config["Measures"] if config["Measures"].getboolean(key)]
-    paths = generate_tree(
-        root,
-        criteria=criteria,
-        filter_files=filter_files,
-        filter_dir=filter_dir,
-        depth_limit=configuration.depth_limit,
-        filter_hidden=filter_hidden,
-        ignore=ignore,
-        file_tree=tree,
-    )
-
-    templates = []
-    for key in tree.template_keys():
-        if tree.get_template(key).parent is not None:
-            templates.append(
-                (tree.get_template(key).unique_part, tree.get_template(key).parent.unique_part, key)
-            )
-        else:
-            templates.append((tree.get_template(key).unique_part, None, key))
-    #    templates = sorted(templates, key=lambda x: len(x[0]), reverse=True)
-    stat_dict, configurations = get_data_from_paths(
-        paths,
-        identifier,
-        output_path=output.tree,
-        measures=measure_list,
-        configuration=configuration,
-        pipe_file_data=config["Output.Piping"].getboolean("pipe_data"),
-        tree=tree,
-        templates=templates,
-    )
-
-    logger.info(
-        f"Retrieved {len(stat_dict)} measures for "
-        f"{len(list(stat_dict.values())[0])} different directory name"
-    )
-    logger.debug("Creating instance of StatBuilder with the measures")
-    size_average = config["Measures_Averaging"].getfloat("size_rounding_percentage")
-    time_average = config["Measures_Averaging"].getfloat("time_rounding_seconds")
-    stat_builder = StatBuilder(
-        stat_dict, measure_list, size_averaging=size_average, time_averaging=time_average
-    )
-
-    vis_config = config["Output.Visualization"]
-    if vis_config.getboolean("create_plots"):
-        logger.debug("Giving the data to the graphic creator")
-        if vis_config.getboolean("save_plots"):
-            image_path = Path(vis_config["image_path"])
-        else:
-            image_path = None
-        stat_builder.create_plots(
-            plots_per_measure=vis_config.getint("number_plot_per_measure"),
-            save_path=image_path,
-            show_plot=vis_config.getboolean("print_plots"),
-        )
-
-    if output.summary is not None:
-        logger.debug("Launching summary text output generation.")
-        with open(output.summary, "w", encoding="utf-8") as f:
-            f.write(stat_builder.create_summary(root, configurations))
-
-    if output.csv is not None:
-        logger.debug("Launching CSV output generation.")
-        stat_builder.create_csv(output.csv)
-
-    logger.info("Script executed successfully.")
-
-
 if __name__ == "__main__":
-    main2()
+    main()

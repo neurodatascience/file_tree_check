@@ -5,6 +5,7 @@ import configparser
 import logging
 import os
 from pathlib import Path
+from typing import Sequence
 
 
 class Parser:
@@ -66,9 +67,9 @@ class Parser:
         self.regex_directory = ""
         self.check_file = False
 
-    def make_parser(self, config_path: Path | str = None):
+    def make_parser(self, config_path: Path | str = None, argv: Sequence[str] | None = None):
         parser = self.pars_args()
-        args = parser.parse_args()
+        args = parser.parse_args(argv)
         if args.config is not None:
             self.pars_config(args.config)
         else:
@@ -228,11 +229,11 @@ class Parser:
         self.file_count = config["Measures"].getboolean("file_count")
         self.dir_count = config["Measures"].getboolean("dir_count")
         self.file_size = config["Measures"].getboolean("file_size")
-        self.file_size_rounding_percentage = config["Measures_Averaging"].getfloat(
+        self.file_size_rounding_percentage = config["Measures.Averaging"].getfloat(
             "size_rounding_percentage"
         )
         self.modified_time = config["Measures"].getboolean("modified_time")
-        self.modified_time_rounding_margin = config["Measures_Averaging"].getint(
+        self.modified_time_rounding_margin = config["Measures.Averaging"].getint(
             "time_rounding_seconds"
         )
         # Output
@@ -311,6 +312,9 @@ class Parser:
             self.filter_custom_list = args.filter_custom
         if self.filter_custom:
             self.filter_custom_list = self.filter_custom_list.split(",")
+            for name in self.filter_custom_list:
+                name = name.strip()
+
         if args.file_count or self.file_count:
             self.file_count = True
             self.measures.append("file_count")
