@@ -4,6 +4,9 @@ import logging
 import re
 from pathlib import Path
 
+from file_tree import FileTree
+from smartPath import SmartPath
+
 
 class IdentifierEngine:
     """Class that can extract an "identifier" from a path.
@@ -42,6 +45,14 @@ class IdentifierEngine:
         self.check_file = check_file
 
     def get_identifier(
+        self, path: str | Path, parent: SmartPath | None, file_tree: FileTree | None
+    ) -> str:
+        if file_tree is None:
+            return self.get_identifier_base(path)
+        else:
+            return self.get_identifier_tree(path, parent, file_tree)
+
+    def get_identifier_base(
         self, path: str | Path, prefix_file_with_parent_directory: bool = False
     ) -> str:
         """Extract the identifier from the file/directory.
@@ -90,7 +101,7 @@ class IdentifierEngine:
         """
         path = Path(path)
         if prefix_file_with_parent_directory and path.is_file():
-            identifier = self.get_identifier(path.parent) + "/"
+            identifier = f"{self.get_identifier(path.parent)}/"
         else:
             identifier = ""
 
@@ -107,3 +118,63 @@ class IdentifierEngine:
         # that is maybe too unique over an empty one
         identifier += path.name if match is None else match.group(0)
         return identifier
+
+    def get_identifier_tree(
+        self, path: str | Path, parent: SmartPath | None, tree: FileTree
+    ) -> str:
+        if parent is not None:
+            parent_identifier = parent.identifier
+            parent_template = tree.get_template(parent_identifier)
+            templates = parent_template.children(tree._templates)
+
+        else:
+            templates = tree._templates
+        for template in templates:
+            if template == "":
+                continue
+            regex = self.parse_string_to_regex(template.unique_part)
+            match = re.match(regex, path.name)
+            if match is not None and match[0] != "":
+                return template
+        return path.name
+
+    def get_identifier_tree_old(self, path: str | Path, tree: FileTree):
+        for key in tree.template_keys():
+            if key == "":
+                continue
+            template = tree.get_template(key)
+            regex = self.parse_string_to_regex(template.unique_part)
+            match = re.match(regex, path.name)
+            if match is not None and match[0] != "":
+                return key
+        return path.name
+
+    def parse_string_to_regex(self, string):
+        string = re.sub(r"\{.*?\}", ".+", string)
+        string = re.sub(r"\[(.*?)\]", r"(?:\1)?", string)
+        return string
+
+    def get_identifier_template(
+        self, path: str | Path, templates: list[str], prefix_file_with_parent_directory: bool = True
+    ):
+        for template in templates:
+            if template[2] == "":
+                continue
+            if (
+                prefix_file_with_parent_directory
+                and Path(path).is_file()
+                and template[1] is not None
+            ):
+                identifier = f"{template[1]}/{template[0]}"
+            else:
+                identifier = f"{template[0]}"
+            regex = self.parse_string_to_regex(identifier)
+            actual = (
+                f"{path.parent.name}/{path.name}"
+                if prefix_file_with_parent_directory and path.is_file()
+                else path.name
+            )
+            match = re.match(regex, actual)
+            if match is not None and match[0] != "":
+                return template[2]
+        return path.name

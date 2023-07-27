@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import re
 from abc import ABC
 from abc import abstractmethod
 from pathlib import Path
+
+from file_tree import FileTree
+from file_tree import Template
+from file_tree.template import Literal
 
 
 class SmartPath(ABC):
@@ -37,11 +42,109 @@ class SmartPath(ABC):
     display_parent_prefix_middle = "    "
     display_parent_prefix_last = "│   "
 
-    def __init__(self, path: Path, parent_smart_path: SmartPath | None, is_last: bool):
+    def __init__(
+        self,
+        path: Path,
+        parent_smart_path: SmartPath | None,
+        is_last: bool,
+        file_tree: FileTree | None = None,
+    ):
         self.path = Path(str(path))
         self.parent = parent_smart_path
+        # self.add_parent()
         self.is_last = is_last
         self.depth: int = self.parent.depth + 1 if self.parent else 0
+        self.identifier: str = self.get_identifier(
+            self.path,
+            self.parent,
+            file_tree,
+        )
+
+    def add_parent(
+        self,
+    ) -> None:
+        if self.parent is not None:
+            self.parent.add_children(self)
+
+    def identifier(self) -> str:
+        return self.identifier
+
+    def get_identifier(
+        self, path: Path, parent_smart_path: SmartPath | None, file_tree: FileTree | None
+    ) -> str:
+        """Determine which identifier function to use.
+
+        Currently only tree one is implemented to use.
+        """
+        if file_tree is None:
+            return self.get_identifier_base(path)
+        else:
+            return self.get_identifier_tree(path, parent_smart_path, file_tree)
+
+    def parse_string_to_regex(self, string) -> re.Pattern:
+        """Convert a string to a regex pattern based off file_tree templates."""
+        # Handles required placeholders
+        string = re.sub(r"\{.*?\}", ".+", string)
+        # Handles optional placeholders
+        string = re.sub(r"\[(.*?)\]", r"(?:\1)?", string)
+        return string
+
+    def get_identifier_base(
+        self,
+        path: str | Path,
+    ) -> str:
+        return "not_implemented"
+
+    def get_identifier_tree(
+        self, path: str | Path, parent: SmartPath | None, tree: FileTree | None
+    ) -> str:
+        """Determine the identifier of the path based off the file_tree templates.
+
+        If path has a parent, searches based off templates of the parent.
+        From the relative subset of templates, finds the one with the longest match.
+        If no match is found then returns the path's name.
+        """
+        if parent is not None:
+            parent_identifier = parent.identifier
+            try:
+                parent_template = tree.get_template(parent_identifier)
+                templates = self.template_children(tree, parent_template).items()
+            except KeyError:
+                templates = tree._templates.items()
+        else:
+            templates = tree._templates.items()
+        span = 0
+        temp_late = None
+        for template in templates:
+            if template[1].unique_part == "." or template[1].unique_part is None:
+                continue
+            regex = self.parse_string_to_regex(template[1].unique_part)
+            match = re.match(regex, path.name)
+            if match is not None and match[0] != "":
+                if match.span()[1] > span:
+                    span = match.span()[1]
+                    temp_late = template
+                if "/" in template[1].unique_part:
+                    continue
+        #             self.unique_config(tree, template[1])
+        return temp_late[0] if temp_late is not None else path.name
+
+    def unique_config(
+        self, tree: FileTree | None, template: Template | None, path: str | Path
+    ) -> dict:
+        if template is not None:
+            for part in template._parts.parts:
+                if part is Literal:
+                    continue
+        return None
+
+    def template_children(self, tree: FileTree | None, parent_template: Template | None) -> dict:
+        """Return a dictionary of the children of the parent_template."""
+        children = {}
+        for template in tree._templates.items():
+            if template[1].parent == parent_template and template[0] not in children:
+                children[template[0]] = template[1]
+        return children
 
     def add_stats(self, stat_dict: dict, identifier: str, measures: list[str] = []) -> dict:
         """For each measure desired adds the value from this path to the dictionary.

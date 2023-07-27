@@ -28,3 +28,10 @@ class SmartFilePath(SmartPath):
         if "modified_time" in measures:
             output += f"Modification time = {time.ctime(self.modified_time)!s}".ljust(60)
         return output + "\n"
+
+    @property
+    def children(self) -> list[SmartPath]:
+        return []
+
+    def add_children(self, child: SmartPath) -> None:
+        pass

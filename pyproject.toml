@@ -11,10 +11,11 @@ license = { file="LICENSE.txt" }
 authors = [
   { name = "Bertrand Toutée", email = "bertrand.toutee@gmail.com"},
 ]
-version = "0.1.0"
+dynamic = ["version"]
 dependencies = [
   "seaborn",
   "matplotlib",
+  "file_tree"
 ]
 
 [project.optional-dependencies]
@@ -33,6 +34,18 @@ test = [
 docs = ["file_tree_check[doc]"]
 tests = ["file_tree_check[test]"]
 dev = ["file_tree_check[doc,test]"]
+
+[project.scripts]
+file_tree_check = "file_tree_check.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src.file_tree_check"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/file_tree_check/_version.py"
 
 [tool.pytest.ini_options]
 addopts = "-ra -vv"
