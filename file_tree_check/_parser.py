@@ -229,11 +229,11 @@ class Parser:
         self.file_count = config["Measures"].getboolean("file_count")
         self.dir_count = config["Measures"].getboolean("dir_count")
         self.file_size = config["Measures"].getboolean("file_size")
-        self.file_size_rounding_percentage = config["Measures.Averaging"].getfloat(
+        self.file_size_rounding_percentage = config["Measures_Averaging"].getfloat(
             "size_rounding_percentage"
         )
         self.modified_time = config["Measures"].getboolean("modified_time")
-        self.modified_time_rounding_margin = config["Measures.Averaging"].getint(
+        self.modified_time_rounding_margin = config["Measures_Averaging"].getint(
             "time_rounding_seconds"
         )
         # Output
