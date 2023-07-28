@@ -11,7 +11,7 @@ from typing import Sequence
 class Parser:
     """Class to parse command line arguments and configuration file."""
 
-    DEFAULT_CONFIG_PATH = os.path.join(Path(__file__).parent, "config.ini")
+    DEFAULT_CONFIG_PATH = os.path.join(Path(__file__).parent, "config_default.ini")
 
     def __init__(self) -> None:
         self.logger = logging.getLogger(f"file_tree_check.{__name__}")
@@ -197,10 +197,11 @@ class Parser:
         # Logging
         parser.add_argument("-l", "--log", type=Path, help="Path to log file.")
         parser.add_argument("-ll", "--log_level", type=int, help="Specify log level.")
-        parser.add_argument(
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument(
             "-v", "--verbose", help="If toggled then verbose mode will be on.", action="store_true"
         )
-        parser.add_argument(
+        group.add_argument(
             "-d", "--debug", help="If toggled then debug mode will be on.", action="store_true"
         )
         return parser

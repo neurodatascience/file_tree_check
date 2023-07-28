@@ -5,8 +5,9 @@ Welcome to file_tree_check's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   general_information
    usage
-   examples
+   file_tree
    config
    faq
    glossary
