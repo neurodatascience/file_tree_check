@@ -50,3 +50,4 @@ html_theme_options = {
     "display_version": False,
     "navigation_depth": 4,
 }
+myst_heading_anchors = 2
