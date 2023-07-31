@@ -20,5 +20,3 @@ Requires python >=3.8.
 
 The required python libraries are the following are listed in the
 [pyproject.toml](pyproject.toml) file.
-
-## Demo

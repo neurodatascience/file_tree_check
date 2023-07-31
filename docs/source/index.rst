@@ -9,6 +9,7 @@ Welcome to file_tree_check's documentation!
    usage
    file_tree
    config
+   demo
    faq
    glossary
    file_tree_check
