@@ -12,7 +12,7 @@ absolutely necessary you can just adjust inputted paths as necessary.)
 
 ### 2. First run, find  pond populations, and duck families.
 
-To begin, let's do a a simple search of file and directorie counts.
+To begin, let's do a a simple search of file and directory counts.
 ```
 tree_check -r Demo -f duck_demo -mf -md
 ```
@@ -36,8 +36,9 @@ Configurations for directory **momma_duck-{momma_duck}**:
             ['baby_swan-imposter.jpg']
 ```
 This shows that two ponds have two momma ducks, and one has four. Furthermore we can see that 7 of the momma ducks have 3 ducklings and their own identification file.
-One momma duck is harboring an imposter baby swan.
-If you scroll down the 'summary.txt' file you will see similar information, but in a different format.
+One momma duck is harboring an imposter baby swan. If you inspect the file tree you will see there is nothing to match with the imposter swan. In these situations the full name of the file or directory will be used for its own category.
+
+If you scroll down the 'summary.txt' file you will see more information, but lets move on for now.
 
 ### 3. Second run, let's get more specific.
 
