@@ -37,7 +37,7 @@ cd file_tree_check
 pip install .
 ```
 
-### Usage as CLI
+### running as CLI
 
 To run with default settings, use the following command:
 ```
@@ -153,4 +153,4 @@ python main.py -r {root directory} -f {file_tree}
 Notes:
 -Depending on your operating system to run a python script you may type python or py3.
 -To run main.py make sure you're calling it with the correct relative path. (if cwd is not file_tree_check)
--The same options apply for passing file_tree as in [Usage as CLI](#usage-as-cli-1) section.
+-The same options apply for passing file_tree as in [Usage as CLI](#running-as-cli) section.

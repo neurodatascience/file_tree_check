@@ -7,11 +7,11 @@ from pathlib import Path
 
 from file_tree import FileTree
 
-from ._parser import Parser
-from .smartDirectoryPath import SmartDirectoryPath
-from .smartFilePath import SmartFilePath
-from .smartPath import SmartPath
-from .statBuilder import StatBuilder
+from file_tree_check._parser import Parser
+from file_tree_check.smartDirectoryPath import SmartDirectoryPath
+from file_tree_check.smartFilePath import SmartFilePath
+from file_tree_check.smartPath import SmartPath
+from file_tree_check.statBuilder import StatBuilder
 
 # Edit the following line to point to the config file location in your current installation:
 CONFIG_PATH = Path(__file__).parent / "config.ini"

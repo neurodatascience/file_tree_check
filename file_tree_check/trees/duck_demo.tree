@@ -1,0 +1,5 @@
+pond-{pond}
+    momma_duck-{momma_duck}
+         momma_duck-{momma_duck}.txt (momma_txt)
+         baby_duck-{baby_duck}[_color-{color}].jpg (baby_duck_jpg)
+      #   -> duck_demo_sub

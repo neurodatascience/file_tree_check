@@ -1,0 +1,4 @@
+pond-{pond}
+    momma_duck-{momma_duck}
+         momma_duck-{momma_duck}.txt (momma_txt)
+         -> duck_demo_sub
