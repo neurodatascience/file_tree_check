@@ -9,7 +9,7 @@
 /results/*
 __pycache__
 Scripts
-
+_version.py
 results
 
 src/file_tree_check/_version.py
