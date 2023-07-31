@@ -6,7 +6,7 @@ To demonstrate some basic functionality of file tree check, lets explore the dem
 
 ### 1. Installation
 
-Make sure you have file_tree_check and all dependencies downloaded. See [installation]() for details on this.
+Make sure you have file_tree_check and all dependencies downloaded. See [installation](https://file-tree-check.readthedocs.io/en/latest/usage.html#installation-as-cli) for details on this.
 Now that you have everything installed properly navigate to your file_tree_check folder. (This is not
 absolutely necessary you can just adjust inputted paths as necessary.)
 
