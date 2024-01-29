@@ -1,4 +1,5 @@
 """Explore a file structure and build of distribution of file numbers and file size."""
+
 from __future__ import annotations
 
 import logging
