@@ -14,4 +14,5 @@
     the implementation of SmartPath for directories.
 
 """
+
 from __future__ import annotations
