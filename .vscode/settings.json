@@ -4,5 +4,6 @@
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "python.formatting.provider": "none",
-  "editor.formatOnPaste": true
+  "editor.formatOnPaste": true,
+  "esbonio.sphinx.confDir": ""
 }

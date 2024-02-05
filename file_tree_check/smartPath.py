@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import re
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from pathlib import Path
 
-from file_tree import FileTree
-from file_tree import Template
+from file_tree import FileTree, Template
 from file_tree.template import Literal
 
 
