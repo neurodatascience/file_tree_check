@@ -41,7 +41,7 @@ repos:
 #     args: [--config-file, setup.cfg]
 
 - repo: https://github.com/MarcoGorelli/auto-walrus
-  rev: 0.3.3
+  rev: 0.3.4
   hooks:
   - id: auto-walrus
 
@@ -59,7 +59,7 @@ repos:
     additional_dependencies: [tomli]
 
 - repo: https://github.com/psf/black
-  rev: 24.4.0
+  rev: 24.4.2
   hooks:
   - id: black
     args: [--config, pyproject.toml]
