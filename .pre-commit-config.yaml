@@ -16,7 +16,7 @@ repos:
   - id: rst-inline-touching-normal     # Detect mistake of inline code touching normal text in rst
 
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.15.2
+  rev: v3.17.0
   hooks:
   - id: pyupgrade
     args: [--py38-plus]
@@ -59,13 +59,13 @@ repos:
     additional_dependencies: [tomli]
 
 - repo: https://github.com/psf/black
-  rev: 24.4.2
+  rev: 24.8.0
   hooks:
   - id: black
     args: [--config, pyproject.toml]
 
 - repo: https://github.com/pycqa/flake8
-  rev: 7.0.0
+  rev: 7.1.1
   hooks:
   - id: flake8
     args: [--config, .flake8]
