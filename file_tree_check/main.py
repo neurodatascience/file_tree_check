@@ -564,19 +564,15 @@ def main():
         try:
             pars.search_expression = re.compile(pars.search_expression)
         except TypeError as e:
-            logger.warning(
-                f"Search Criteria {pars.search_expression} \
-                is invalid, resuming without criteria: {e}"
-            )
+            logger.warning(f"Search Criteria {pars.search_expression} \
+                is invalid, resuming without criteria: {e}")
             pars.search_expression = None
 
     configuration = Configuration(pars)
 
-    logger.info(
-        f"Output file paths: Summary: {pars.summary_path},\
+    logger.info(f"Output file paths: Summary: {pars.summary_path},\
           Tree: {pars.tree_path},\
-            CSV: {pars.csv_path}"
-    )
+            CSV: {pars.csv_path}")
     logger.debug("Launching exploration of target directory.")
 
     paths = generate_tree(
